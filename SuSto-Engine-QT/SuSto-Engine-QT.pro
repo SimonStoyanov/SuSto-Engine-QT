@@ -8,6 +8,8 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
+INCLUDEPATH += "3rdParty/DarkStyle/framelesswindow"
+
 TARGET = SuSto-Engine-QT
 TEMPLATE = app
 
@@ -26,17 +28,27 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    rendererwidget.cpp
+        rendererwidget.cpp \
+        3rdParty/DarkStyle/framelesswindow/framelesswindow.cpp \
+        3rdParty/DarkStyle/framelesswindow/windowdragger.cpp \
+        3rdParty/DarkStyle/DarkStyle.cpp
 
 HEADERS += \
         mainwindow.h \
-    rendererwidget.h
+        rendererwidget.h \
+        3rdParty/DarkStyle/framelesswindow/framelesswindow.h \
+        3rdParty/DarkStyle/framelesswindow/windowdragger.h \
+        3rdParty/DarkStyle/DarkStyle.h
 
 FORMS += \
         mainwindow.ui \
+        3rdParty/DarkStyle/framelesswindow/framelesswindow.ui
 
 QT += opengl \
 
 RC_FILE = myapp.rc \
 
 CONFIG += console
+
+RESOURCES += 3rdParty/DarkStyle/framelesswindow.qrc \
+             3rdParty/DarkStyle/darkstyle.qrc
