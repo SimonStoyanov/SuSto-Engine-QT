@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "hierarchy.h"
 
 #include <QTextStream>
 
@@ -11,6 +12,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    hierarchy = new Hierarchy();
+    ui->dockHierarchy->setWidget(hierarchy);
 
     // FILE
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(actionCreateFile()));

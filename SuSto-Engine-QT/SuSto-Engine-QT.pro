@@ -31,18 +31,23 @@ SOURCES += \
         rendererwidget.cpp \
         3rdParty/DarkStyle/framelesswindow/framelesswindow.cpp \
         3rdParty/DarkStyle/framelesswindow/windowdragger.cpp \
-        3rdParty/DarkStyle/DarkStyle.cpp
+        3rdParty/DarkStyle/DarkStyle.cpp \
+    hierarchy.cpp \
+    entity.cpp
 
 HEADERS += \
         mainwindow.h \
         rendererwidget.h \
         3rdParty/DarkStyle/framelesswindow/framelesswindow.h \
         3rdParty/DarkStyle/framelesswindow/windowdragger.h \
-        3rdParty/DarkStyle/DarkStyle.h
+        3rdParty/DarkStyle/DarkStyle.h \
+    hierarchy.h \
+    entity.h
 
 FORMS += \
         mainwindow.ui \
-        3rdParty/DarkStyle/framelesswindow/framelesswindow.ui
+        3rdParty/DarkStyle/framelesswindow/framelesswindow.ui \
+    hierarchy.ui
 
 QT += opengl \
 

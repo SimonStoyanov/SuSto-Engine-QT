@@ -7,6 +7,8 @@ namespace Ui {
 class MainWindow;
 }
 
+class Hierarchy;
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -14,7 +16,6 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-
 
 
 private slots:
@@ -28,6 +29,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    Hierarchy *hierarchy;
 };
 
 #endif // MAINWINDOW_H
