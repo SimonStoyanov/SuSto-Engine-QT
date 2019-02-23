@@ -1,13 +1,17 @@
 #ifndef RENDERERWIDGET_H
 #define RENDERERWIDGET_H
 
-#include <QWidget>
+#include <QOpenGLWidget>
 
-class RendererWidget : public QWidget
+class RendererWidget : public QOpenGLWidget
 {
     Q_OBJECT
 public:
     explicit RendererWidget(QWidget *parent = nullptr);
+
+    void initializeGL();
+    void resizeGL();
+    void paintGL();
 
 signals:
 

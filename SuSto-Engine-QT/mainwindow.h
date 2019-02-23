@@ -15,6 +15,17 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+
+
+private slots:
+    // FILE
+    void actionCreateFile();
+    void actionExit();
+    // EDIT
+
+    // HELP
+    void actionAbout();
+
 private:
     Ui::MainWindow *ui;
 };
