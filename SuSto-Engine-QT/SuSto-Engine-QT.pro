@@ -33,7 +33,9 @@ SOURCES += \
         3rdParty/DarkStyle/framelesswindow/windowdragger.cpp \
         3rdParty/DarkStyle/DarkStyle.cpp \
     hierarchy.cpp \
-    entity.cpp
+    entity.cpp \
+    entity.cpp \
+    component.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -42,7 +44,8 @@ HEADERS += \
         3rdParty/DarkStyle/framelesswindow/windowdragger.h \
         3rdParty/DarkStyle/DarkStyle.h \
     hierarchy.h \
-    entity.h
+    entity.h \
+    component.h
 
 FORMS += \
         mainwindow.ui \
