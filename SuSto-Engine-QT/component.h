@@ -1,6 +1,8 @@
 #ifndef COMPONENT_H
 #define COMPONENT_H
 
+#include <string>
+
 class Entity;
 
 enum component_type
@@ -15,11 +17,17 @@ class Component
 {
 public:
     Component();
-    Component(component_type type_, Entity owner_);
+    Component(component_type type_, Entity* owner_);
 
-private:
+    std::string GetCName() const;
+    void SetCName(std::string new_name);
+
+public:
     component_type type = component_type::COMPONENT_NULL;
     Entity* owner = nullptr;
+
+private:
+    std::string name = "";
 };
 
 #endif // COMPONENT_H

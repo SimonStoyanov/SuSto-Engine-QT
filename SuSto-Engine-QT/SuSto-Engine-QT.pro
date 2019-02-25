@@ -46,7 +46,9 @@ SOURCES += \
     hierarchy.cpp \
     entity.cpp \
     entity.cpp \
-    component.cpp
+    component.cpp \
+    Components/c_transform.cpp \
+    Components/c_shape_renderer.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -57,7 +59,9 @@ HEADERS += \
     hierarchy.h \
     entity.h \
     component.h \
-    globals.h
+    globals.h \
+    Components/c_transform.h \
+    Components/c_shape_renderer.h
 
 FORMS += \
         mainwindow.ui \

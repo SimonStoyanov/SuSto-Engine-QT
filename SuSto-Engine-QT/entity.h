@@ -22,7 +22,7 @@ private:
     std::string name = "";
 
 
-    std::list<Component> components;
+    std::list<Component*> components;
 };
 
 #endif // ENTITY_H
