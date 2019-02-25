@@ -3,11 +3,16 @@
 
 #include <QMainWindow>
 
+#include "ads/API.h"
+#include "ads/ContainerWidget.h"
+#include "ads/SectionContent.h"
+
 namespace Ui {
 class MainWindow;
 }
 
 class Hierarchy;
+class RendererWidget;
 
 class MainWindow : public QMainWindow
 {
@@ -28,8 +33,15 @@ private slots:
     void actionAbout();
 
 private:
-    Ui::MainWindow *ui;
-    Hierarchy *hierarchy;
+    Ui::MainWindow* ui;
+    Hierarchy* hierarchy;
+    RendererWidget* rendering;
+
+    // The main container for dockings.
+    ADS_NS::ContainerWidget* advanced_docking_container = nullptr;
+    ADS_NS::SectionContent::RefPtr docking_area_hierarchy = nullptr;
+    ADS_NS::SectionContent::RefPtr docking_area_inspector = nullptr;
+    ADS_NS::SectionContent::RefPtr docking_area_rendering = nullptr;
 };
 
 #endif // MAINWINDOW_H
