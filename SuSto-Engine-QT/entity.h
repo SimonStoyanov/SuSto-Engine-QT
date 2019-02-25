@@ -3,7 +3,8 @@
 
 #include <list>
 
-#include "component.h"
+class Component;
+enum component_type;
 
 class Entity
 {
@@ -11,7 +12,7 @@ public:
     Entity();
     ~Entity();
 
-    Component *AddComponent(component_type type_, std::string unique_id);
+    Component *AddComponent(component_type type_);
 
 public:
     std::string GetName();

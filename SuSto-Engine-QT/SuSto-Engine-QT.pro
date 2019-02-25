@@ -45,7 +45,8 @@ HEADERS += \
         3rdParty/DarkStyle/DarkStyle.h \
     hierarchy.h \
     entity.h \
-    component.h
+    component.h \
+    globals.h
 
 FORMS += \
         mainwindow.ui \

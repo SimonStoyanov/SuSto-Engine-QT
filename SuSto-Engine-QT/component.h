@@ -19,6 +19,7 @@ public:
 
 private:
     component_type type = component_type::COMPONENT_NULL;
+    Entity* owner = nullptr;
 };
 
 #endif // COMPONENT_H

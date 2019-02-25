@@ -1,8 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "hierarchy.h"
+#include "globals.h"
 
-#include <QTextStream>
+#include "hierarchy.h"
 
 #include <QFile>
 #include <QtWidgets>
@@ -39,8 +39,7 @@ void MainWindow::actionCreateFile()
 
 void MainWindow::actionExit()
 {
-    QTextStream out(stdout);
-    out << "Exiting the application" << endl;
+    SPOOKYLOG("Exiting the application");
     QApplication::quit();
 }
 
