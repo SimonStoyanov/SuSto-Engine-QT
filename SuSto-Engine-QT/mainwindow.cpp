@@ -67,3 +67,26 @@ void MainWindow::actionAbout()
         tr("Made by Guillem Sunyer Caldú and Simón Stoyanov Beltrán "
         "for the Advanced Graphics subject."));
 }
+void MainWindow::on_actionWindowsRenderer_triggered()
+{
+    if (ui->actionWindowsRenderer->isChecked())
+        advanced_docking_container->showSectionContent(docking_area_rendering);
+    else
+        advanced_docking_container->hideSectionContent(docking_area_rendering);
+}
+
+void MainWindow::on_actionWindowsInspector_triggered()
+{
+    if (ui->actionWindowsInspector->isChecked())
+        advanced_docking_container->showSectionContent(docking_area_inspector);
+    else
+        advanced_docking_container->hideSectionContent(docking_area_inspector);
+}
+
+void MainWindow::on_actionWindowsHierarchy_triggered()
+{
+    if (ui->actionWindowsHierarchy->isChecked())
+        advanced_docking_container->showSectionContent(docking_area_hierarchy);
+    else
+        advanced_docking_container->hideSectionContent(docking_area_hierarchy);
+}

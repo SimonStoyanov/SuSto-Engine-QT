@@ -7,6 +7,8 @@ namespace Ui {
 class Hierarchy;
 }
 
+class Entity;
+
 class Hierarchy : public QWidget
 {
     Q_OBJECT
@@ -22,6 +24,7 @@ private slots:
 
 private:
     Ui::Hierarchy *ui;
+    std::list<Entity*> entities;
 };
 
 #endif // HIERARCHY_H

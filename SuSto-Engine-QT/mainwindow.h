@@ -32,6 +32,12 @@ private slots:
     // HELP
     void actionAbout();
 
+    void on_actionWindowsRenderer_triggered();
+
+    void on_actionWindowsInspector_triggered();
+
+    void on_actionWindowsHierarchy_triggered();
+
 private:
     Ui::MainWindow* ui;
     Hierarchy* hierarchy;
