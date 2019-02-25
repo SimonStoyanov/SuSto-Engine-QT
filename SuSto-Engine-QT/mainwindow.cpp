@@ -1,11 +1,16 @@
-#include "mainwindow.h"
+﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
+
 #include "globals.h"
 
 #include "hierarchy.h"
+#include "rendererwidget.h"
 
 #include <QFile>
 #include <QtWidgets>
+
+#include "ads/SectionWidget.h"
+#include "ads/DropOverlay.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -14,7 +19,19 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     hierarchy = new Hierarchy();
-    ui->dockHierarchy->setWidget(hierarchy);
+    rendering = new RendererWidget();
+
+    // Init Advanced Docking
+    advanced_docking_container = new ADS_NS::ContainerWidget();
+    setCentralWidget(advanced_docking_container);
+
+    docking_area_hierarchy = ADS_NS::SectionContent::newSectionContent(QString("docking_area_hierarchy"), advanced_docking_container, new QLabel("Hierarchy"), hierarchy);
+    docking_area_inspector = ADS_NS::SectionContent::newSectionContent(QString("docking_area_inspector"), advanced_docking_container, new QLabel("Inspector"), hierarchy);
+    docking_area_rendering = ADS_NS::SectionContent::newSectionContent(QString("docking_area_rendering"), advanced_docking_container, new QLabel("Scene"), rendering);
+
+    advanced_docking_container->addSectionContent(docking_area_rendering, NULL, ADS_NS::CenterDropArea);
+    advanced_docking_container->addSectionContent(docking_area_hierarchy, NULL, ADS_NS::RightDropArea);
+    advanced_docking_container->addSectionContent(docking_area_inspector, NULL, ADS_NS::LeftDropArea);
 
     // FILE
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(actionCreateFile()));
