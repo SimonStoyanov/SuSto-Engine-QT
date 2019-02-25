@@ -1,6 +1,9 @@
 #include "entity.h"
 #include "component.h"
 
+#include "Components/c_transform.h"
+#include "Components/c_shape_renderer.h"
+
 #include "globals.h"
 
 Entity::Entity()
@@ -21,13 +24,13 @@ Component *Entity::AddComponent(component_type type_)
     {
         case component_type::COMPONENT_TRANSFORM:
         {
-            //ret = new C_Transform(this);
+            ret = new C_Transform(this);
             SPOOKYLOG("Component -Transform- created");
         }
         break;
         case component_type::COMPONENT_SHAPE_RENDERER:
         {
-            //ret = new C_ShapeRenderer(this);
+            ret = new C_ShapeRenderer(this);
             SPOOKYLOG("Component -Shape Renderer- created");
         }
         break;
@@ -41,7 +44,7 @@ Component *Entity::AddComponent(component_type type_)
     if (ret == nullptr)
         SPOOKYLOG("Component is null / not created");
 
-    //components.push_back(ret);
+    components.push_back(ret);
 
     return ret;
 
