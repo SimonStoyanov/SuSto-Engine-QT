@@ -48,7 +48,20 @@ SOURCES += \
     entity.cpp \
     component.cpp \
     Components/c_transform.cpp \
-    Components/c_shape_renderer.cpp
+    Components/c_shape_renderer.cpp \
+    3rdParty/DarkStyle/framelesswindow/framelesswindow.cpp \
+    3rdParty/DarkStyle/framelesswindow/windowdragger.cpp \
+    3rdParty/DarkStyle/DarkStyle.cpp \
+    Components/c_shape_renderer.cpp \
+    Components/c_transform.cpp \
+    Managers/entitymanager.cpp \
+    component.cpp \
+    entity.cpp \
+    hierarchy.cpp \
+    main.cpp \
+    mainwindow.cpp \
+    rendererwidget.cpp \
+    Managers/appmanager.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -61,7 +74,20 @@ HEADERS += \
     component.h \
     globals.h \
     Components/c_transform.h \
-    Components/c_shape_renderer.h
+    Components/c_shape_renderer.h \
+    3rdParty/DarkStyle/framelesswindow/framelesswindow.h \
+    3rdParty/DarkStyle/framelesswindow/windowdragger.h \
+    3rdParty/DarkStyle/DarkStyle.h \
+    Components/c_shape_renderer.h \
+    Components/c_transform.h \
+    Managers/entitymanager.h \
+    component.h \
+    entity.h \
+    globals.h \
+    hierarchy.h \
+    mainwindow.h \
+    rendererwidget.h \
+    Managers/appmanager.h
 
 FORMS += \
         mainwindow.ui \

@@ -12,6 +12,9 @@ public:
     Entity();
     ~Entity();
 
+    void Start();
+    void CleanUp();
+
     Component *AddComponent(component_type type_);
 
 public:
