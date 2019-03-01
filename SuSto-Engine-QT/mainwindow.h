@@ -12,6 +12,7 @@ class MainWindow;
 }
 
 class Hierarchy;
+class Inspector;
 class RendererWidget;
 
 class MainWindow : public QMainWindow
@@ -39,9 +40,10 @@ private slots:
     void on_actionWindowsHierarchy_triggered();
 
 private:
-    Ui::MainWindow* ui;
-    Hierarchy* hierarchy;
-    RendererWidget* rendering;
+    Ui::MainWindow* ui = nullptr;
+    Hierarchy* hierarchy = nullptr;
+    Inspector* inspector = nullptr;
+    RendererWidget* rendering = nullptr;
 
     // The main container for dockings.
     ADS_NS::ContainerWidget* advanced_docking_container = nullptr;

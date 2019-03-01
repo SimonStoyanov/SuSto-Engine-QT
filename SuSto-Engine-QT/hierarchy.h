@@ -25,6 +25,7 @@ private slots:
 private:
     Ui::Hierarchy *ui;
     std::list<Entity*> entities;
+    void CreateEntityInHierarchy(Entity* entity, std::string name);
 };
 
 #endif // HIERARCHY_H

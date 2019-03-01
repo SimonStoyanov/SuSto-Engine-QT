@@ -4,6 +4,7 @@
 #include "globals.h"
 
 #include "hierarchy.h"
+#include "inspector.h"
 #include "rendererwidget.h"
 
 #include <QFile>
@@ -19,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     hierarchy = new Hierarchy();
+    inspector = new Inspector();
     rendering = new RendererWidget();
 
     // Init Advanced Docking
@@ -26,12 +28,12 @@ MainWindow::MainWindow(QWidget *parent) :
     setCentralWidget(advanced_docking_container);
 
     docking_area_hierarchy = ADS_NS::SectionContent::newSectionContent(QString("docking_area_hierarchy"), advanced_docking_container, new QLabel("Hierarchy"), hierarchy);
-    docking_area_inspector = ADS_NS::SectionContent::newSectionContent(QString("docking_area_inspector"), advanced_docking_container, new QLabel("Inspector"), hierarchy);
+    docking_area_inspector = ADS_NS::SectionContent::newSectionContent(QString("docking_area_inspector"), advanced_docking_container, new QLabel("Inspector"), inspector);
     docking_area_rendering = ADS_NS::SectionContent::newSectionContent(QString("docking_area_rendering"), advanced_docking_container, new QLabel("Scene"), rendering);
 
     advanced_docking_container->addSectionContent(docking_area_rendering, NULL, ADS_NS::CenterDropArea);
-    advanced_docking_container->addSectionContent(docking_area_hierarchy, NULL, ADS_NS::RightDropArea);
-    advanced_docking_container->addSectionContent(docking_area_inspector, NULL, ADS_NS::LeftDropArea);
+    advanced_docking_container->addSectionContent(docking_area_hierarchy, NULL, ADS_NS::LeftDropArea);
+    advanced_docking_container->addSectionContent(docking_area_inspector, NULL, ADS_NS::RightDropArea);
 
     // FILE
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(actionCreateFile()));

@@ -48,7 +48,9 @@ SOURCES += \
     entity.cpp \
     component.cpp \
     Components/c_transform.cpp \
-    Components/c_shape_renderer.cpp
+    Components/c_shape_renderer.cpp \
+    hierarchyentity.cpp \
+    inspector.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -61,12 +63,16 @@ HEADERS += \
     component.h \
     globals.h \
     Components/c_transform.h \
-    Components/c_shape_renderer.h
+    Components/c_shape_renderer.h \
+    hierarchyentity.h \
+    inspector.h
 
 FORMS += \
         mainwindow.ui \
         3rdParty/DarkStyle/framelesswindow/framelesswindow.ui \
-    hierarchy.ui
+    hierarchy.ui \
+    hierarchyentity.ui \
+    inspector.ui
 
 QT += opengl \
 

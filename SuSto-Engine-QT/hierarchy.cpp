@@ -1,6 +1,7 @@
 #include "hierarchy.h"
 #include "ui_hierarchy.h"
 #include "entity.h"
+#include "hierarchyentity.h"
 
 #include "globals.h"
 
@@ -20,6 +21,13 @@ Hierarchy::~Hierarchy()
     entities.clear();
 }
 
+void Hierarchy::CreateEntityInHierarchy(Entity* entity, std::string name)
+{
+    HierarchyEntity *new_entity_in_hierarchy = new HierarchyEntity(entity);
+    new_entity_in_hierarchy->SetName(name);
+    ui->scrollLayout->addWidget(new_entity_in_hierarchy);
+}
+
 void Hierarchy::on_buttonAddEntity_clicked()
 {
     Entity* new_entity = new Entity();
@@ -28,12 +36,11 @@ void Hierarchy::on_buttonAddEntity_clicked()
 
     new_entity->SetName(name);
 
-    SPOOKYLOG(name + + " created succesfully");
+    SPOOKYLOG(name + " created succesfully");
 
     entities.push_back(new_entity);
 
-    /*QLabel* label = new QLabel(QString(name), this);
-    ui->scrollArea->setWidget(label);*/
+    CreateEntityInHierarchy(new_entity, name);
 }
 
 void Hierarchy::on_buttonRemoveEntity_clicked()
