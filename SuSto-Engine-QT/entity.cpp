@@ -16,6 +16,16 @@ Entity::~Entity()
     components.clear();
 }
 
+void Entity::Start()
+{
+
+}
+
+void Entity::CleanUp()
+{
+
+}
+
 Component *Entity::AddComponent(component_type type_)
 {
     Component* ret = nullptr;

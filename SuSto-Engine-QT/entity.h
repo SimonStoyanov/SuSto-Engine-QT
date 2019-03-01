@@ -8,10 +8,17 @@ enum component_type;
 
 class Entity
 {
-public:
+    friend class EntityManager;
+
+private:
     Entity();
     ~Entity();
+    void operator delete(void *) {}
 
+    void Start();
+    void CleanUp();
+
+public:
     Component *AddComponent(component_type type_);
 
 public:

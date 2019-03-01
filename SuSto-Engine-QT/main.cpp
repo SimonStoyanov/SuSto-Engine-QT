@@ -2,12 +2,14 @@
 #include <QApplication>
 #include "3rdParty/DarkStyle/framelesswindow/framelesswindow.h"
 #include "3rdParty/DarkStyle/DarkStyle.h"
+#include "Managers/appmanager.h"
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
+    QApplication app(argc, argv);
+    app.setStyle(new DarkStyle);
 
-    a.setStyle(new DarkStyle);
+    AppManager::Instance()->Init();
 
     FramelessWindow framelessWindow;
     framelessWindow.setWindowIcon(QIcon("Resources/spooky.ico"));
@@ -18,5 +20,9 @@ int main(int argc, char *argv[])
     framelessWindow.setContent(mainWindow);
     framelessWindow.show();
 
-    return a.exec();
+    int ret = app.exec();
+
+    AppManager::DestroyInstance();
+
+    return ret;
 }

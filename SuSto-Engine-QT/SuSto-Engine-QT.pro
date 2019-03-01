@@ -51,6 +51,63 @@ SOURCES += \
     Components/c_shape_renderer.cpp \
     hierarchyentity.cpp \
     inspector.cpp
+    3rdParty/DarkStyle/framelesswindow/framelesswindow.cpp \
+    3rdParty/DarkStyle/framelesswindow/windowdragger.cpp \
+    3rdParty/DarkStyle/DarkStyle.cpp \
+    Components/c_shape_renderer.cpp \
+    Components/c_transform.cpp \
+    Managers/entitymanager.cpp \
+    component.cpp \
+    entity.cpp \
+    hierarchy.cpp \
+    main.cpp \
+    mainwindow.cpp \
+    rendererwidget.cpp \
+    Managers/appmanager.cpp \
+    Managers/eventmanager.cpp \
+    3rdParty/DarkStyle/framelesswindow/framelesswindow.cpp \
+    3rdParty/DarkStyle/framelesswindow/windowdragger.cpp \
+    3rdParty/DarkStyle/DarkStyle.cpp \
+    Components/c_shape_renderer.cpp \
+    Components/c_transform.cpp \
+    Managers/appmanager.cpp \
+    Managers/entitymanager.cpp \
+    Managers/eventmanager.cpp \
+    component.cpp \
+    entity.cpp \
+    hierarchy.cpp \
+    main.cpp \
+    mainwindow.cpp \
+    rendererwidget.cpp \
+    3rdParty/DarkStyle/framelesswindow/framelesswindow.cpp \
+    3rdParty/DarkStyle/framelesswindow/windowdragger.cpp \
+    3rdParty/DarkStyle/DarkStyle.cpp \
+    Components/c_shape_renderer.cpp \
+    Components/c_transform.cpp \
+    Managers/appmanager.cpp \
+    Managers/entitymanager.cpp \
+    Managers/eventmanager.cpp \
+    component.cpp \
+    entity.cpp \
+    hierarchy.cpp \
+    main.cpp \
+    mainwindow.cpp \
+    rendererwidget.cpp \
+    3rdParty/DarkStyle/framelesswindow/framelesswindow.cpp \
+    3rdParty/DarkStyle/framelesswindow/windowdragger.cpp \
+    3rdParty/DarkStyle/DarkStyle.cpp \
+    Components/c_shape_renderer.cpp \
+    Components/c_transform.cpp \
+    Events/event.cpp \
+    Managers/appmanager.cpp \
+    Managers/entitymanager.cpp \
+    Managers/eventmanager.cpp \
+    component.cpp \
+    entity.cpp \
+    hierarchy.cpp \
+    main.cpp \
+    mainwindow.cpp \
+    rendererwidget.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -65,7 +122,64 @@ HEADERS += \
     Components/c_transform.h \
     Components/c_shape_renderer.h \
     hierarchyentity.h \
-    inspector.h
+    inspector.h \
+    3rdParty/DarkStyle/framelesswindow/framelesswindow.h \
+    3rdParty/DarkStyle/framelesswindow/windowdragger.h \
+    3rdParty/DarkStyle/DarkStyle.h \
+    Components/c_shape_renderer.h \
+    Components/c_transform.h \
+    Managers/entitymanager.h \
+    component.h \
+    entity.h \
+    globals.h \
+    hierarchy.h \
+    mainwindow.h \
+    rendererwidget.h \
+    Managers/appmanager.h \
+    Managers/eventmanager.h \
+    3rdParty/DarkStyle/framelesswindow/framelesswindow.h \
+    3rdParty/DarkStyle/framelesswindow/windowdragger.h \
+    3rdParty/DarkStyle/DarkStyle.h \
+    Components/c_shape_renderer.h \
+    Components/c_transform.h \
+    Managers/appmanager.h \
+    Managers/entitymanager.h \
+    Managers/eventmanager.h \
+    component.h \
+    entity.h \
+    globals.h \
+    hierarchy.h \
+    mainwindow.h \
+    rendererwidget.h \
+    3rdParty/DarkStyle/framelesswindow/framelesswindow.h \
+    3rdParty/DarkStyle/framelesswindow/windowdragger.h \
+    3rdParty/DarkStyle/DarkStyle.h \
+    Components/c_shape_renderer.h \
+    Components/c_transform.h \
+    Managers/appmanager.h \
+    Managers/entitymanager.h \
+    Managers/eventmanager.h \
+    component.h \
+    entity.h \
+    globals.h \
+    hierarchy.h \
+    mainwindow.h \
+    rendererwidget.h \
+    3rdParty/DarkStyle/framelesswindow/framelesswindow.h \
+    3rdParty/DarkStyle/framelesswindow/windowdragger.h \
+    3rdParty/DarkStyle/DarkStyle.h \
+    Components/c_shape_renderer.h \
+    Components/c_transform.h \
+    Events/event.h \
+    Managers/appmanager.h \
+    Managers/entitymanager.h \
+    Managers/eventmanager.h \
+    component.h \
+    entity.h \
+    globals.h \
+    hierarchy.h \
+    mainwindow.h \
+    rendererwidget.h
 
 FORMS += \
         mainwindow.ui \
