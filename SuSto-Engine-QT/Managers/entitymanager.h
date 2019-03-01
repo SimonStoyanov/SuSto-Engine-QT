@@ -9,6 +9,7 @@ class EntityManager
 {
 private:
     EntityManager();
+    void operator delete(void *) {}
 
 public:
     static EntityManager* Instance()

@@ -6,6 +6,7 @@ class AppManager
 {
 private:
     AppManager();
+    void operator delete(void *) {}
 
 public:
     static AppManager* Instance()
