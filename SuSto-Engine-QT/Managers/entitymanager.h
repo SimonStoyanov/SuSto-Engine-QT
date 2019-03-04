@@ -40,6 +40,10 @@ public:
     void DestroyEntity(Entity*& entity);
     void DestroyAllEntities();
 
+    std::vector<Entity*> GetEntities() {
+        return entities;
+    }
+
 private:
     void Start();
     void CleanUp();

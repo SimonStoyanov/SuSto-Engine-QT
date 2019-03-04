@@ -1,5 +1,7 @@
 ﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "hierarchyentity.h"
+#include "ui_inspector.h"
 
 #include "globals.h"
 
@@ -20,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     hierarchy = new Hierarchy();
-    inspector = new Inspector();
+    inspector = new Inspector(this);
     rendering = new RendererWidget();
 
     // Init Advanced Docking
@@ -35,14 +37,16 @@ MainWindow::MainWindow(QWidget *parent) :
     advanced_docking_container->addSectionContent(docking_area_hierarchy, NULL, ADS_NS::LeftDropArea);
     advanced_docking_container->addSectionContent(docking_area_inspector, NULL, ADS_NS::RightDropArea);
 
-    // FILE
+    // TOOLBAR FILE
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(actionCreateFile()));
     connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(actionExit()));
 
-    // EDIT
+    // TOOLBAR EDIT
 
-    // HELP
+    // TOOLBAR HELP
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(actionAbout()));
+
+    // INSPECTOR
 }
 
 MainWindow::~MainWindow()

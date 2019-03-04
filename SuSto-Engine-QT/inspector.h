@@ -7,16 +7,28 @@ namespace Ui {
 class Inspector;
 }
 
+class Entity;
+class MainWindow;
+
 class Inspector : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit Inspector(QWidget *parent = 0);
+    explicit Inspector(MainWindow* mainwindow_, QWidget *parent = 0);
     ~Inspector();
 
+    void SelectEntity(Entity* entity)
+    {
+        selectedEntity = entity;
+    }
+
+private slots:
+
 private:
-    Ui::Inspector *ui;
+    MainWindow* mainwindow = nullptr;
+    Ui::Inspector *ui = nullptr;
+    Entity* selectedEntity = nullptr;
 };
 
 #endif // INSPECTOR_H

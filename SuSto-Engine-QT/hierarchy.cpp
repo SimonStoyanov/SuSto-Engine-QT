@@ -34,18 +34,9 @@ void Hierarchy::CreateEntityInHierarchy(Entity* entity, std::string name)
 void Hierarchy::on_buttonAddEntity_clicked()
 {
     Entity* new_entity = EntityManager::Instance()->CreateEntity();
+    new_entity->SetName("entity_" + std::to_string(EntityManager::Instance()->GetEntities().size() - 1));
 
-    /*Entity* new_entity = new Entity();
-
-    std::string name = "entity_" + std::to_string(entities.size());
-
-    new_entity->SetName(name);
-
-    SPOOKYLOG(name + " created succesfully");
-
-    entities.push_back(new_entity);*/
-
-    CreateEntityInHierarchy(new_entity, name);
+    CreateEntityInHierarchy(new_entity, new_entity->GetName());
 }
 
 void Hierarchy::on_buttonRemoveEntity_clicked()

@@ -23,6 +23,11 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    Inspector* GetInspector()
+    {
+        return inspector;
+    }
+
 
 private slots:
     // FILE

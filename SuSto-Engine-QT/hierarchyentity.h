@@ -19,6 +19,9 @@ public:
 
     void SetName(std::string name);
 
+private slots:
+    void on_entityName_clicked();
+
 private:
     Ui::HierarchyEntity *ui;
     Entity* parentEntity = nullptr;
