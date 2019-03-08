@@ -21,7 +21,10 @@ public:
     void SelectEntity(Entity* entity)
     {
         selectedEntity = entity;
+        SetInspectorView();
     }
+
+    void SetInspectorView();
 
 private slots:
 

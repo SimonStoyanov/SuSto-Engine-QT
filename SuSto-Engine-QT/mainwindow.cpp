@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    hierarchy = new Hierarchy();
+    hierarchy = new Hierarchy(this);
     inspector = new Inspector(this);
     rendering = new RendererWidget();
 

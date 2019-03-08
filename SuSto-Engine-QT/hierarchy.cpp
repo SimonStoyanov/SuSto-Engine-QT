@@ -1,6 +1,8 @@
 #include "hierarchy.h"
 #include "ui_hierarchy.h"
 #include "entity.h"
+#include "mainwindow.h"
+#include "inspector.h"
 
 #include "hierarchyentity.h"
 
@@ -10,8 +12,9 @@
 
 #include <QLabel>
 
-Hierarchy::Hierarchy(QWidget *parent) :
+Hierarchy::Hierarchy(MainWindow* mainwindow_, QWidget *parent) :
     QWidget(parent),
+    mainwindow(mainwindow_),
     ui(new Ui::Hierarchy)
 {
     ui->setupUi(this);
@@ -24,9 +27,16 @@ Hierarchy::~Hierarchy()
     entities.clear();
 }
 
+void Hierarchy::SetSelected(HierarchyEntity *selected)
+{
+    selectedEntity = selected;
+
+    mainwindow->GetInspector()->SelectEntity(selected->GetParent());
+}
+
 void Hierarchy::CreateEntityInHierarchy(Entity* entity, std::string name)
 {
-    HierarchyEntity *new_entity_in_hierarchy = new HierarchyEntity(entity);
+    HierarchyEntity *new_entity_in_hierarchy = new HierarchyEntity(entity, this);
     new_entity_in_hierarchy->SetName(name);
     ui->scrollLayout->addWidget(new_entity_in_hierarchy);
 }

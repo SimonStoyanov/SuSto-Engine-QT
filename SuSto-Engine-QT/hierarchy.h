@@ -8,14 +8,18 @@ class Hierarchy;
 }
 
 class Entity;
+class HierarchyEntity;
+class MainWindow;
 
 class Hierarchy : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit Hierarchy(QWidget *parent = nullptr);
+    explicit Hierarchy(MainWindow* mainwindow_, QWidget *parent = nullptr);
     ~Hierarchy();
+
+    void SetSelected(HierarchyEntity* selected);
 
 private slots:
     void on_buttonAddEntity_clicked();
@@ -24,7 +28,11 @@ private slots:
 
 private:
     Ui::Hierarchy *ui;
+    MainWindow* mainwindow = nullptr;
+
     std::list<Entity*> entities;
+    HierarchyEntity* selectedEntity = nullptr;
+
     void CreateEntityInHierarchy(Entity* entity, std::string name);
 };
 

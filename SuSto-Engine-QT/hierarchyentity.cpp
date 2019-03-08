@@ -2,17 +2,17 @@
 #include "ui_hierarchyentity.h"
 #include "mainwindow.h"
 #include "inspector.h"
+#include "hierarchy.h"
 
 #include "entity.h"
 
-HierarchyEntity::HierarchyEntity(Entity* entity, QWidget* parent) :
+HierarchyEntity::HierarchyEntity(Entity* entity, Hierarchy* hierarchy_, QWidget* parent) :
     QWidget(parent),
-    ui(new Ui::HierarchyEntity)
+    ui(new Ui::HierarchyEntity),
+    parentEntity(entity),
+    hierarchy(hierarchy_)
 {
     ui->setupUi(this);
-    parentEntity = entity;
-
-    //connect(ui->entityName, SIGNAL(clicked(bool)), parent->)
 }
 
 HierarchyEntity::~HierarchyEntity()
@@ -23,9 +23,10 @@ HierarchyEntity::~HierarchyEntity()
 void HierarchyEntity::SetName(std::string name)
 {
     ui->entityName->setText(name.c_str());
+    parentEntity->SetName(name.c_str());
 }
 
 void HierarchyEntity::on_entityName_clicked()
 {
-
+    hierarchy->SetSelected(this);
 }
