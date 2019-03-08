@@ -79,7 +79,8 @@ FORMS += \
         3rdParty/DarkStyle/framelesswindow/framelesswindow.ui \
     hierarchy.ui \
     hierarchyentity.ui \
-    inspector.ui
+    inspector.ui \
+    transform.ui
 
 QT += opengl \
 
