@@ -34,6 +34,13 @@ void Hierarchy::SetSelected(HierarchyEntity *selected)
     mainwindow->GetInspector()->SelectEntity(selected->GetParent());
 }
 
+void Hierarchy::UpdateSelectedEntity()
+{
+    Inspector* inspector = mainwindow->GetInspector();
+
+    selectedEntity->SetName(inspector->GetEntityName());
+}
+
 void Hierarchy::CreateEntityInHierarchy(Entity* entity, std::string name)
 {
     HierarchyEntity *new_entity_in_hierarchy = new HierarchyEntity(entity, this);

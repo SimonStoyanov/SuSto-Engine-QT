@@ -21,9 +21,11 @@ public:
 
     void SetSelected(HierarchyEntity* selected);
 
+public slots:
+    void UpdateSelectedEntity();
+
 private slots:
     void on_buttonAddEntity_clicked();
-
     void on_buttonRemoveEntity_clicked();
 
 private:

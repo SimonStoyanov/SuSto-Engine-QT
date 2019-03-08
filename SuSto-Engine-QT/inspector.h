@@ -26,7 +26,9 @@ public:
 
     void SetInspectorView();
 
-private slots:
+
+public:
+    std::string GetEntityName();
 
 private:
     MainWindow* mainwindow = nullptr;

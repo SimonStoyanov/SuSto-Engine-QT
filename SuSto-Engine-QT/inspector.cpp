@@ -2,8 +2,11 @@
 #include "inspector.h"
 #include "mainwindow.h"
 #include "hierarchy.h"
+#include "hierarchyentity.h"
 #include "entity.h"
 #include "ui_inspector.h"
+
+#include <qcombobox>
 
 Inspector::Inspector(MainWindow* mainwindow_, QWidget *parent) :
     QWidget(parent),
@@ -12,7 +15,7 @@ Inspector::Inspector(MainWindow* mainwindow_, QWidget *parent) :
 {
     ui->setupUi(this);
 
-    //connect(ui->entityName, SIGNAL(returnPressed()), mainwindow_->hierarchy->e )
+    connect(ui->entityName, SIGNAL(returnPressed()), mainwindow->GetHierarchy(), SLOT(UpdateSelectedEntity()));
 }
 
 Inspector::~Inspector()
@@ -23,5 +26,9 @@ Inspector::~Inspector()
 void Inspector::SetInspectorView()
 {
     ui->entityName->setText(selectedEntity->GetName().c_str());
-    SPOOKYLOG(selectedEntity->GetName());
+}
+
+std::string Inspector::GetEntityName()
+{
+    return ui->entityName->text().toStdString();
 }

@@ -28,6 +28,11 @@ public:
         return inspector;
     }
 
+    Hierarchy* GetHierarchy()
+    {
+        return hierarchy;
+    }
+
 
 private slots:
     // FILE
