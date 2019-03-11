@@ -8,7 +8,7 @@
 
 Entity::Entity()
 {
-
+    transform = (C_Transform*) AddComponent(component_type::COMPONENT_TRANSFORM);
 }
 
 Entity::~Entity()
@@ -58,6 +58,11 @@ Component *Entity::AddComponent(component_type type_)
 
     return ret;
 
+}
+
+C_Transform *Entity::GetTransform() const
+{
+    return transform;
 }
 
 std::string Entity::GetName()

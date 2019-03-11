@@ -5,6 +5,7 @@
 
 namespace Ui {
 class Inspector;
+class Transform;
 }
 
 class Entity;
@@ -33,6 +34,7 @@ public:
 private:
     MainWindow* mainwindow = nullptr;
     Ui::Inspector *ui = nullptr;
+    Ui::Transform *trn = nullptr;
     Entity* selectedEntity = nullptr;
 };
 

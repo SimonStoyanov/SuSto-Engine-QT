@@ -6,6 +6,8 @@
 class Component;
 enum component_type;
 
+class C_Transform;
+
 class Entity
 {
     friend class EntityManager;
@@ -20,6 +22,7 @@ private:
 
 public:
     Component *AddComponent(component_type type_);
+    C_Transform* GetTransform() const;
 
 public:
     std::string GetName();
@@ -27,7 +30,7 @@ public:
 
 private:
     std::string name = "";
-
+    C_Transform* transform = nullptr;
 
     std::list<Component*> components;
 };
