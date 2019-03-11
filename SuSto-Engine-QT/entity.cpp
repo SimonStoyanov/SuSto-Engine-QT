@@ -23,7 +23,7 @@ void Entity::Start()
 
 void Entity::CleanUp()
 {
-
+    DestroyAllComponents();
 }
 
 Component *Entity::AddComponent(component_type type_)
@@ -53,11 +53,35 @@ Component *Entity::AddComponent(component_type type_)
 
     if (ret == nullptr)
         SPOOKYLOG("Component is null / not created");
+    else
+    {
+        components.push_back(ret);
 
-    components.push_back(ret);
+        ret->Start();
+    }
 
     return ret;
 
+}
+
+void Entity::DestroyComponent(Component*& component)
+{
+    if(component != nullptr)
+    {
+        for(std::list<Component*>::iterator it = components.begin(); it != components.end(); ++it)
+        {
+            if((*it) == component)
+            {
+                components.erase(it);
+                break;
+            }
+        }
+
+        component->CleanUp();
+
+        delete component;
+        component = nullptr;
+    }
 }
 
 std::string Entity::GetName()
@@ -68,4 +92,16 @@ std::string Entity::GetName()
 void Entity::SetName(std::string name_)
 {
     name = name_;
+}
+
+void Entity::DestroyAllComponents()
+{
+    for(std::list<Component*>::iterator it = components.begin(); it != components.end(); ++it)
+    {
+        (*it)->CleanUp();
+
+        delete (*it);
+    }
+
+    components.clear();
 }

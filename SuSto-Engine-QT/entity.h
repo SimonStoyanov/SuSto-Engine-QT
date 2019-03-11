@@ -2,6 +2,7 @@
 #define ENTITY_H
 
 #include <list>
+#include <vector>
 
 class Component;
 enum component_type;
@@ -20,16 +21,18 @@ private:
 
 public:
     Component *AddComponent(component_type type_);
+    void DestroyComponent(Component*& component);
 
-public:
     std::string GetName();
     void SetName(std::string name_);
 
 private:
+    void DestroyAllComponents();
+
+private:
     std::string name = "";
 
-
-    std::list<Component*> components;
+    std::list<Component*> components; 
 };
 
 #endif // ENTITY_H
