@@ -43,7 +43,7 @@ EventManager::EventManager()
 
 }
 
-void EventManager::Suscribe(const std::function<void (Event *)> &function, EventType e_type)
+void EventManager::Subscribe(const std::function<void (Event *)> &function, EventType e_type)
 {
     Suscribe(std::bind(&EventManager::OnEvent, this, std::placeholders::_1), EventType::EVENT_NULL);
 

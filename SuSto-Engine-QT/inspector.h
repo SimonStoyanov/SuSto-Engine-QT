@@ -10,6 +10,7 @@ class Transform;
 
 class Entity;
 class MainWindow;
+class Event;
 
 class Inspector : public QWidget
 {
@@ -29,8 +30,9 @@ public:
 
 
 public:
-    std::string GetEntityName();
-
+    std::string GetEntityName();  
+    void SetEntityName(std::string new_name);
+    void onEvent(Event *event);
 private:
     MainWindow* mainwindow = nullptr;
     Ui::Inspector *ui = nullptr;

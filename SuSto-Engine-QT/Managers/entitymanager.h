@@ -44,6 +44,9 @@ public:
         return entities;
     }
 
+    Entity* GetSelectedEntity();
+    void SetSelectedEntity(Entity* entity);
+
 private:
     void Start();
     void CleanUp();
@@ -52,6 +55,7 @@ private:
     static EntityManager* instance;
 
     std::vector<Entity*> entities;
+    Entity* selectedEntity = nullptr;
 };
 
 #endif // ENTITYMANAGER_H

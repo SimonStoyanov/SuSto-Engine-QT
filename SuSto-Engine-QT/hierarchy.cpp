@@ -24,21 +24,22 @@ Hierarchy::~Hierarchy()
 {
     delete ui;
 
-    entities.clear();
+    h_entities.clear();
 }
 
 void Hierarchy::SetSelected(HierarchyEntity *selected)
 {
-    selectedEntity = selected;
-
-    mainwindow->GetInspector()->SelectEntity(selected->GetParent());
+    mainwindow->GetInspector()->SelectEntity(selected->GetEntity());
 }
 
 void Hierarchy::UpdateSelectedEntity()
 {
     Inspector* inspector = mainwindow->GetInspector();
 
-    selectedEntity->SetName(inspector->GetEntityName());
+    /*if (selectedEntity != nullptr)
+        selectedEntity->SetName(inspector->GetEntityName());
+    else
+        inspector->SetEntityName("No entity selected");*/
 }
 
 void Hierarchy::CreateEntityInHierarchy(Entity* entity, std::string name)
@@ -46,6 +47,7 @@ void Hierarchy::CreateEntityInHierarchy(Entity* entity, std::string name)
     HierarchyEntity *new_entity_in_hierarchy = new HierarchyEntity(entity, this);
     new_entity_in_hierarchy->SetName(name);
     ui->scrollLayout->addWidget(new_entity_in_hierarchy);
+    h_entities.push_back(new_entity_in_hierarchy);
 }
 
 void Hierarchy::on_buttonAddEntity_clicked()
@@ -58,5 +60,22 @@ void Hierarchy::on_buttonAddEntity_clicked()
 
 void Hierarchy::on_buttonRemoveEntity_clicked()
 {
+    Entity* selectedEntity = EntityManager::Instance()->GetSelectedEntity();
 
+    if (selectedEntity != nullptr)
+    {
+        for (std::list<HierarchyEntity*>::iterator it; it != h_entities.end(); ++it)
+        {
+            if ((*it)->GetEntity() == selectedEntity)
+            {
+                h_entities.erase(it);
+                delete *it;
+                EntityManager::Instance()->DestroyEntity(selectedEntity);
+
+                break;
+            }
+        }
+    }
+
+    UpdateSelectedEntity();
 }

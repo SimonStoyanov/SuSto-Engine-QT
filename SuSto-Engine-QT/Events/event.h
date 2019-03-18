@@ -3,7 +3,9 @@
 
 enum EventType
 {
-    EVENT_NULL,
+    EVENT_SELECT_ENTITY_CHANGE,
+
+    EVENT_NULL
 };
 
 class Event
