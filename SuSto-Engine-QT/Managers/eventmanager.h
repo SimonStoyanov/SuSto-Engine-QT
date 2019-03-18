@@ -64,6 +64,8 @@ public:
 
     void SendEvent(Event*& ev);
 
+    void OnEvent(Event* ev);
+
 private:
     void Start();
     void CleanUp();

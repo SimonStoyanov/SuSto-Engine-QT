@@ -1,4 +1,7 @@
 #include "eventmanager.h"
+#include <iostream>
+#include <memory>
+#include <functional>
 
 EventDelegate::EventDelegate(EventType e_type)
 {
@@ -42,6 +45,8 @@ EventManager::EventManager()
 
 void EventManager::Suscribe(const std::function<void (Event *)> &function, EventType e_type)
 {
+    Suscribe(std::bind(&EventManager::OnEvent, this, std::placeholders::_1), EventType::EVENT_NULL);
+
     EventDelegate* ed = event_delegates[e_type];
 
     if (ed == nullptr)
@@ -78,6 +83,11 @@ void EventManager::SendEvent(Event*& ev)
         delete ev;
         ev = nullptr;
     }
+}
+
+void EventManager::OnEvent(Event *ev)
+{
+
 }
 
 void EventManager::Start()
