@@ -40,7 +40,7 @@ EventManager::EventManager()
 
 }
 
-void EventManager::Suscribe(const std::function<void (Event *)> &function, EventType e_type)
+void EventManager::Subscribe(const std::function<void (Event *)> &function, EventType e_type)
 {
     EventDelegate* ed = event_delegates[e_type];
 

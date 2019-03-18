@@ -8,17 +8,16 @@ class HierarchyEntity;
 }
 
 class Entity;
-class Hierarchy;
 
 class HierarchyEntity : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit HierarchyEntity(Entity* entity, Hierarchy* hierarchy_, QWidget *parent = 0);
+    explicit HierarchyEntity(Entity* entity, QWidget *parent = 0);
     ~HierarchyEntity();
 
-    Entity* GetParent(){
+    Entity* GetEntity(){
         return parentEntity;
     }
 
@@ -30,7 +29,6 @@ private slots:
 private:
     Ui::HierarchyEntity *ui;
     Entity* parentEntity = nullptr;
-    Hierarchy* hierarchy = nullptr;
 };
 
 #endif // HIERARCHYENTITY_H

@@ -32,8 +32,8 @@ private:
     Ui::Hierarchy *ui;
     MainWindow* mainwindow = nullptr;
 
-    std::list<Entity*> entities;
-    HierarchyEntity* selectedEntity = nullptr;
+    std::list<HierarchyEntity*> h_entities;
+    //HierarchyEntity* selectedEntity = nullptr;
 
     void CreateEntityInHierarchy(Entity* entity, std::string name);
 };

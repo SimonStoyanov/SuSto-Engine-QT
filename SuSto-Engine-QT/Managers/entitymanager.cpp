@@ -34,6 +34,8 @@ void EntityManager::DestroyEntity(Entity*& entity)
         entity->CleanUp();
         delete entity;
         entity = nullptr;
+        if (entity == selectedEntity)
+            selectedEntity = nullptr;
     }
 }
 
@@ -46,6 +48,16 @@ void EntityManager::DestroyAllEntities()
     }
 
     entities.clear();
+}
+
+Entity *EntityManager::GetSelectedEntity()
+{
+    return selectedEntity;
+}
+
+void EntityManager::SetSelectedEntity(Entity *entity)
+{
+    selectedEntity = entity;
 }
 
 void EntityManager::Start()

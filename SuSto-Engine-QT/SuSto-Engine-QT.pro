@@ -106,7 +106,8 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     rendererwidget.cpp \
-    3rdParty/MathGeoLib/Math/grisu3.c
+    3rdParty/MathGeoLib/Math/grisu3.c \
+    Events/selectentitychange.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -205,7 +206,8 @@ HEADERS += \
     hierarchyentity.h \
     inspector.h \
     mainwindow.h \
-    rendererwidget.h
+    rendererwidget.h \
+    Events/selectentitychange.h
 
 FORMS += \
         mainwindow.ui \
