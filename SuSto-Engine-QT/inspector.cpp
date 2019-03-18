@@ -24,7 +24,6 @@ Inspector::Inspector(MainWindow* mainwindow_, QWidget *parent) :
     //QWidget *trn = dynamic_cast<QWidget *>(c_trn);
     ui->ComponentsLayout->addWidget(transform);
 
-
     connect(ui->entityName, SIGNAL(editingFinished()), mainwindow->GetHierarchy(), SLOT(UpdateSelectedEntity()));
 }
 

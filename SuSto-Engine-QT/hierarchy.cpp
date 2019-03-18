@@ -58,5 +58,9 @@ void Hierarchy::on_buttonAddEntity_clicked()
 
 void Hierarchy::on_buttonRemoveEntity_clicked()
 {
-
+    if (selectedEntity == nullptr)
+    {
+        entities.remove(selectedEntity->GetParent());
+        delete selectedEntity;
+    }
 }

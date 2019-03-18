@@ -1,5 +1,6 @@
 #include "component.h"
 #include "entity.h"
+#include "3rdParty/MathGeoLib/Math/float2.h"
 
 Component::Component()
 {
