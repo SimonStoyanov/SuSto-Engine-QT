@@ -17,6 +17,7 @@ public:
     Shape(ShapeType type);
 
     virtual void Redraw(QPainter& painter) {};
+    virtual void Resize(QSize& new_size) {};
 
     ShapeType GetType() const;
 

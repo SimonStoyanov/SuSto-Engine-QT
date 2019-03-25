@@ -45,8 +45,6 @@ EventManager::EventManager()
 
 void EventManager::Subscribe(const std::function<void (Event *)> &function, EventType e_type)
 {
-    Suscribe(std::bind(&EventManager::OnEvent, this, std::placeholders::_1), EventType::EVENT_NULL);
-
     EventDelegate* ed = event_delegates[e_type];
 
     if (ed == nullptr)
