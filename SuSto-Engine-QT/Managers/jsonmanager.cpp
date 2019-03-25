@@ -1,11 +1,8 @@
-#include "ModuleJson.h"
+#include "jsonmanager.h"
 #include "Globals.h"
 #include "Functions.h"
 
-#include "mmgr\nommgr.h"
-#include "mmgr\mmgr.h"
-
-ModuleJson::ModuleJson() : Module()
+ModuleJson::ModuleJson()
 {
 
 }

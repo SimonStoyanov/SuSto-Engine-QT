@@ -1,10 +1,7 @@
 #ifndef __MODULE_JSON_H__
 #define __MODULE_JSON_H__
 
-#include "Module.h"
 #include "Parson\parson.h"
-
-#include "GeometryMath.h"
 
 #include <map>
 
