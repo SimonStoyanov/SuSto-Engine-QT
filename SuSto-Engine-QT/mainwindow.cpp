@@ -15,6 +15,8 @@
 #include "ads/SectionWidget.h"
 #include "ads/DropOverlay.h"
 
+#include "Managers/entitymanager.h"
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -42,6 +44,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(actionExit()));
 
     // TOOLBAR EDIT
+    connect(ui->actionCopy, SIGNAL(triggered()), hierarchy, SLOT(CopyEntity()));
+    connect(ui->actionPaste, SIGNAL(triggered()), hierarchy, SLOT(PasteEntity()));
+    connect(ui->actionDelete, SIGNAL(triggered()), hierarchy, SLOT(on_buttonRemoveEntity_clicked()));
 
     // TOOLBAR HELP
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(actionAbout()));

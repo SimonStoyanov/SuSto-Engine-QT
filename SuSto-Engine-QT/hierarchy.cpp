@@ -2,6 +2,7 @@
 #include "ui_hierarchy.h"
 #include "entity.h"
 #include "mainwindow.h"
+#include "ui_mainwindow.h"
 #include "inspector.h"
 
 #include "hierarchyentity.h"
@@ -11,6 +12,7 @@
 #include "globals.h"
 
 #include <QLabel>
+#include <list>
 
 Hierarchy::Hierarchy(MainWindow* mainwindow_, QWidget *parent) :
     QWidget(parent),
@@ -42,6 +44,30 @@ void Hierarchy::UpdateSelectedEntity()
         inspector->SetEntityName("No entity selected");*/
 }
 
+void Hierarchy::CopyEntity()
+{
+    entityInClipboard = EntityManager::Instance()->GetSelectedEntity();
+    if (entityInClipboard != nullptr){
+        SPOOKYLOG("Selected entity: " + entityInClipboard->GetName());
+        mainwindow->GetUI()->actionPaste->setEnabled(true);
+    }
+    else
+    {
+        SPOOKYLOG("Nothing selected");
+    }
+}
+
+void Hierarchy::PasteEntity()
+{
+    if (entityInClipboard != nullptr)
+    {
+        Entity* new_entity = EntityManager::Instance()->CreateEntity();
+        new_entity->SetName(entityInClipboard->GetName() + "_copy");
+
+        CreateEntityInHierarchy(new_entity, new_entity->GetName());
+    }
+}
+
 void Hierarchy::CreateEntityInHierarchy(Entity* entity, std::string name)
 {
     HierarchyEntity *new_entity_in_hierarchy = new HierarchyEntity(entity, this);
@@ -64,15 +90,19 @@ void Hierarchy::on_buttonRemoveEntity_clicked()
 
     if (selectedEntity != nullptr)
     {
-        for (std::list<HierarchyEntity*>::iterator it; it != h_entities.end(); ++it)
+        for (std::list<HierarchyEntity*>::iterator it = h_entities.begin(); it != h_entities.end(); ++it)
         {
             if ((*it)->GetEntity() == selectedEntity)
             {
-                h_entities.erase(it);
-                delete *it;
-                EntityManager::Instance()->DestroyEntity(selectedEntity);
+                if ((*it)->GetEntity() == entityInClipboard)
+                    mainwindow->GetUI()->actionPaste->setEnabled(false);
 
-                break;
+                delete *it;
+                h_entities.erase(it);
+                EntityManager::Instance()->DestroyEntity(selectedEntity);
+                UpdateSelectedEntity();
+
+                return;
             }
         }
     }

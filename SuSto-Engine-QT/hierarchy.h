@@ -23,6 +23,8 @@ public:
 
 public slots:
     void UpdateSelectedEntity();
+    void CopyEntity();
+    void PasteEntity();
 
 private slots:
     void on_buttonAddEntity_clicked();
@@ -31,10 +33,11 @@ private slots:
 private:
     Ui::Hierarchy *ui;
     MainWindow* mainwindow = nullptr;
+    Entity* entityInClipboard = nullptr;
 
     std::list<HierarchyEntity*> h_entities;
-    //HierarchyEntity* selectedEntity = nullptr;
 
+private:
     void CreateEntityInHierarchy(Entity* entity, std::string name);
 };
 

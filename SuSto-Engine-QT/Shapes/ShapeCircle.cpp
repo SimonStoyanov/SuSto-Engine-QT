@@ -1,6 +1,6 @@
 #include "ShapeCircle.h"
 
-ShapeCircle::ShapeCircle()
+ShapeCircle::ShapeCircle() : Shape(ShapeType::SHAPE_CIRCLE)
 {
 
 }

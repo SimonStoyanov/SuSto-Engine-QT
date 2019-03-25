@@ -33,6 +33,11 @@ public:
         return hierarchy;
     }
 
+    Ui::MainWindow* GetUI()
+    {
+        return ui;
+    }
+
 
 private slots:
     // FILE
