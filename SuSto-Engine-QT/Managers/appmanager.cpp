@@ -2,6 +2,7 @@
 #include "entitymanager.h"
 #include "eventmanager.h"
 #include "shapemanager.h"
+#include "jsonmanager.h"
 #include "globals.h"
 
 AppManager* AppManager::instance = nullptr;
@@ -25,7 +26,8 @@ void AppManager::CleanUp()
 {
     SPOOKYLOG("Application Manager CleanUp");
 
-    EntityManager::DestroyInstance();
-    EventManager::DestroyInstance();
     ShapeManager::DestroyInstance();
+    EntityManager::DestroyInstance();
+    JsonManager::DestroyInstance();
+    EventManager::DestroyInstance();
 }

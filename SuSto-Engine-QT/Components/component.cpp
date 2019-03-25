@@ -1,4 +1,4 @@
-#include "component.h"
+#include "Components/component.h"
 #include "entity.h"
 #include "3rdParty/MathGeoLib/Math/float2.h"
 

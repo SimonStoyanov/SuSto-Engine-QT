@@ -44,7 +44,6 @@ SOURCES += \
         hierarchy.cpp \
         inspector.cpp \
         entity.cpp \
-        component.cpp \
         hierarchyentity.cpp \
         3rdParty/DarkStyle/framelesswindow/framelesswindow.cpp \
         3rdParty/DarkStyle/framelesswindow/windowdragger.cpp \
@@ -99,7 +98,6 @@ SOURCES += \
     Managers/appmanager.cpp \
     Managers/entitymanager.cpp \
     Managers/eventmanager.cpp \
-    component.cpp \
     entity.cpp \
     hierarchy.cpp \
     hierarchyentity.cpp \
@@ -153,7 +151,6 @@ SOURCES += \
     Managers/appmanager.cpp \
     Managers/entitymanager.cpp \
     Managers/eventmanager.cpp \
-    component.cpp \
     drawingwidget.cpp \
     entity.cpp \
     hierarchy.cpp \
@@ -216,7 +213,6 @@ SOURCES += \
     Managers/shapemanager.cpp \
     Shapes/shape.cpp \
     Shapes/shapecircle.cpp \
-    component.cpp \
     drawingwidget.cpp \
     entity.cpp \
     hierarchy.cpp \
@@ -226,7 +222,8 @@ SOURCES += \
     mainwindow.cpp \
     rendererwidget.cpp \
     3rdParty/MathGeoLib/Math/grisu3.c \
-    3rdParty/Parson/parson.c
+    3rdParty/Parson/parson.c \
+    Components/component.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -234,7 +231,6 @@ HEADERS += \
         hierarchy.h \
         inspector.h \
         entity.h \
-        component.h \
         hierarchyentity.h \
         3rdParty/DarkStyle/framelesswindow/framelesswindow.h \
         3rdParty/DarkStyle/framelesswindow/windowdragger.h \
@@ -318,7 +314,6 @@ HEADERS += \
     Managers/appmanager.h \
     Managers/entitymanager.h \
     Managers/eventmanager.h \
-    component.h \
     entity.h \
     globals.h \
     hierarchy.h \
@@ -399,7 +394,6 @@ HEADERS += \
     Managers/appmanager.h \
     Managers/entitymanager.h \
     Managers/eventmanager.h \
-    component.h \
     drawingwidget.h \
     entity.h \
     globals.h \
@@ -490,7 +484,6 @@ HEADERS += \
     Managers/shapemanager.h \
     Shapes/shape.h \
     Shapes/shapecircle.h \
-    component.h \
     drawingwidget.h \
     entity.h \
     globals.h \
@@ -498,7 +491,8 @@ HEADERS += \
     hierarchyentity.h \
     inspector.h \
     mainwindow.h \
-    rendererwidget.h
+    rendererwidget.h \
+    Components/component.h
 
 FORMS += \
         mainwindow.ui \

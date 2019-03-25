@@ -1,9 +1,16 @@
-#ifndef __MODULE_JSON_H__
-#define __MODULE_JSON_H__
+#ifndef JSONMANAGER_H
+#define JSONMANAGER_H
 
-#include "Parson\parson.h"
+#include "3rdParty/Parson/parson.h"
 
+#include <list>
 #include <map>
+
+#include "3rdParty/MathGeoLib/Math/float2.h"
+#include "3rdParty/MathGeoLib/Math/float3.h"
+#include "3rdParty/MathGeoLib/Math/float4.h"
+
+class JsonDoc;
 
 class DataAbstraction
 {
@@ -15,11 +22,11 @@ public:
 	void AddInt(const std::string& name, int val);
 	void AddBool(const std::string& name, bool val);
 	void AddFloat(const std::string& name, float val);
-	void AddString(const std::string& name, std::string val);
-	void AddFloat2(const std::string& name, float2 val);
-	void AddFloat3(const std::string& name, float3 val);
-	void AddFloat4(const std::string& name, float4 val);
-	void AddFloat2Vector(const std::string& name, const std::vector<float2> val);
+    void AddString(const std::string& name, const std::string& val);
+    void AddFloat2(const std::string& name, const float2& val);
+    void AddFloat3(const std::string& name, const float3& val);
+    void AddFloat4(const std::string& name, const float4& val);
+    void AddFloat2Vector(const std::string& name, const std::vector<float2> val);
 
 	int GetInt(const std::string& name, int def = 0);
 	bool GetBool(const std::string& name, bool def = false);
@@ -30,8 +37,8 @@ public:
 	float4 GetFloat4(const std::string& name, float4 def = float4::zero);
 	std::vector<float2> GetFloat2Vector(const std::string& name);
 
-	void Serialize(JSON_Doc& doc);
-	void DeSerialize(JSON_Doc& doc);
+    void Serialize(JsonDoc& doc);
+    void DeSerialize(JsonDoc& doc);
 
 private:
 	std::map<std::string, int>		           ints;
@@ -44,13 +51,13 @@ private:
 	std::map<std::string, std::vector<float2>> floats2_vector;
 };
 
-class JSON_Doc
+class JsonDoc
 {
 public:
-	JSON_Doc();
-	JSON_Doc(JSON_Value* value, JSON_Object* object, const char* path);
-	JSON_Doc(JSON_Doc& doc);
-	~JSON_Doc();
+    JsonDoc();
+    JsonDoc(JSON_Value* value, JSON_Object* object, const char* path);
+    JsonDoc(const JsonDoc& doc);
+    ~JsonDoc();
 
 	void SetString(const std::string& set, const char* str);
 	void SetBool(const std::string& set, bool bo);
@@ -59,11 +66,11 @@ public:
 	void SetNumber3(const std::string& set, float3 val);
 	void SetNumber4(const std::string& set, float4 val);
 	const char* GetString(const std::string& str, const char* defaul = "");
-	const bool GetBool(const std::string& bo, bool defaul = false);
-	const double GetNumber(const std::string& nu, double defaul = 0);
-	const float2 GetNumber2(const std::string& fl, float2 defaul = float2(0, 0));
-	const float3 GetNumber3(const std::string& fl, float3 defaul = float3(0, 0, 0));
-	const float4 GetNumber4(const std::string& fl, float4 defaul = float4(0, 0, 0, 0));
+    bool GetBool(const std::string& bo, bool defaul = false);
+    double GetNumber(const std::string& nu, double defaul = 0);
+    float2 GetNumber2(const std::string& fl, float2 defaul = float2(0, 0));
+    float3 GetNumber3(const std::string& fl, float3 defaul = float3(0, 0, 0));
+    float4 GetNumber4(const std::string& fl, float4 defaul = float4(0, 0, 0, 0));
 
 	void SetArray(const std::string& set);
 	bool ArrayExists(const std::string& arr);
@@ -87,7 +94,7 @@ public:
 	void MoveToRoot();
 	void AddSection(const std::string& set);
 
-	JSON_Doc GetNode();
+    JsonDoc GetNode();
 
 	void Clear();
 
@@ -106,25 +113,54 @@ private:
 	std::string		 path;
 };
 
-class ModuleJson : public Module
+class JsonManager
 {
+private:
+    JsonManager();
+    void operator delete(void *) {}
+
 public:
-	ModuleJson();
-	~ModuleJson();
+    static JsonManager* Instance()
+    {
+        if(instance == nullptr)
+        {
+            instance = new JsonManager();
 
-	bool Awake();
-	bool CleanUp();
+            instance->Start();
+        }
 
-	JSON_Doc* LoadJSON(const char* path);
-	JSON_Doc* CreateJSON(const char * path, const char* name, const char* extension);
-	JSON_Doc* CreateJSON(const char * filepath);
-	void UnloadJSON(JSON_Doc* path);
+        return instance;
+    }
+
+    static void DestroyInstance()
+    {
+        if(instance != nullptr)
+        {
+            instance->CleanUp();
+
+            delete instance;
+
+            instance = nullptr;
+        }
+    }
+
+
+    JsonDoc* LoadJSON(const std::string& path);
+    JsonDoc* CreateJSON(const std::string& path, const std::string& name, const std::string& extension);
+    JsonDoc* CreateJSON(const std::string& filepath);
+    void UnloadJSON(JsonDoc* path);
+
 
 private:
+    void Start();
+    void CleanUp();
+
 	void UnloadAllJSONs();
 
 private:
-	std::list<JSON_Doc*> jsons;
+    static JsonManager* instance;
+
+    std::list<JsonDoc*> jsons;
 };
 
-#endif // !__MODULE_JSON_H__
+#endif // !JSONMANAGER_H

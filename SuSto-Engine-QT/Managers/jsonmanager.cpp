@@ -1,42 +1,23 @@
 #include "jsonmanager.h"
-#include "Globals.h"
-#include "Functions.h"
+#include "globals.h"
 
-ModuleJson::ModuleJson()
+JsonManager* JsonManager::instance = nullptr;
+
+JsonManager::JsonManager()
 {
 
 }
 
-ModuleJson::~ModuleJson()
+JsonDoc* JsonManager::LoadJSON(const std::string& path)
 {
-}
+    JsonDoc* ret = nullptr;
 
-bool ModuleJson::Awake()
-{
-	bool ret = true;
-
-	JSON_Doc* doc = CreateJSON("C://Users//Guillem//Desktop//test.json");
-
-	if (doc != nullptr)
-	{
-		doc->SetArray("array");
-
-		doc->AddNumber2ToArray("array", float2(3, 4));
-
-		doc->Save();
-	}
-
-	return ret;
-}
-
-JSON_Doc* ModuleJson::LoadJSON(const char * path)
-{
-	JSON_Doc* ret = nullptr;
+    const char* c_path = path.c_str();
 
 	bool exists = false;
-	for (std::list<JSON_Doc*>::iterator it = jsons.begin(); it != jsons.end(); it++)
+    for (std::list<JsonDoc*>::iterator it = jsons.begin(); it != jsons.end(); it++)
 	{
-		if (TextCmp(path, (*it)->GetPath().c_str()))
+        if (path.compare((*it)->GetPath()) == 0)
 		{
 			ret = (*it);
 			exists = true;
@@ -46,16 +27,16 @@ JSON_Doc* ModuleJson::LoadJSON(const char * path)
 
 	if (!exists)
 	{
-		JSON_Value *user_data = json_parse_file(path);
+        JSON_Value *user_data = json_parse_file(c_path);
 		JSON_Object *root_object = json_value_get_object(user_data);
 
 		if (user_data == nullptr || root_object == nullptr)
 		{
-			INTERNAL_LOG("Error loading %s", path);
+            //SPOOKYLOG("Error loading %s", c_path);
 		}
 		else
 		{
-			JSON_Doc* new_doc = new JSON_Doc(user_data, root_object, path);
+            JsonDoc* new_doc = new JsonDoc(user_data, root_object, c_path);
 			jsons.push_back(new_doc);
 
 			ret = new_doc;
@@ -66,25 +47,25 @@ JSON_Doc* ModuleJson::LoadJSON(const char * path)
 }
 
 
-JSON_Doc* ModuleJson::CreateJSON(const char * path, const char* name, const char* extension)
+JsonDoc* JsonManager::CreateJSON(const std::string& path, const std::string& name, const std::string& extension)
 {
-	JSON_Doc* ret = nullptr;
+    JsonDoc* ret = nullptr;
 
-	std::string filepath = std::string(path) + std::string(name) + std::string(".") + std::string(extension);
+    std::string filepath = path + name + std::string(".") + extension;
 
-	ret = CreateJSON(filepath.c_str());
+    ret = CreateJSON(filepath);
 
 	return ret;
 }
 
-JSON_Doc * ModuleJson::CreateJSON(const char * filepath)
+JsonDoc * JsonManager::CreateJSON(const std::string& filepath)
 {
-	JSON_Doc* ret = nullptr;
+    JsonDoc* ret = nullptr;
 
 	bool exists = false;
-	for (std::list<JSON_Doc*>::iterator it = jsons.begin(); it != jsons.end(); it++)
+    for (std::list<JsonDoc*>::iterator it = jsons.begin(); it != jsons.end(); it++)
 	{
-		if (TextCmp(filepath, (*it)->GetPath().c_str()))
+        if (filepath.compare((*it)->GetPath()) == 0)
 		{
 			exists = true;
 			break;
@@ -93,7 +74,7 @@ JSON_Doc * ModuleJson::CreateJSON(const char * filepath)
 
 	if (exists)
 	{
-		INTERNAL_LOG("Error creating %s. There is already a file with this path/name", filepath);
+        //INTERNAL_LOG("Error creating %s. There is already a file with this path/name", filepath);
 	}
 	else
 	{
@@ -101,13 +82,13 @@ JSON_Doc * ModuleJson::CreateJSON(const char * filepath)
 
 		if (root_value == nullptr)
 		{
-			INTERNAL_LOG("Error creating %s. Wrong path?", filepath);
+            //INTERNAL_LOG("Error creating %s. Wrong path?", filepath);
 		}
 		else
 		{
 			JSON_Object* root_object = json_value_get_object(root_value);
 
-			JSON_Doc* new_doc = new JSON_Doc(root_value, root_object, filepath);
+            JsonDoc* new_doc = new JsonDoc(root_value, root_object, filepath.c_str());
 			jsons.push_back(new_doc);
 
 			new_doc->Save();
@@ -119,16 +100,16 @@ JSON_Doc * ModuleJson::CreateJSON(const char * filepath)
 	return ret;
 }
 
-void ModuleJson::UnloadJSON(JSON_Doc * son)
+void JsonManager::UnloadJSON(JsonDoc * json)
 {
-	if (son != nullptr)
+    if (json != nullptr)
 	{
-		for (std::list<JSON_Doc*>::iterator it = jsons.begin(); it != jsons.end();)
+        for (std::list<JsonDoc*>::iterator it = jsons.begin(); it != jsons.end();)
 		{
-			if ((*it) == son)
+            if ((*it) == json)
 			{
 				(*it)->CleanUp();
-				RELEASE(*it);
+                delete(*it);
 
 				it = jsons.erase(it);
 				break;
@@ -140,31 +121,27 @@ void ModuleJson::UnloadJSON(JSON_Doc * son)
 	}
 }
 
-void ModuleJson::UnloadAllJSONs()
+void JsonManager::UnloadAllJSONs()
 {
-	for (std::list<JSON_Doc*>::iterator it = jsons.begin(); it != jsons.end(); ++it)
+    for (std::list<JsonDoc*>::iterator it = jsons.begin(); it != jsons.end(); ++it)
 	{
 		(*it)->CleanUp();
-		RELEASE(*it);
+        delete(*it);
 	}
 
 	jsons.clear();
 }
 
-bool ModuleJson::CleanUp()
+void JsonManager::CleanUp()
 {
-	bool ret = true;
-
 	UnloadAllJSONs();
-
-	return ret;
 }
 
-JSON_Doc::JSON_Doc()
+JsonDoc::JsonDoc()
 {
 }
 
-JSON_Doc::JSON_Doc(JSON_Value * _value, JSON_Object * _object, const char* _path)
+JsonDoc::JsonDoc(JSON_Value * _value, JSON_Object * _object, const char* _path)
 {
 	value = _value;
 	object = _object;
@@ -172,7 +149,7 @@ JSON_Doc::JSON_Doc(JSON_Value * _value, JSON_Object * _object, const char* _path
 	path = _path;
 }
 
-JSON_Doc::JSON_Doc(JSON_Doc & doc)
+JsonDoc::JsonDoc(const JsonDoc & doc)
 {
 	value = doc.value;
 	object = doc.object;
@@ -180,33 +157,33 @@ JSON_Doc::JSON_Doc(JSON_Doc & doc)
 	root = object;
 }
 
-JSON_Doc::~JSON_Doc()
+JsonDoc::~JsonDoc()
 {
 }
 
-void JSON_Doc::SetString(const std::string& set, const char * str)
+void JsonDoc::SetString(const std::string& set, const char * str)
 {
 	json_object_dotset_string(object, set.c_str(), str);
 }
 
-void JSON_Doc::SetBool(const std::string& set, bool bo)
+void JsonDoc::SetBool(const std::string& set, bool bo)
 {
 	json_object_dotset_boolean(object, set.c_str(), bo);
 }
 
-void JSON_Doc::SetNumber(const std::string& set, double nu)
+void JsonDoc::SetNumber(const std::string& set, double nu)
 {
 	json_object_dotset_number(object, set.c_str(), nu);
 }
 
-void JSON_Doc::SetNumber2(const std::string & set, float2 val)
+void JsonDoc::SetNumber2(const std::string & set, float2 val)
 {
 	SetArray(set);
 	AddNumberToArray(set, val.x);
 	AddNumberToArray(set, val.y);
 }
 
-void JSON_Doc::SetNumber3(const std::string& set, float3 val)
+void JsonDoc::SetNumber3(const std::string& set, float3 val)
 {
 	SetArray(set);
 	AddNumberToArray(set, val.x);
@@ -214,7 +191,7 @@ void JSON_Doc::SetNumber3(const std::string& set, float3 val)
 	AddNumberToArray(set, val.z);
 }
 
-void JSON_Doc::SetNumber4(const std::string& set, float4 val)
+void JsonDoc::SetNumber4(const std::string& set, float4 val)
 {
 	SetArray(set);
 	AddNumberToArray(set, val.x);
@@ -223,7 +200,7 @@ void JSON_Doc::SetNumber4(const std::string& set, float4 val)
 	AddNumberToArray(set, val.z);
 }
 
-void JSON_Doc::SetArray(const std::string& set)
+void JsonDoc::SetArray(const std::string& set)
 {
 	JSON_Value* va = json_value_init_array();
 	JSON_Array* arr = json_value_get_array(va);
@@ -231,7 +208,7 @@ void JSON_Doc::SetArray(const std::string& set)
 	json_object_dotset_value(object, set.c_str(), va);
 }
 
-bool JSON_Doc::ArrayExists(const std::string & arr)
+bool JsonDoc::ArrayExists(const std::string & arr)
 {
 	bool ret = false;
 
@@ -243,7 +220,7 @@ bool JSON_Doc::ArrayExists(const std::string & arr)
 	return ret;
 }
 
-void JSON_Doc::ClearArray(const std::string& arr)
+void JsonDoc::ClearArray(const std::string& arr)
 {
 	JSON_Array* array = json_object_dotget_array(object, arr.c_str());
 
@@ -253,7 +230,7 @@ void JSON_Doc::ClearArray(const std::string& arr)
 	}
 }
 
-void JSON_Doc::RemoveArrayIndex(const std::string & arr, int index)
+void JsonDoc::RemoveArrayIndex(const std::string & arr, int index)
 {
 	JSON_Array* array = json_object_dotget_array(object, arr.c_str());
 
@@ -263,7 +240,7 @@ void JSON_Doc::RemoveArrayIndex(const std::string & arr, int index)
 	}
 }
 
-int JSON_Doc::GetArrayCount(const std::string& set) const
+int JsonDoc::GetArrayCount(const std::string& set) const
 {
 	int ret = 0;
 
@@ -277,7 +254,7 @@ int JSON_Doc::GetArrayCount(const std::string& set) const
 	return ret;
 }
 
-const char * JSON_Doc::GetStringFromArray(const std::string& arr, int index)
+const char * JsonDoc::GetStringFromArray(const std::string& arr, int index)
 {
 	const char* ret = nullptr;
 
@@ -294,7 +271,7 @@ const char * JSON_Doc::GetStringFromArray(const std::string& arr, int index)
 	return ret;
 }
 
-bool JSON_Doc::GetBoolFromArray(const std::string& arr, int index)
+bool JsonDoc::GetBoolFromArray(const std::string& arr, int index)
 {
 	bool ret = false;
 
@@ -311,7 +288,7 @@ bool JSON_Doc::GetBoolFromArray(const std::string& arr, int index)
 	return ret;
 }
 
-double JSON_Doc::GetNumberFromArray(const std::string& arr, int index)
+double JsonDoc::GetNumberFromArray(const std::string& arr, int index)
 {
 	double ret = 0;
 
@@ -328,11 +305,11 @@ double JSON_Doc::GetNumberFromArray(const std::string& arr, int index)
 	return ret;
 }
 
-float2 JSON_Doc::GetNumber2FromArray(const std::string & arr, int index)
+float2 JsonDoc::GetNumber2FromArray(const std::string & arr, int index)
 {
 	float2 ret = float2::zero;
 
-	JSON_Doc section_doc = this->GetNode();
+    JsonDoc section_doc = this->GetNode();
 
 	if (section_doc.MoveToSectionFromArray(arr, index))
 	{
@@ -342,7 +319,7 @@ float2 JSON_Doc::GetNumber2FromArray(const std::string & arr, int index)
 	return ret;
 }
 
-void JSON_Doc::AddStringToArray(const std::string& arr, const char * str)
+void JsonDoc::AddStringToArray(const std::string& arr, const char * str)
 {
 	JSON_Array* array = json_object_dotget_array(object, arr.c_str());
 
@@ -352,7 +329,7 @@ void JSON_Doc::AddStringToArray(const std::string& arr, const char * str)
 	}
 }
 
-void JSON_Doc::AddBoolToArray(const std::string& arr, bool bo)
+void JsonDoc::AddBoolToArray(const std::string& arr, bool bo)
 {
 	JSON_Array* array = json_object_dotget_array(object, arr.c_str());
 
@@ -362,7 +339,7 @@ void JSON_Doc::AddBoolToArray(const std::string& arr, bool bo)
 	}
 }
 
-void JSON_Doc::AddNumberToArray(const std::string& arr, double set)
+void JsonDoc::AddNumberToArray(const std::string& arr, double set)
 {
 	JSON_Array* array = json_object_dotget_array(object, arr.c_str());
 
@@ -372,7 +349,7 @@ void JSON_Doc::AddNumberToArray(const std::string& arr, double set)
 	}
 }
 
-void JSON_Doc::AddNumber2ToArray(const std::string & arr, float2 set)
+void JsonDoc::AddNumber2ToArray(const std::string & arr, float2 set)
 {
 	AddSectionToArray(arr);
 
@@ -380,7 +357,7 @@ void JSON_Doc::AddNumber2ToArray(const std::string & arr, float2 set)
 	
 	if (section > 0)
 	{
-		JSON_Doc section_doc = this->GetNode();
+        JsonDoc section_doc = this->GetNode();
 
 		if (section_doc.MoveToSectionFromArray(arr, section - 1))
 		{
@@ -389,7 +366,7 @@ void JSON_Doc::AddNumber2ToArray(const std::string & arr, float2 set)
 	}
 }
 
-void JSON_Doc::AddSectionToArray(const std::string& arr)
+void JsonDoc::AddSectionToArray(const std::string& arr)
 {
 	JSON_Array* array = json_object_dotget_array(object, arr.c_str());
 
@@ -399,7 +376,7 @@ void JSON_Doc::AddSectionToArray(const std::string& arr)
 	}
 }
 
-bool JSON_Doc::MoveToSectionFromArray(const std::string& arr, int index)
+bool JsonDoc::MoveToSectionFromArray(const std::string& arr, int index)
 {
 	bool ret = false;
 
@@ -416,7 +393,7 @@ bool JSON_Doc::MoveToSectionFromArray(const std::string& arr, int index)
 	return ret;
 }
 
-const char * JSON_Doc::GetString(const std::string& str, const char* defaul)
+const char * JsonDoc::GetString(const std::string& str, const char* defaul)
 {
 	const char* ret = defaul;
 
@@ -426,7 +403,7 @@ const char * JSON_Doc::GetString(const std::string& str, const char* defaul)
 	return ret;
 }
 
-const bool JSON_Doc::GetBool(const std::string& str, bool defaul)
+bool JsonDoc::GetBool(const std::string& str, bool defaul)
 {
 	bool ret = defaul;
 
@@ -436,7 +413,7 @@ const bool JSON_Doc::GetBool(const std::string& str, bool defaul)
 	return ret;
 }
 
-const double JSON_Doc::GetNumber(const std::string& str, double defaul)
+double JsonDoc::GetNumber(const std::string& str, double defaul)
 {
 	double ret = defaul;
 
@@ -446,7 +423,7 @@ const double JSON_Doc::GetNumber(const std::string& str, double defaul)
 	return ret;
 }
 
-const float2 JSON_Doc::GetNumber2(const std::string & fl, float2 defaul)
+float2 JsonDoc::GetNumber2(const std::string & fl, float2 defaul)
 {
 	float2 ret = float2::zero;
 
@@ -463,7 +440,7 @@ const float2 JSON_Doc::GetNumber2(const std::string & fl, float2 defaul)
 	return ret;
 }
 
-const float3 JSON_Doc::GetNumber3(const std::string& fl, float3 defaul)
+float3 JsonDoc::GetNumber3(const std::string& fl, float3 defaul)
 {
 	float3 ret = float3::zero;
 
@@ -481,7 +458,7 @@ const float3 JSON_Doc::GetNumber3(const std::string& fl, float3 defaul)
 	return ret;
 }
 
-const float4 JSON_Doc::GetNumber4(const std::string& fl, float4 defaul)
+float4 JsonDoc::GetNumber4(const std::string& fl, float4 defaul)
 {
 	float4 ret = float4::zero;
 
@@ -500,7 +477,7 @@ const float4 JSON_Doc::GetNumber4(const std::string& fl, float4 defaul)
 	return ret;
 }
 
-bool JSON_Doc::MoveToSection(const std::string& set)
+bool JsonDoc::MoveToSection(const std::string& set)
 {
 	bool ret = false;
 
@@ -515,27 +492,27 @@ bool JSON_Doc::MoveToSection(const std::string& set)
 	return ret;
 }
 
-void JSON_Doc::RemoveSection(const std::string& set)
+void JsonDoc::RemoveSection(const std::string& set)
 {
 	json_object_remove(object, set.c_str());
 }
 
-void JSON_Doc::MoveToRoot()
+void JsonDoc::MoveToRoot()
 {
 	object = root;
 }
 
-void JSON_Doc::AddSection(const std::string& set)
+void JsonDoc::AddSection(const std::string& set)
 {
 	json_object_set_value(object, set.c_str(), json_value_init_object());
 }
 
-JSON_Doc JSON_Doc::GetNode()
+JsonDoc JsonDoc::GetNode()
 {
-	return JSON_Doc(*this);
+    return JsonDoc(*this);
 }
 
-void JSON_Doc::Clear()
+void JsonDoc::Clear()
 {
 	json_value_free(value);
 	value = json_value_init_object();
@@ -543,22 +520,22 @@ void JSON_Doc::Clear()
 	root = object;
 }
 
-std::string JSON_Doc::GetPath()
+std::string JsonDoc::GetPath()
 {
 	return path;
 }
 
-void JSON_Doc::Save()
+void JsonDoc::Save()
 {
 	json_serialize_to_file_pretty(value, path.c_str());
 }
 
-void JSON_Doc::CleanUp()
+void JsonDoc::CleanUp()
 {
 	json_value_free(value);
 }
 
-bool JSON_Doc::FindValue(const char * str, json_value_type type)
+bool JsonDoc::FindValue(const char * str, json_value_type type)
 {
 	bool ret = false;
 
@@ -570,7 +547,7 @@ bool JSON_Doc::FindValue(const char * str, json_value_type type)
 	return ret;
 }
 
-bool JSON_Doc::FindArrayValue(const char * arr, int index, json_value_type type)
+bool JsonDoc::FindArrayValue(const char * arr, int index, json_value_type type)
 {
 	bool ret = false;
 
@@ -617,22 +594,22 @@ void DataAbstraction::AddFloat(const std::string & name, float val)
 	floats[name] = val;
 }
 
-void DataAbstraction::AddString(const std::string & name, std::string val)
+void DataAbstraction::AddString(const std::string & name, const std::string& val)
 {
 	strings[name] = val;
 }
 
-void DataAbstraction::AddFloat2(const std::string & name, float2 val)
+void DataAbstraction::AddFloat2(const std::string & name, const float2& val)
 {
 	floats2[name] = val;
 }
 
-void DataAbstraction::AddFloat3(const std::string & name, float3 val)
+void DataAbstraction::AddFloat3(const std::string & name, const float3& val)
 {
 	floats3[name] = val;
 }
 
-void DataAbstraction::AddFloat4(const std::string & name, float4 val)
+void DataAbstraction::AddFloat4(const std::string & name, const float4& val)
 {
 	floats4[name] = val;
 }
@@ -722,7 +699,7 @@ std::vector<float2> DataAbstraction::GetFloat2Vector(const std::string & name)
 	return std::vector<float2>();
 }
 
-void DataAbstraction::Serialize(JSON_Doc & doc)
+void DataAbstraction::Serialize(JsonDoc & doc)
 {
 	int counter = 0;
 	if (ints.size() > 0)
@@ -868,7 +845,7 @@ void DataAbstraction::Serialize(JSON_Doc & doc)
 	}
 }
 
-void DataAbstraction::DeSerialize(JSON_Doc & doc)
+void DataAbstraction::DeSerialize(JsonDoc & doc)
 {
 	int ints_count = doc.GetNumber("ints_count", 0);
 	int bools_count = doc.GetNumber("bools_count", 0);
