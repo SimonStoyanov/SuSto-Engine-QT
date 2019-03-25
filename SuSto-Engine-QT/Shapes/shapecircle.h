@@ -1,7 +1,7 @@
 #ifndef SHAPECIRCLE_H
 #define SHAPECIRCLE_H
 
-#include "Shapes/Shape.h"
+#include "Shapes/shape.h"
 
 class ShapeCircle : public Shape
 {

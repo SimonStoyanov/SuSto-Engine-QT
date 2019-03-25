@@ -7,6 +7,7 @@
 enum ShapeType
 {
     SHAPE_CIRCLE,
+    SHAPE_QUAD,
 
     SHAPE_NULL
 };

@@ -1,4 +1,4 @@
-#include "ShapeCircle.h"
+#include "shapecircle.h"
 
 ShapeCircle::ShapeCircle() : Shape(ShapeType::SHAPE_CIRCLE)
 {

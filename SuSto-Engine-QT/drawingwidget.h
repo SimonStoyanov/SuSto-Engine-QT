@@ -17,7 +17,9 @@ public:
     explicit DrawingWidget(QWidget *parent = 0);
     ~DrawingWidget();
 
-
+    void paintEvent(QPaintEvent* event) override;
+    QSize sizeHint() const;
+    QSize minimumSizeHint() const;
 
 private:
     Ui::DrawingWidget *ui;

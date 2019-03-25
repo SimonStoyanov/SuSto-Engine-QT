@@ -8,6 +8,7 @@
 #include "hierarchy.h"
 #include "inspector.h"
 #include "rendererwidget.h"
+#include "drawingwidget.h"
 
 #include <QFile>
 #include <QtWidgets>
@@ -25,7 +26,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     hierarchy = new Hierarchy(this);
     inspector = new Inspector(this);
-    rendering = new RendererWidget();
+    //rendering = new RendererWidget();
+    drawing = new DrawingWidget();
 
     // Init Advanced Docking
     advanced_docking_container = new ADS_NS::ContainerWidget();
@@ -33,7 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     docking_area_hierarchy = ADS_NS::SectionContent::newSectionContent(QString("docking_area_hierarchy"), advanced_docking_container, new QLabel("Hierarchy"), hierarchy);
     docking_area_inspector = ADS_NS::SectionContent::newSectionContent(QString("docking_area_inspector"), advanced_docking_container, new QLabel("Inspector"), inspector);
-    docking_area_rendering = ADS_NS::SectionContent::newSectionContent(QString("docking_area_rendering"), advanced_docking_container, new QLabel("Scene"), rendering);
+    docking_area_rendering = ADS_NS::SectionContent::newSectionContent(QString("docking_area_rendering"), advanced_docking_container, new QLabel("Scene"), drawing);
 
     advanced_docking_container->addSectionContent(docking_area_rendering, NULL, ADS_NS::CenterDropArea);
     advanced_docking_container->addSectionContent(docking_area_hierarchy, NULL, ADS_NS::LeftDropArea);
