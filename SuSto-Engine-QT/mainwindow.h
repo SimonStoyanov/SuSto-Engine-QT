@@ -14,6 +14,7 @@ class MainWindow;
 class Hierarchy;
 class Inspector;
 class RendererWidget;
+class DrawingWidget;
 
 class MainWindow : public QMainWindow
 {
@@ -54,6 +55,7 @@ private:
     Hierarchy* hierarchy = nullptr;
     Inspector* inspector = nullptr;
     RendererWidget* rendering = nullptr;
+    DrawingWidget* drawing = nullptr;
 
     // The main container for dockings.
     ADS_NS::ContainerWidget* advanced_docking_container = nullptr;

@@ -1,6 +1,7 @@
 #include "appmanager.h"
 #include "entitymanager.h"
 #include "eventmanager.h"
+#include "shapemanager.h"
 #include "globals.h"
 
 AppManager* AppManager::instance = nullptr;
@@ -26,4 +27,5 @@ void AppManager::CleanUp()
 
     EntityManager::DestroyInstance();
     EventManager::DestroyInstance();
+    ShapeManager::DestroyInstance();
 }

@@ -163,8 +163,9 @@ SOURCES += \
     mainwindow.cpp \
     rendererwidget.cpp \
     3rdParty/MathGeoLib/Math/grisu3.c \
-    Shapes/Shape.cpp \
-    Shapes/ShapeCircle.cpp
+    Managers/shapemanager.cpp \
+    Shapes/shapecircle.cpp \
+    Shapes/shape.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -346,8 +347,9 @@ HEADERS += \
     inspector.h \
     mainwindow.h \
     rendererwidget.h \
-    Shapes/Shape.h \
-    Shapes/ShapeCircle.h
+    Managers/shapemanager.h \
+    Shapes/shapecircle.h \
+    Shapes/shape.h
 
 FORMS += \
         mainwindow.ui \
