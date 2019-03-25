@@ -2,15 +2,17 @@
 #include "ui_hierarchyentity.h"
 #include "Managers/entitymanager.h"
 #include "Events/event.h"
+#include "globals.h"
 
 #include "entity.h"
 
 HierarchyEntity::HierarchyEntity(Entity* entity, QWidget* parent) :
     QWidget(parent),
-    ui(new Ui::HierarchyEntity),
-    parentEntity(entity)
+    ui(new Ui::HierarchyEntity)
 {
     ui->setupUi(this);
+
+    parentEntity = entity;
 
 }
 
@@ -19,10 +21,17 @@ HierarchyEntity::~HierarchyEntity()
     delete ui;
 }
 
-void HierarchyEntity::SetName(std::string name)
+Entity *HierarchyEntity::GetEntity()
 {
-    ui->entityName->setText(name.c_str());
-    parentEntity->SetName(name.c_str());
+    return parentEntity;
+}
+
+void HierarchyEntity::UpdateUI()
+{
+    if(parentEntity != nullptr)
+    {
+        ui->entityName->setText(parentEntity->GetName().c_str());
+    }
 }
 
 void HierarchyEntity::on_entityName_clicked()

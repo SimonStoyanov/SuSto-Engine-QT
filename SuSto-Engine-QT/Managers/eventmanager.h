@@ -62,7 +62,7 @@ public:
     void Subscribe(const std::function<void(Event*)>& function, EventType e_type);
     void UnSuscribe(const std::function<void(Event*)>& function, EventType e_type);
 
-    void SendEvent(Event*& ev);
+    void SendEvent(Event* ev);
 
     void OnEvent(Event* ev);
 

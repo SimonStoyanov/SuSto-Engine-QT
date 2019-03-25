@@ -19,12 +19,8 @@ public:
     explicit Hierarchy(MainWindow* mainwindow_, QWidget *parent = nullptr);
     ~Hierarchy();
 
-    void SetSelected(HierarchyEntity* selected);
-
 public slots:
-    void UpdateSelectedEntity();
-    void CopyEntity();
-    void PasteEntity();
+    void UpdateUI();
 
 private slots:
     void on_buttonAddEntity_clicked();
@@ -33,12 +29,8 @@ private slots:
 private:
     Ui::Hierarchy *ui;
     MainWindow* mainwindow = nullptr;
-    Entity* entityInClipboard = nullptr;
 
-    std::list<HierarchyEntity*> h_entities;
-
-private:
-    void CreateEntityInHierarchy(Entity* entity, std::string name);
+    std::vector<HierarchyEntity*> h_entities;
 };
 
 #endif // HIERARCHY_H

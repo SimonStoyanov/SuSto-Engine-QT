@@ -9,9 +9,12 @@
 #include "Components/c_transform.h"
 #include "ui_transform.h"
 #include "Managers/eventmanager.h"
+#include "Managers/entitymanager.h"
+#include "Events/event.h"
+#include "Events/selectentitychange.h"
 
 #include <functional>
-#include <qcombobox>
+#include <QComboBox>
 
 Inspector::Inspector(MainWindow* mainwindow_, QWidget *parent) :
     QWidget(parent),
@@ -21,15 +24,15 @@ Inspector::Inspector(MainWindow* mainwindow_, QWidget *parent) :
 {
     ui->setupUi(this);
 
+    EventManager::Instance()->Subscribe(std::bind(&Inspector::OnEvent, this, std::placeholders::_1), EventType::EVENT_SELECT_ENTITY_CHANGE);
+
     QWidget *transform = new QWidget;
     trn->setupUi(transform);
 
-    //QWidget *trn = dynamic_cast<QWidget *>(c_trn);
     ui->ComponentsLayout->addWidget(transform);
 
-    EventManager::Instance()->Subscribe(std::bind(&Inspector::onEvent, this, std::placeholders::_1), EventType::EVENT_SELECT_ENTITY_CHANGE);
-
-    connect(ui->entityName, SIGNAL(editingFinished()), mainwindow->GetHierarchy(), SLOT(UpdateSelectedEntity()));
+    connect(ui->entityName, SIGNAL(editingFinished()), this, SLOT(SetEntityDataFromUI()));
+    connect(ui->entityName, SIGNAL(textChanged(QString)), this, SLOT(EntityNameChanged(QString)));
 }
 
 Inspector::~Inspector()
@@ -38,23 +41,58 @@ Inspector::~Inspector()
     delete trn;
 }
 
-void Inspector::SetInspectorView()
+void Inspector::UpdateUI()
 {
-    ui->entityName->setText(selectedEntity->GetName().c_str());
+    Entity* selected_entity = EntityManager::Instance()->GetSelectedEntity();
+
+    if(selected_entity != nullptr)
+    {
+        ui->entityName->setText(selected_entity->GetName().c_str());
+    }
+    else
+    {
+        ui->entityName->setText("");
+    }
+
+    mainwindow->GetHierarchy()->UpdateUI();
+
+    SPOOKYLOG("updating inspector ui");
 }
 
-std::string Inspector::GetEntityName()
+void Inspector::EntityNameChanged(const QString& str)
 {
-    return ui->entityName->text().toStdString();
+    Entity* selected_entity = EntityManager::Instance()->GetSelectedEntity();
+
+    if(selected_entity != nullptr)
+    {
+        selected_entity->SetName(str.toStdString());
+    }
+
+    UpdateUI();
 }
 
-void Inspector::SetEntityName(std::string new_name)
-{
-    ui->entityName->setText(new_name.c_str());
+void Inspector::SetEntityDataFromUI()
+{    
+    Entity* selected_entity = EntityManager::Instance()->GetSelectedEntity();
+
+    if(selected_entity != nullptr)
+    {
+        selected_entity->SetName(ui->entityName->text().toStdString());
+    }
+
+    UpdateUI();
 }
 
 
-void Inspector::onEvent(Event* event)
+void Inspector::OnEvent(Event* event)
 {
-
+    switch(event->GetType())
+    {
+    case EventType::EVENT_SELECT_ENTITY_CHANGE:
+    {
+        SPOOKYLOG("event");
+        UpdateUI();
+        break;
+    }
+    }
 }

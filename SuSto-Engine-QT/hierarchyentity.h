@@ -17,11 +17,10 @@ public:
     explicit HierarchyEntity(Entity* entity, QWidget *parent = 0);
     ~HierarchyEntity();
 
-    Entity* GetEntity(){
-        return parentEntity;
-    }
+    Entity *GetEntity();
 
-    void SetName(std::string name);
+    void UpdateUI();
+
 
 private slots:
     void on_entityName_clicked();

@@ -1,4 +1,7 @@
 #include "entitymanager.h"
+#include "Events/selectentitychange.h"
+#include "eventmanager.h"
+#include "globals.h"
 
 EntityManager* EntityManager::instance = nullptr;
 
@@ -31,11 +34,12 @@ void EntityManager::DestroyEntity(Entity*& entity)
             }
         }
 
+        if (entity == selectedEntity)
+            SetSelectedEntity(nullptr);
+
         entity->CleanUp();
         delete entity;
         entity = nullptr;
-        if (entity == selectedEntity)
-            selectedEntity = nullptr;
     }
 }
 
@@ -55,9 +59,17 @@ Entity *EntityManager::GetSelectedEntity()
     return selectedEntity;
 }
 
-void EntityManager::SetSelectedEntity(Entity *entity)
+void EntityManager::SetSelectedEntity(Entity* entity)
 {
+    Entity* last_selected_entity = selectedEntity;
+
     selectedEntity = entity;
+
+    if(last_selected_entity != entity)
+    {
+        SelectEntityChange* ev = new SelectEntityChange(selectedEntity);
+        EventManager::Instance()->SendEvent(ev);
+    }
 }
 
 void EntityManager::Start()

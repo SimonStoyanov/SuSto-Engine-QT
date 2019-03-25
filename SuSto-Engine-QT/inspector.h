@@ -17,27 +17,23 @@ class Inspector : public QWidget
     Q_OBJECT
 
 public:
-    explicit Inspector(MainWindow* mainwindow_, QWidget *parent = 0);
+    explicit Inspector(MainWindow* mainwindow_, QWidget *parent = nullptr);
     ~Inspector();
 
-    void SelectEntity(Entity* entity)
-    {
-        selectedEntity = entity;
-        SetInspectorView();
-    }
+public slots:
+    void UpdateUI();
 
-    void SetInspectorView();
+private slots:
+    void EntityNameChanged(const QString& str);
+    void SetEntityDataFromUI();
 
+private:
+    void OnEvent(Event *event);
 
-public:
-    std::string GetEntityName();  
-    void SetEntityName(std::string new_name);
-    void onEvent(Event *event);
 private:
     MainWindow* mainwindow = nullptr;
     Ui::Inspector *ui = nullptr;
     Ui::Transform *trn = nullptr;
-    Entity* selectedEntity = nullptr;
 };
 
 #endif // INSPECTOR_H

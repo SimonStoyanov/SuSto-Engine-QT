@@ -67,7 +67,7 @@ void EventManager::UnSuscribe(const std::function<void (Event *)> &function, Eve
     }
 }
 
-void EventManager::SendEvent(Event*& ev)
+void EventManager::SendEvent(Event* ev)
 {
     if (ev != nullptr)
     {

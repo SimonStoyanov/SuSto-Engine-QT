@@ -3,10 +3,20 @@
 
 #include "Events/event.h"
 
+class Entity;
+
 class SelectEntityChange : public Event
 {
+    friend class EventManager;
+
 public:
-    SelectEntityChange();
+    SelectEntityChange(Entity* entity);
+
+private:
+    Entity* GetEntity() const;
+
+private:
+    Entity* entity = nullptr;
 };
 
 #endif // SELECTENTITYCHANGE_H
