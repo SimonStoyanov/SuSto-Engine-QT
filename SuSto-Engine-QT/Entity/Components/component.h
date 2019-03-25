@@ -6,7 +6,7 @@
 class QWidget;
 class Entity;
 
-enum component_type
+enum ComponentType
 {
     COMPONENT_TRANSFORM,
     COMPONENT_SHAPE_RENDERER,
@@ -18,17 +18,21 @@ class Component
 {
 public:
     Component();
-    Component(component_type type_, Entity* owner_);
+    Component(ComponentType type_, Entity* owner_);
 
     virtual void Start(){}
     virtual void CleanUp(){}
 
-    //virtual QWidget* GetUI() {return nullptr;}
+    virtual void CreateUI() {}
+    virtual void DestroyUI() {}
+    virtual void UpdateUI() {}
+    virtual QWidget* GetUI() const {return nullptr;}
+
 
     std::string GetCName() const;
     void SetCName(std::string new_name);
 
-    component_type GetType() const;
+    ComponentType GetType() const;
     Entity *GetOwner() const;
 
 public:
@@ -36,8 +40,10 @@ public:
 private:
     std::string name = "";
 
-    component_type type = component_type::COMPONENT_NULL;
+    ComponentType type = ComponentType::COMPONENT_NULL;
     Entity* owner = nullptr;
+
+    QWidget* ui = nullptr;
 };
 
 #endif // COMPONENT_H

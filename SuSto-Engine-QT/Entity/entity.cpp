@@ -1,5 +1,5 @@
 #include "entity.h"
-#include "component.h"
+#include "Components/component.h"
 
 #include "Components/c_transform.h"
 #include "Components/c_shape_renderer.h"
@@ -8,7 +8,7 @@
 
 Entity::Entity()
 {
-    transform = (C_Transform*) AddComponent(component_type::COMPONENT_TRANSFORM);
+    transform = (C_Transform*) AddComponent(ComponentType::COMPONENT_TRANSFORM);
 }
 
 Entity::~Entity()
@@ -26,25 +26,25 @@ void Entity::CleanUp()
     DestroyAllComponents();
 }
 
-Component *Entity::AddComponent(component_type type_)
+Component *Entity::AddComponent(ComponentType type_)
 {
     Component* ret = nullptr;
 
     switch (type_)
     {
-        case component_type::COMPONENT_TRANSFORM:
+        case ComponentType::COMPONENT_TRANSFORM:
         {
             ret = new C_Transform(this);
             SPOOKYLOG("Component -Transform- created");
         }
         break;
-        case component_type::COMPONENT_SHAPE_RENDERER:
+        case ComponentType::COMPONENT_SHAPE_RENDERER:
         {
             ret = new C_ShapeRenderer(this);
             SPOOKYLOG("Component -Shape Renderer- created");
         }
         break;
-        case component_type::COMPONENT_NULL:
+        case ComponentType::COMPONENT_NULL:
         {
             SPOOKYLOG("Component of type null created");
         }
@@ -58,6 +58,7 @@ Component *Entity::AddComponent(component_type type_)
         components.push_back(ret);
 
         ret->Start();
+        ret->CreateUI();
     }
 
     return ret;
@@ -73,7 +74,7 @@ void Entity::DestroyComponent(Component*& component)
 {
     if(component != nullptr)
     {
-        for(std::list<Component*>::iterator it = components.begin(); it != components.end(); ++it)
+        for(std::vector<Component*>::iterator it = components.begin(); it != components.end(); ++it)
         {
             if((*it) == component)
             {
@@ -82,11 +83,17 @@ void Entity::DestroyComponent(Component*& component)
             }
         }
 
+        component->DestroyUI();
         component->CleanUp();
 
         delete component;
         component = nullptr;
     }
+}
+
+std::vector<Component *> Entity::GetComponents() const
+{
+    return components;
 }
 
 std::string Entity::GetName()
@@ -101,7 +108,7 @@ void Entity::SetName(std::string name_)
 
 void Entity::DestroyAllComponents()
 {
-    for(std::list<Component*>::iterator it = components.begin(); it != components.end(); ++it)
+    for(std::vector<Component*>::iterator it = components.begin(); it != components.end(); ++it)
     {
         (*it)->CleanUp();
 

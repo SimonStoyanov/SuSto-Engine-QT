@@ -7,12 +7,12 @@ Component::Component()
 
 }
 
-Component::Component(component_type type_, Entity* owner_) : type(type_), owner(owner_)
+Component::Component(ComponentType type_, Entity* owner_) : type(type_), owner(owner_)
 {
 
 }
 
-component_type Component::GetType() const
+ComponentType Component::GetType() const
 {
     return type;
 }

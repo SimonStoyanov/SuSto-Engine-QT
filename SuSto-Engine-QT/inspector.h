@@ -25,15 +25,17 @@ public slots:
 
 private slots:
     void EntityNameChanged(const QString& str);
-    void SetEntityDataFromUI();
 
 private:
     void OnEvent(Event *event);
 
+    void RemoveAllComponents();
+
 private:
     MainWindow* mainwindow = nullptr;
     Ui::Inspector *ui = nullptr;
-    Ui::Transform *trn = nullptr;
+
+    std::vector<QWidget*> components_widgets;
 };
 
 #endif // INSPECTOR_H

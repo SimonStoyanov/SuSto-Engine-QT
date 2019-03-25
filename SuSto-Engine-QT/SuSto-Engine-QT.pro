@@ -45,13 +45,10 @@ SOURCES += \
         rendererwidget.cpp \
         hierarchy.cpp \
         inspector.cpp \
-        entity.cpp \
         hierarchyentity.cpp \
         3rdParty/DarkStyle/framelesswindow/framelesswindow.cpp \
         3rdParty/DarkStyle/framelesswindow/windowdragger.cpp \
         3rdParty/DarkStyle/DarkStyle.cpp \
-        Components/c_transform.cpp \
-        Components/c_shape_renderer.cpp \
         Managers/entitymanager.cpp \
         Managers/appmanager.cpp \
         Managers/eventmanager.cpp \
@@ -94,13 +91,10 @@ SOURCES += \
     3rdParty/MathGeoLib/Math/SSEMath.cpp \
     3rdParty/MathGeoLib/Math/TransformOps.cpp \
     3rdParty/MathGeoLib/Time/Clock.cpp \
-    Components/c_shape_renderer.cpp \
-    Components/c_transform.cpp \
     Events/event.cpp \
     Managers/appmanager.cpp \
     Managers/entitymanager.cpp \
     Managers/eventmanager.cpp \
-    entity.cpp \
     hierarchy.cpp \
     hierarchyentity.cpp \
     inspector.cpp \
@@ -147,14 +141,11 @@ SOURCES += \
     3rdParty/MathGeoLib/Math/SSEMath.cpp \
     3rdParty/MathGeoLib/Math/TransformOps.cpp \
     3rdParty/MathGeoLib/Time/Clock.cpp \
-    Components/c_shape_renderer.cpp \
-    Components/c_transform.cpp \
     Events/event.cpp \
     Managers/appmanager.cpp \
     Managers/entitymanager.cpp \
     Managers/eventmanager.cpp \
     drawingwidget.cpp \
-    entity.cpp \
     hierarchy.cpp \
     hierarchyentity.cpp \
     inspector.cpp \
@@ -204,8 +195,6 @@ SOURCES += \
     3rdParty/MathGeoLib/Math/SSEMath.cpp \
     3rdParty/MathGeoLib/Math/TransformOps.cpp \
     3rdParty/MathGeoLib/Time/Clock.cpp \
-    Components/c_shape_renderer.cpp \
-    Components/c_transform.cpp \
     Events/event.cpp \
     Events/selectentitychange.cpp \
     Managers/appmanager.cpp \
@@ -216,7 +205,6 @@ SOURCES += \
     Shapes/shape.cpp \
     Shapes/shapecircle.cpp \
     drawingwidget.cpp \
-    entity.cpp \
     hierarchy.cpp \
     hierarchyentity.cpp \
     inspector.cpp \
@@ -225,20 +213,20 @@ SOURCES += \
     rendererwidget.cpp \
     3rdParty/MathGeoLib/Math/grisu3.c \
     3rdParty/Parson/parson.c \
-    Components/component.cpp
+    Entity/entity.cpp \
+    Entity/Components/c_shape_renderer.cpp \
+    Entity/Components/c_transform.cpp \
+    Entity/Components/component.cpp
 
 HEADERS += \
         mainwindow.h \
         rendererwidget.h \
         hierarchy.h \
         inspector.h \
-        entity.h \
         hierarchyentity.h \
         3rdParty/DarkStyle/framelesswindow/framelesswindow.h \
         3rdParty/DarkStyle/framelesswindow/windowdragger.h \
         3rdParty/DarkStyle/DarkStyle.h \
-        Components/c_transform.h \
-        Components/c_shape_renderer.h \
         Managers/entitymanager.h \
         Managers/appmanager.h \
         Managers/eventmanager.h \
@@ -310,13 +298,10 @@ HEADERS += \
     3rdParty/MathGeoLib/MathBuildConfig.h \
     3rdParty/MathGeoLib/MathGeoLib.h \
     3rdParty/MathGeoLib/MathGeoLibFwd.h \
-    Components/c_shape_renderer.h \
-    Components/c_transform.h \
     Events/event.h \
     Managers/appmanager.h \
     Managers/entitymanager.h \
     Managers/eventmanager.h \
-    entity.h \
     globals.h \
     hierarchy.h \
     hierarchyentity.h \
@@ -390,14 +375,11 @@ HEADERS += \
     3rdParty/MathGeoLib/MathBuildConfig.h \
     3rdParty/MathGeoLib/MathGeoLib.h \
     3rdParty/MathGeoLib/MathGeoLibFwd.h \
-    Components/c_shape_renderer.h \
-    Components/c_transform.h \
     Events/event.h \
     Managers/appmanager.h \
     Managers/entitymanager.h \
     Managers/eventmanager.h \
     drawingwidget.h \
-    entity.h \
     globals.h \
     hierarchy.h \
     hierarchyentity.h \
@@ -475,8 +457,6 @@ HEADERS += \
     3rdParty/MathGeoLib/MathGeoLib.h \
     3rdParty/MathGeoLib/MathGeoLibFwd.h \
     3rdParty/Parson/parson.h \
-    Components/c_shape_renderer.h \
-    Components/c_transform.h \
     Events/event.h \
     Events/selectentitychange.h \
     Managers/appmanager.h \
@@ -487,14 +467,16 @@ HEADERS += \
     Shapes/shape.h \
     Shapes/shapecircle.h \
     drawingwidget.h \
-    entity.h \
     globals.h \
     hierarchy.h \
     hierarchyentity.h \
     inspector.h \
     mainwindow.h \
     rendererwidget.h \
-    Components/component.h
+    Entity/entity.h \
+    Entity/Components/c_shape_renderer.h \
+    Entity/Components/c_transform.h \
+    Entity/Components/component.h
 
 FORMS += \
         mainwindow.ui \

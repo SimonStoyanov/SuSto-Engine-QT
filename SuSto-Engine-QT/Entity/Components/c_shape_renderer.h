@@ -10,6 +10,9 @@ class C_ShapeRenderer : public Component
 public:
     C_ShapeRenderer(Entity* owner);
 
+    void Start();
+    void CleanUp();
+
     void CreateShape(ShapeType type);
 
 private:

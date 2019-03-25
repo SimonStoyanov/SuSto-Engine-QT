@@ -3,8 +3,7 @@
 #include "Managers/entitymanager.h"
 #include "Events/event.h"
 #include "globals.h"
-
-#include "entity.h"
+#include "Entity/entity.h"
 
 HierarchyEntity::HierarchyEntity(Entity* entity, QWidget* parent) :
     QWidget(parent),
@@ -21,7 +20,7 @@ HierarchyEntity::~HierarchyEntity()
     delete ui;
 }
 
-Entity *HierarchyEntity::GetEntity()
+Entity* HierarchyEntity::GetEntity()
 {
     return parentEntity;
 }

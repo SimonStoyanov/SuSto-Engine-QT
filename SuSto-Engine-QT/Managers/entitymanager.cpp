@@ -70,6 +70,8 @@ void EntityManager::SetSelectedEntity(Entity* entity)
         SelectEntityChange* ev = new SelectEntityChange(selectedEntity);
         EventManager::Instance()->SendEvent(ev);
     }
+
+    SPOOKYLOG("selection change");
 }
 
 void EntityManager::Start()

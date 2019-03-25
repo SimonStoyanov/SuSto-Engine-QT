@@ -1,6 +1,6 @@
 #include "hierarchy.h"
 #include "ui_hierarchy.h"
-#include "entity.h"
+#include "Entity/entity.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "inspector.h"
@@ -64,11 +64,10 @@ void Hierarchy::on_buttonRemoveEntity_clicked()
         {
             if ((*it)->GetEntity() == selectedEntity)
             {
-
                 delete *it;
                 h_entities.erase(it);
 
-                return;
+                break;
             }
         }
 

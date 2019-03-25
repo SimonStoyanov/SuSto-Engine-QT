@@ -5,7 +5,7 @@
 #include <vector>
 
 class Component;
-enum component_type;
+enum ComponentType;
 
 class C_Transform;
 
@@ -22,9 +22,11 @@ private:
     void CleanUp();
 
 public:
-    Component *AddComponent(component_type type_);
-    C_Transform* GetTransform() const;
+    Component *AddComponent(ComponentType type_);
     void DestroyComponent(Component*& component);
+    std::vector<Component *> GetComponents() const;
+
+    C_Transform* GetTransform() const;
 
     std::string GetName();
     void SetName(std::string name_);
@@ -36,7 +38,7 @@ private:
     std::string name = "";
     C_Transform* transform = nullptr;
 
-    std::list<Component*> components; 
+    std::vector<Component*> components;
 };
 
 #endif // ENTITY_H
