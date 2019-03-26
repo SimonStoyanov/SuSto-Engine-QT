@@ -2,12 +2,7 @@
 #include "Entity/entity.h"
 #include "3rdParty/MathGeoLib/Math/float2.h"
 
-Component::Component()
-{
-
-}
-
-Component::Component(ComponentType t, const std::string& n, Entity* o, bool un, bool can_del)
+Component::Component(ComponentType t, const std::string& n, Entity* o, bool un, bool can_del) : QWidget(nullptr)
 {
     type = t;
     owner = o;

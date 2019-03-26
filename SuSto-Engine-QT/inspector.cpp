@@ -67,10 +67,7 @@ void Inspector::UpdateUI()
                 ui->componentsLayout->addWidget(lineB);
                 ui->componentsLayout->addWidget(label);
                 ui->componentsLayout->addWidget(widget);
-
             }
-
-            SPOOKYLOG(std::to_string(counter));
         }
         else
         {

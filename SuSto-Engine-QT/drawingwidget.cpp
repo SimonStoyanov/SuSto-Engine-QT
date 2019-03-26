@@ -36,12 +36,14 @@ void DrawingWidget::paintEvent(QPaintEvent *event)
 
     painter.drawRect(rect());
 
+     SPOOKYLOG("Drawing event");
+
     for(std::vector<Shape*>::iterator it = shapes.begin(); it != shapes.end(); ++it)
     {
         (*it)->Redraw(painter);
-    }
 
-    SPOOKYLOG("draw");
+        SPOOKYLOG("Drawing shape");
+    }
 }
 
 QSize DrawingWidget::sizeHint() const

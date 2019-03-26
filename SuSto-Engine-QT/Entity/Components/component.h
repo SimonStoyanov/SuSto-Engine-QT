@@ -2,8 +2,8 @@
 #define COMPONENT_H
 
 #include <string>
+#include "QWidget"
 
-class QWidget;
 class Entity;
 
 enum ComponentType
@@ -14,11 +14,12 @@ enum ComponentType
     COMPONENT_NULL
 };
 
-class Component
+class Component : public QWidget
 {
+    Q_OBJECT
+
 public:
-    Component();
-    Component(ComponentType type_, const std::string& name, Entity* owner_, bool unique = false, bool can_delete = true);
+    explicit Component(ComponentType type_, const std::string& name, Entity* owner_, bool unique = false, bool can_delete = true);
 
     virtual void Start(){}
     virtual void CleanUp(){}

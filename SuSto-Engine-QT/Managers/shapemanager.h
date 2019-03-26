@@ -39,14 +39,22 @@ public:
     void DestroyShape(Shape*& sh);
     std::vector<Shape*> GetShapes() const;
 
+    ShapeType GetShapeTypeByShapeName(const std::string& shape_name) const;
+    std::map<ShapeType, std::string> GetAllShapeTypes();
+
+
 private:
     void Start();
     void CleanUp();
+
+    void AddShapeType(ShapeType type, const std::string& name);
 
 private:
     static ShapeManager* instance;
 
     std::vector<Shape*> shapes;
+
+    std::map<ShapeType, std::string> shapes_types;
 
 };
 

@@ -9,6 +9,8 @@ class Transform;
 
 class C_Transform : public Component
 {
+     Q_OBJECT
+
 public:
     C_Transform(Entity* owner);
     ~C_Transform();
