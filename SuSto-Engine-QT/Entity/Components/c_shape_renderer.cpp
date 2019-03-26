@@ -25,7 +25,7 @@ void C_ShapeRenderer::Update()
         float2 new_size = GetOwner()->GetTransform()->GetScale() * size;
         curr_shape->SetSize(new_size);
 
-        curr_shape->SetStrockeThickness(stroke);
+        curr_shape->SetStrokeThickness(stroke);
     }
 }
 
@@ -60,6 +60,9 @@ void C_ShapeRenderer::CreateUI()
 
     connect(form->sizeTextInput, SIGNAL(valueChanged(double)), this, SLOT(OnUIValueChanged(double)));
     connect(form->strokeTextInput, SIGNAL(valueChanged(double)), this, SLOT(OnUIValueChanged(double)));
+
+    form->sizeTextInput->setValue(80);
+    form->strokeTextInput->setValue(10);
 
     CreateShape(ShapeType::SHAPE_CIRCLE);
 }
@@ -106,6 +109,7 @@ void C_ShapeRenderer::CreateShape(ShapeType type)
     if(curr_shape != nullptr)
     {
         OnComboBoxStrokeStyleChanges("");
+        OnUIValueChanged(0);
     }
 }
 

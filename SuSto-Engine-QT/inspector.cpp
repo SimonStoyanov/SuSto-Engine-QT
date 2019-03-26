@@ -13,6 +13,7 @@
 #include "Events/selectentitychange.h"
 #include "Entity/Components/component.h"
 #include "UI/GeneralWidgets/floatingcontext.h"
+#include "UI/uiutils.h"
 
 #include <functional>
 #include <QComboBox>
@@ -43,7 +44,7 @@ void Inspector::UpdateUI()
 
         Entity* selected_entity = EntityManager::Instance()->GetSelectedEntity();
 
-        RemoveAllComponents();
+        UIUtils::RemoveWidgetsFromLayout(ui->componentsLayout);
 
         if(selected_entity != nullptr)
         {
@@ -54,6 +55,8 @@ void Inspector::UpdateUI()
             int counter = 0;
             for(std::vector<Component*>::iterator it = components.begin(); it != components.end(); ++it, ++counter)
             {
+                QHBoxLayout* h_layout = new QHBoxLayout();
+
                 QWidget *lineB = new QWidget;
                 lineB->setFixedHeight(2);
                 lineB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
@@ -61,11 +64,22 @@ void Inspector::UpdateUI()
 
                 QLabel* label = new QLabel();
                 label->setText(QString::fromStdString((*it)->GetName()));
+                h_layout->addWidget(label);
+
+                if((*it)->GetCanDelete())
+                {
+                    QPushButton* delete_button = new QPushButton();
+                    delete_button->setText("X");
+                    h_layout->addWidget(delete_button);
+
+                    //connect(delete_button, &QPushButton::clicked, [this, delete_button]()
+                    //{RemoveComponentButton((*it));});
+                }
 
                 QWidget* widget = (*it)->GetUI();
 
                 ui->componentsLayout->addWidget(lineB);
-                ui->componentsLayout->addWidget(label);
+                ui->componentsLayout->addLayout(h_layout);
                 ui->componentsLayout->addWidget(widget);
             }
         }
@@ -111,6 +125,11 @@ void Inspector::AddComponentButton()
     connect(f_context, SIGNAL(dialogClosed(std::string)),this, SLOT(AddComponentSelected(std::string)));
 }
 
+void Inspector::RemoveComponentButton(Component *comp)
+{
+
+}
+
 void Inspector::AddComponentSelected(const std::string &component)
 {
     if(component.compare("") != 0)
@@ -140,16 +159,3 @@ void Inspector::OnEvent(Event* event)
     }
 }
 
-void Inspector::RemoveAllComponents()
-{
-    QLayoutItem* item = ui->componentsLayout->takeAt(0);
-
-    while(item != nullptr)
-    {
-        item->widget()->setParent(nullptr);
-
-        ui->componentsLayout->removeItem(item);
-
-        item = ui->componentsLayout->takeAt(0);
-    }
-}

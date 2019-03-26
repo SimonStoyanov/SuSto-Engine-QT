@@ -21,7 +21,7 @@ void Shape::SetStrokeColor(const QColor &color)
     pen.setColor(color);
 }
 
-void Shape::SetStrockeThickness(float set)
+void Shape::SetStrokeThickness(float set)
 {
     pen.setWidthF(set);
 }

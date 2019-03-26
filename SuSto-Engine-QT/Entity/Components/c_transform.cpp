@@ -59,6 +59,10 @@ void C_Transform::CreateUI()
     connect(form->sclx, SIGNAL(valueChanged(double)), this, SLOT(OnUIValueChanged(double)));
     connect(form->scly, SIGNAL(valueChanged(double)), this, SLOT(OnUIValueChanged(double)));
     connect(form->sclz, SIGNAL(valueChanged(double)), this, SLOT(OnUIValueChanged(double)));
+
+    form->sclx->setValue(1);
+    form->scly->setValue(1);
+    form->sclz->setValue(1);
 }
 
 void C_Transform::DestroyUI()

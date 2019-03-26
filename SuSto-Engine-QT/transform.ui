@@ -34,7 +34,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="posx"/>
+      <widget class="QDoubleSpinBox" name="posx">
+       <property name="minimum">
+        <double>-99999999999999.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>99999999999999.000000000000000</double>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QLabel" name="py_txt">
@@ -44,7 +51,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="posy"/>
+      <widget class="QDoubleSpinBox" name="posy">
+       <property name="minimum">
+        <double>-99999999999999.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>99999999999999.000000000000000</double>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QLabel" name="pz_txt">
@@ -54,7 +68,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="posz"/>
+      <widget class="QDoubleSpinBox" name="posz">
+       <property name="minimum">
+        <double>-99999999999999.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>99999999999999.000000000000000</double>
+       </property>
+      </widget>
      </item>
      <item>
       <spacer name="horizontalSpacer">
@@ -94,7 +115,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="rotx"/>
+      <widget class="QDoubleSpinBox" name="rotx">
+       <property name="minimum">
+        <double>-99999999999999.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>99999999999999.000000000000000</double>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QLabel" name="ry_txt">
@@ -104,7 +132,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="roty"/>
+      <widget class="QDoubleSpinBox" name="roty">
+       <property name="minimum">
+        <double>-99999999999999.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>99999999999999.000000000000000</double>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QLabel" name="rz_txt">
@@ -114,7 +149,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="rotz"/>
+      <widget class="QDoubleSpinBox" name="rotz">
+       <property name="maximum">
+        <double>99999999999999.000000000000000</double>
+       </property>
+       <property name="value">
+        <double>0.000000000000000</double>
+       </property>
+      </widget>
      </item>
      <item>
       <spacer name="horizontalSpacer_2">
@@ -154,7 +196,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="sclx"/>
+      <widget class="QDoubleSpinBox" name="sclx">
+       <property name="minimum">
+        <double>-99999999999999.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>99999999999999.000000000000000</double>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QLabel" name="xy_txt">
@@ -164,7 +213,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="scly"/>
+      <widget class="QDoubleSpinBox" name="scly">
+       <property name="minimum">
+        <double>-99999999999999.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>99999999999999.000000000000000</double>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QLabel" name="sz_txt">
@@ -174,7 +230,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QDoubleSpinBox" name="sclz"/>
+      <widget class="QDoubleSpinBox" name="sclz">
+       <property name="minimum">
+        <double>-99999999999999.000000000000000</double>
+       </property>
+       <property name="maximum">
+        <double>99999999999999.000000000000000</double>
+       </property>
+      </widget>
      </item>
      <item>
       <spacer name="horizontalSpacer_3">

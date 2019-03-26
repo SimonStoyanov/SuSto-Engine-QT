@@ -25,7 +25,7 @@ public:
 
     void SetFillColor(const QColor& color);
     void SetStrokeColor(const QColor& color);
-    void SetStrockeThickness(float set);
+    void SetStrokeThickness(float set);
     void SetStrokeStyle(Qt::PenStyle style);
 
     QColor GetFillColor() const;

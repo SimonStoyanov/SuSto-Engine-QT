@@ -277,7 +277,8 @@ SOURCES += \
     rendererwidget.cpp \
     3rdParty/MathGeoLib/Math/grisu3.c \
     3rdParty/Parson/parson.c \
-    UI/GeneralWidgets/floatingcontext.cpp
+    UI/GeneralWidgets/floatingcontext.cpp \
+    UI/uiutils.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -625,7 +626,8 @@ HEADERS += \
     inspector.h \
     mainwindow.h \
     rendererwidget.h \
-    UI/GeneralWidgets/floatingcontext.h
+    UI/GeneralWidgets/floatingcontext.h \
+    UI/uiutils.h
 
 FORMS += \
         mainwindow.ui \

@@ -29,9 +29,6 @@ public:
     void SetDescription(const std::string& description);
     void SetContent(const std::vector<std::string>& content);
 
-private:
-    void RemoveAllContentWidgets();
-
 private slots:
     void ContentPressed(const std::string& content);
 

@@ -38,6 +38,13 @@
     </layout>
    </item>
    <item>
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QPushButton" name="addComponentButton">
      <property name="sizePolicy">
       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
@@ -58,7 +65,7 @@
      <property name="sizeHint" stdset="0">
       <size>
        <width>20</width>
-       <height>532</height>
+       <height>40</height>
       </size>
      </property>
     </spacer>

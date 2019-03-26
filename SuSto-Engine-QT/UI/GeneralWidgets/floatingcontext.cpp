@@ -3,6 +3,7 @@
 #include "QPushButton"
 #include "QSignalMapper"
 #include "globals.h"
+#include "UI/uiutils.h"
 
 FloatingContext::FloatingContext(QWidget *parent) :
     QDialog(nullptr),
@@ -30,7 +31,7 @@ void FloatingContext::UpdateUI()
 
     ui->descriptionLabel->setText(QString::fromStdString(description));
 
-    RemoveAllContentWidgets();
+    UIUtils::RemoveWidgetsFromLayout(ui->verticalLayout);
 
     for(std::vector<std::string>::iterator it = content.begin(); it != content.end(); ++it)
     {
@@ -55,20 +56,6 @@ void FloatingContext::SetContent(const std::vector<std::string> &cont)
     content = cont;
 
     UpdateUI();
-}
-
-void FloatingContext::RemoveAllContentWidgets()
-{
-    QLayoutItem* item = ui->verticalLayout->takeAt(0);
-
-    while(item != nullptr)
-    {
-        item->widget()->setParent(nullptr);
-
-        ui->verticalLayout->removeItem(item);
-
-        item = ui->verticalLayout->takeAt(0);
-    }
 }
 
 void FloatingContext::ContentPressed(const std::string &content)

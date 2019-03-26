@@ -3,6 +3,8 @@
 
 #include <QWidget>
 
+class Component;
+
 namespace Ui {
 class Inspector;
 class Transform;
@@ -26,12 +28,11 @@ public slots:
 private slots:
     void EntityNameChanged(const QString& str);
     void AddComponentButton();
+    void RemoveComponentButton(Component* comp);
     void AddComponentSelected(const std::string& component);
 
 private:
     void OnEvent(Event *event);
-
-    void RemoveAllComponents();
 
 private:
     MainWindow* mainwindow = nullptr;
