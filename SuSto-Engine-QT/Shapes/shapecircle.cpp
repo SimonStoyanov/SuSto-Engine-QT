@@ -18,7 +18,7 @@ void ShapeCircle::Redraw(QPainter &painter)
     painter.setBrush(brush);
 
     int w = size.x * 2;
-    int h = size.x * 2;
+    int h = size.y * 2;
 
     QRect circle_rect(pos.x, pos.y, w, h);
 

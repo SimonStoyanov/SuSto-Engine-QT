@@ -25,3 +25,13 @@ std::string Component::GetName() const
 {
     return name;
 }
+
+bool Component::GetUnique() const
+{
+    return unique;
+}
+
+bool Component::GetCanDelete() const
+{
+    return can_delete;
+}

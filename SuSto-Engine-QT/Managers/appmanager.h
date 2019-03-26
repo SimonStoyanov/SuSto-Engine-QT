@@ -1,9 +1,13 @@
 #ifndef APPMANAGER_H
 #define APPMANAGER_H
 
+#include "QTimer"
+#include "QWidget"
 
-class AppManager
+class AppManager : public QObject
 {
+    Q_OBJECT
+
 private:
     AppManager();
     void operator delete(void *) {}
@@ -39,8 +43,13 @@ private:
     void Start();
     void CleanUp();
 
+private slots:
+    void Update();
+
 private:
      static AppManager* instance;
+
+     QTimer workTimer;
 };
 
 #endif // APPMANAGER_H

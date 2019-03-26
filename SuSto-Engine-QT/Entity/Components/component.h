@@ -22,17 +22,23 @@ public:
     explicit Component(ComponentType type_, const std::string& name, Entity* owner_, bool unique = false, bool can_delete = true);
 
     virtual void Start(){}
+    virtual void Update(){}
     virtual void CleanUp(){}
+
+    virtual void OnComponentAdded(Component* comp) {};
+    virtual void OnComponentRemoved(Component* comp){};
 
     virtual void CreateUI() {}
     virtual void DestroyUI() {}
     virtual void UpdateUI() {}
     virtual QWidget* GetUI() const {return nullptr;}
 
-
     ComponentType GetType() const;
     Entity *GetOwner() const;
     std::string GetName() const;
+
+    bool GetUnique() const;
+    bool GetCanDelete() const;
 
 public:
 

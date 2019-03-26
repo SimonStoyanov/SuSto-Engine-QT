@@ -21,16 +21,21 @@ void Entity::Start()
 
 }
 
+void Entity::Update()
+{
+    UpdateAllComponents();
+}
+
 void Entity::CleanUp()
 {
     DestroyAllComponents();
 }
 
-Component *Entity::AddComponent(ComponentType type_)
+Component *Entity::AddComponent(ComponentType type)
 {
     Component* ret = nullptr;
 
-    switch (type_)
+    switch (type)
     {
         case ComponentType::COMPONENT_TRANSFORM:
         {
@@ -55,10 +60,28 @@ Component *Entity::AddComponent(ComponentType type_)
         SPOOKYLOG("Component is null / not created");
     else
     {
-        components.push_back(ret);
+        bool can_add = true;
 
-        ret->Start();
-        ret->CreateUI();
+        if(ret->GetUnique())
+        {
+            if(GetComponent(type) != nullptr)
+                can_add = false;
+        }
+
+        if(can_add)
+        {
+            components.push_back(ret);
+
+            ret->Start();
+            ret->CreateUI();
+
+            CallOnComponentAdded(ret);
+        }
+        else
+        {
+            delete ret;
+            ret = nullptr;
+        }
     }
 
     return ret;
@@ -74,21 +97,42 @@ void Entity::DestroyComponent(Component*& component)
 {
     if(component != nullptr)
     {
-        for(std::vector<Component*>::iterator it = components.begin(); it != components.end(); ++it)
+        if(component->GetCanDelete())
         {
-            if((*it) == component)
+            for(std::vector<Component*>::iterator it = components.begin(); it != components.end(); ++it)
             {
-                components.erase(it);
-                break;
+                if((*it) == component)
+                {
+                    components.erase(it);
+                    break;
+                }
             }
+
+            CallOnComponentRemoved(component);
+
+            component->DestroyUI();
+            component->CleanUp();
+
+            delete component;
+            component = nullptr;
         }
-
-        component->DestroyUI();
-        component->CleanUp();
-
-        delete component;
-        component = nullptr;
     }
+}
+
+Component* Entity::GetComponent(ComponentType type)
+{
+    Component* ret = nullptr;
+
+    for(std::vector<Component*>::iterator it = components.begin(); it != components.end(); ++it)
+    {
+        if((*it)->GetType() == type)
+        {
+            ret = (*it);
+            break;
+        }
+    }
+
+    return ret;
 }
 
 std::vector<Component *> Entity::GetComponents() const
@@ -106,6 +150,14 @@ void Entity::SetName(std::string name_)
     name = name_;
 }
 
+void Entity::UpdateAllComponents()
+{
+    for(std::vector<Component*>::iterator it = components.begin(); it != components.end(); ++it)
+    {
+        (*it)->Update();
+    }
+}
+
 void Entity::DestroyAllComponents()
 {
     for(std::vector<Component*>::iterator it = components.begin(); it != components.end(); ++it)
@@ -116,4 +168,16 @@ void Entity::DestroyAllComponents()
     }
 
     components.clear();
+}
+
+void Entity::CallOnComponentAdded(Component *call)
+{
+    for(std::vector<Component*>::iterator it = components.begin(); it != components.end(); ++it)
+        (*it)->OnComponentAdded(call);
+}
+
+void Entity::CallOnComponentRemoved(Component *call)
+{
+    for(std::vector<Component*>::iterator it = components.begin(); it != components.end(); ++it)
+        (*it)->OnComponentRemoved(call);
 }

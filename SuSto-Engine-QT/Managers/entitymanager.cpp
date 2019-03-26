@@ -11,6 +11,14 @@ EntityManager::EntityManager()
 
 }
 
+void EntityManager::UpdateAllEntities()
+{
+    for(std::vector<Entity*>::iterator it = entities.begin(); it != entities.end(); ++it)
+    {
+        (*it)->Update();
+    }
+}
+
 Entity* EntityManager::CreateEntity()
 {
     Entity* ret = new Entity();

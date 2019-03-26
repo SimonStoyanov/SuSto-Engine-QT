@@ -19,11 +19,13 @@ private:
     void operator delete(void *) {}
 
     void Start();
+    void Update();
     void CleanUp();
 
 public:
     Component *AddComponent(ComponentType type_);
     void DestroyComponent(Component*& component);
+    Component* GetComponent(ComponentType type);
     std::vector<Component *> GetComponents() const;
 
     C_Transform* GetTransform() const;
@@ -32,7 +34,11 @@ public:
     void SetName(std::string name_);
 
 private:
+    void UpdateAllComponents();
     void DestroyAllComponents();
+
+    void CallOnComponentAdded(Component* call);
+    void CallOnComponentRemoved(Component* call);
 
 private:
     std::string name = "";

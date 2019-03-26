@@ -4,8 +4,9 @@
 #include "Managers/shapemanager.h"
 #include "ui_shape.h"
 #include "globals.h"
+#include "Entity/Components/c_transform.h"
 
-C_ShapeRenderer::C_ShapeRenderer(Entity* owner) : Component(ComponentType::COMPONENT_SHAPE_RENDERER, "Shape renderer", owner)
+C_ShapeRenderer::C_ShapeRenderer(Entity* owner) : Component(ComponentType::COMPONENT_SHAPE_RENDERER, "Shape renderer", owner, true)
 {
 
 }
@@ -13,6 +14,19 @@ C_ShapeRenderer::C_ShapeRenderer(Entity* owner) : Component(ComponentType::COMPO
 void C_ShapeRenderer::Start()
 {
 
+}
+
+void C_ShapeRenderer::Update()
+{
+    if(curr_shape != nullptr)
+    {
+        curr_shape->SetPos(GetOwner()->GetTransform()->GetPos());
+
+        float2 new_size = GetOwner()->GetTransform()->GetScale() * size;
+        curr_shape->SetSize(new_size);
+
+        curr_shape->SetStrockeThickness(stroke);
+    }
 }
 
 void C_ShapeRenderer::CleanUp()
@@ -44,7 +58,10 @@ void C_ShapeRenderer::CreateUI()
 
     form->strokeStyleComboBox->setCurrentIndex(1);
 
-     CreateShape(ShapeType::SHAPE_CIRCLE);
+    connect(form->sizeTextInput, SIGNAL(valueChanged(double)), this, SLOT(OnUIValueChanged(double)));
+    connect(form->strokeTextInput, SIGNAL(valueChanged(double)), this, SLOT(OnUIValueChanged(double)));
+
+    CreateShape(ShapeType::SHAPE_CIRCLE);
 }
 
 void C_ShapeRenderer::DestroyUI()
@@ -60,6 +77,21 @@ void C_ShapeRenderer::UpdateUI()
 QWidget *C_ShapeRenderer::GetUI() const
 {
     return ui;
+}
+
+Shape *C_ShapeRenderer::GetShape() const
+{
+    return curr_shape;
+}
+
+void C_ShapeRenderer::SetSize(float set)
+{
+    size = set;
+}
+
+void C_ShapeRenderer::SetStroke(float set)
+{
+    stroke = set;
 }
 
 void C_ShapeRenderer::CreateShape(ShapeType type)
@@ -111,5 +143,14 @@ void C_ShapeRenderer::OnComboBoxStrokeStyleChanges(const QString &name)
 
             curr_shape->SetStrokeStyle(stroke_style);
         }
+    }
+}
+
+void C_ShapeRenderer::OnUIValueChanged(double val)
+{
+    if(curr_shape != nullptr)
+    {
+        size = form->sizeTextInput->value();
+        stroke = form->strokeTextInput->value();
     }
 }

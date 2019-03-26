@@ -38,6 +38,8 @@ public:
         }
     }
 
+    void UpdateAllEntities();
+
     Entity* CreateEntity();
     void DestroyEntity(Entity*& entity);
     void DestroyAllEntities();
