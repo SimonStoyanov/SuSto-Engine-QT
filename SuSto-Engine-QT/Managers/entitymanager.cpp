@@ -2,6 +2,7 @@
 #include "Events/selectentitychange.h"
 #include "eventmanager.h"
 #include "globals.h"
+#include "Entity/Components/component.h"
 
 EntityManager* EntityManager::instance = nullptr;
 
@@ -54,6 +55,11 @@ void EntityManager::DestroyAllEntities()
     entities.clear();
 }
 
+std::vector<Entity *> EntityManager::GetEntities()
+{
+    return entities;
+}
+
 Entity *EntityManager::GetSelectedEntity()
 {
     return selectedEntity;
@@ -70,16 +76,41 @@ void EntityManager::SetSelectedEntity(Entity* entity)
         SelectEntityChange* ev = new SelectEntityChange(selectedEntity);
         EventManager::Instance()->SendEvent(ev);
     }
-
-    SPOOKYLOG("selection change");
 }
 
 void EntityManager::Start()
 {
-
+    AddComponentType(ComponentType::COMPONENT_TRANSFORM, "Transform");
+    AddComponentType(ComponentType::COMPONENT_SHAPE_RENDERER, "Shape Renderer");
 }
 
 void EntityManager::CleanUp()
 {
     DestroyAllEntities();
+}
+
+void EntityManager::AddComponentType(ComponentType type, const std::string &component_name)
+{
+    component_types[type] = component_name;
+}
+
+ComponentType EntityManager::GetComponentTypeByComponentName(const std::string &component_name) const
+{
+    ComponentType ret = ComponentType::COMPONENT_NULL;
+
+    for(std::map<ComponentType, std::string>::const_iterator it = component_types.begin(); it != component_types.end(); ++it)
+    {
+        if((*it).second.compare(component_name) == 0)
+        {
+            ret = (*it).first;
+            break;
+        }
+    }
+
+    return ret;
+}
+
+std::map<ComponentType, std::string> EntityManager::GetAllComponentTypes() const
+{
+    return component_types;
 }

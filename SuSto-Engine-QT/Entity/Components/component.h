@@ -18,7 +18,7 @@ class Component
 {
 public:
     Component();
-    Component(ComponentType type_, Entity* owner_);
+    Component(ComponentType type_, const std::string& name, Entity* owner_, bool unique = false, bool can_delete = true);
 
     virtual void Start(){}
     virtual void CleanUp(){}
@@ -29,16 +29,16 @@ public:
     virtual QWidget* GetUI() const {return nullptr;}
 
 
-    std::string GetCName() const;
-    void SetCName(std::string new_name);
-
     ComponentType GetType() const;
     Entity *GetOwner() const;
+    std::string GetName() const;
 
 public:
 
 private:
     std::string name = "";
+    bool unique = false;
+    bool can_delete = false;
 
     ComponentType type = ComponentType::COMPONENT_NULL;
     Entity* owner = nullptr;

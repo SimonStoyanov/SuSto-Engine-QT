@@ -25,6 +25,8 @@ public slots:
 
 private slots:
     void EntityNameChanged(const QString& str);
+    void AddComponentButton();
+    void AddComponentSelected(const std::string& component);
 
 private:
     void OnEvent(Event *event);
@@ -35,7 +37,7 @@ private:
     MainWindow* mainwindow = nullptr;
     Ui::Inspector *ui = nullptr;
 
-    std::vector<QWidget*> components_widgets;
+    bool update_ui = true;
 };
 
 #endif // INSPECTOR_H

@@ -1,5 +1,5 @@
 #include "selectentitychange.h"
-#include "entity.h"
+#include "Entity/entity.h"
 
 SelectEntityChange::SelectEntityChange(Entity* en) : Event(EventType::EVENT_SELECT_ENTITY_CHANGE)
 {

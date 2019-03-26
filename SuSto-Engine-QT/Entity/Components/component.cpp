@@ -1,5 +1,5 @@
-#include "Components/component.h"
-#include "entity.h"
+#include "Entity/Components/component.h"
+#include "Entity/entity.h"
 #include "3rdParty/MathGeoLib/Math/float2.h"
 
 Component::Component()
@@ -7,9 +7,13 @@ Component::Component()
 
 }
 
-Component::Component(ComponentType type_, Entity* owner_) : type(type_), owner(owner_)
+Component::Component(ComponentType t, const std::string& n, Entity* o, bool un, bool can_del)
 {
-
+    type = t;
+    owner = o;
+    name = n;
+    unique = un;
+    can_delete = can_del;
 }
 
 ComponentType Component::GetType() const
@@ -20,4 +24,9 @@ ComponentType Component::GetType() const
 Entity *Component::GetOwner() const
 {
     return owner;
+}
+
+std::string Component::GetName() const
+{
+    return name;
 }

@@ -12,6 +12,7 @@
 #include "Events/event.h"
 #include "Events/selectentitychange.h"
 #include "Entity/Components/component.h"
+#include "UI/GeneralWidgets/floatingcontext.h"
 
 #include <functional>
 #include <QComboBox>
@@ -26,6 +27,7 @@ Inspector::Inspector(MainWindow* mainwindow_, QWidget *parent) :
     EventManager::Instance()->Subscribe(std::bind(&Inspector::OnEvent, this, std::placeholders::_1), EventType::EVENT_SELECT_ENTITY_CHANGE);
 
     connect(ui->entityName, SIGNAL(textChanged(QString)), this, SLOT(EntityNameChanged(QString)));
+    connect(ui->addComponentButton, SIGNAL(pressed()), this, SLOT(AddComponentButton()));
 }
 
 Inspector::~Inspector()
@@ -35,31 +37,50 @@ Inspector::~Inspector()
 
 void Inspector::UpdateUI()
 {
-    Entity* selected_entity = EntityManager::Instance()->GetSelectedEntity();
-
-    RemoveAllComponents();
-
-    if(selected_entity != nullptr)
+    if(update_ui)
     {
-        ui->entityName->setText(selected_entity->GetName().c_str());
+        update_ui = false;
 
-        std::vector<Component*> components = selected_entity->GetComponents();
+        Entity* selected_entity = EntityManager::Instance()->GetSelectedEntity();
 
-        for(std::vector<Component*>::iterator it = components.begin(); it != components.end(); ++it)
+        RemoveAllComponents();
+
+        if(selected_entity != nullptr)
         {
-            QWidget* widget = (*it)->GetUI();
+            ui->entityName->setText(selected_entity->GetName().c_str());
 
-            components_widgets.push_back(widget);
+            std::vector<Component*> components = selected_entity->GetComponents();
 
-            ui->ComponentsLayout->addWidget(widget);
+            int counter = 0;
+            for(std::vector<Component*>::iterator it = components.begin(); it != components.end(); ++it, ++counter)
+            {
+                QWidget *lineB = new QWidget;
+                lineB->setFixedHeight(2);
+                lineB->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+                lineB->setStyleSheet(QString("background-color: #c0c0c0;"));
+
+                QLabel* label = new QLabel();
+                label->setText(QString::fromStdString((*it)->GetName()));
+
+                QWidget* widget = (*it)->GetUI();
+
+                ui->componentsLayout->addWidget(lineB);
+                ui->componentsLayout->addWidget(label);
+                ui->componentsLayout->addWidget(widget);
+
+            }
+
+            SPOOKYLOG(std::to_string(counter));
         }
-    }
-    else
-    {
-        ui->entityName->setText("");
-    }
+        else
+        {
+            ui->entityName->setText("");
+        }
 
-    mainwindow->GetHierarchy()->UpdateUI();
+        mainwindow->GetHierarchy()->UpdateUI();
+
+        update_ui = true;
+    }
 }
 
 void Inspector::EntityNameChanged(const QString& str)
@@ -74,13 +95,48 @@ void Inspector::EntityNameChanged(const QString& str)
     UpdateUI();
 }
 
+void Inspector::AddComponentButton()
+{
+    FloatingContext* f_context = new FloatingContext(nullptr);
+    f_context->setWindowTitle("Add component");
+    f_context->SetDescription("Select a new component to add.");
+
+    std::vector<std::string> content;
+
+    std::map<ComponentType, std::string> component_types = EntityManager::Instance()->GetAllComponentTypes();
+
+    for(std::map<ComponentType, std::string>::iterator it = component_types.begin(); it != component_types.end(); ++it)
+        content.push_back((*it).second);
+
+    f_context->SetContent(content);
+
+    f_context->show();
+    connect(f_context, SIGNAL(dialogClosed(std::string)),this, SLOT(AddComponentSelected(std::string)));
+}
+
+void Inspector::AddComponentSelected(const std::string &component)
+{
+    if(component.compare("") != 0)
+    {
+        ComponentType type = EntityManager::Instance()->GetComponentTypeByComponentName(component);
+
+        Entity* selected_entity = EntityManager::Instance()->GetSelectedEntity();
+
+        if(selected_entity != nullptr)
+        {
+            selected_entity->AddComponent(type);
+        }
+    }
+
+    UpdateUI();
+}
+
 void Inspector::OnEvent(Event* event)
 {
     switch(event->GetType())
     {
     case EventType::EVENT_SELECT_ENTITY_CHANGE:
     {
-        SPOOKYLOG("event");
         UpdateUI();
         break;
     }
@@ -89,11 +145,14 @@ void Inspector::OnEvent(Event* event)
 
 void Inspector::RemoveAllComponents()
 {
-    for(std::vector<QWidget*>::iterator it = components_widgets.begin(); it != components_widgets.end(); ++it)
-    {
-        (*it)->setParent(nullptr);
-        ui->ComponentsLayout->removeWidget((*it));
-    }
+    QLayoutItem* item = ui->componentsLayout->takeAt(0);
 
-    components_widgets.clear();
+    while(item != nullptr)
+    {
+        item->widget()->setParent(nullptr);
+
+        ui->componentsLayout->removeItem(item);
+
+        item = ui->componentsLayout->takeAt(0);
+    }
 }

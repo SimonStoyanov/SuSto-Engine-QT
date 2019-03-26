@@ -31,14 +31,14 @@
     </widget>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="ComponentsLayout">
+    <layout class="QVBoxLayout" name="componentsLayout">
      <property name="topMargin">
       <number>0</number>
      </property>
     </layout>
    </item>
    <item>
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QPushButton" name="addComponentButton">
      <property name="sizePolicy">
       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
        <horstretch>0</horstretch>
