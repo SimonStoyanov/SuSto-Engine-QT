@@ -28,6 +28,7 @@ public:
 
 private slots:
     void OnComboBoxShapeChanges(const QString& new_shape);
+    void OnComboBoxStrokeStyleChanges(const QString& new_shape);
 
 private:
     QWidget* ui = nullptr;

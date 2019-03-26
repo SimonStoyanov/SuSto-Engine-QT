@@ -3,6 +3,7 @@
 
 #include <string>
 #include <qpainter.h>
+#include "3rdParty/MathGeoLib/Math/float2.h"
 
 enum ShapeType
 {
@@ -22,8 +23,31 @@ public:
 
     ShapeType GetType() const;
 
+    void SetFillColor(const QColor& color);
+    void SetStrokeColor(const QColor& color);
+    void SetStrockeThickness(float set);
+    void SetStrokeStyle(Qt::PenStyle style);
+
+    QColor GetFillColor() const;
+    QColor GetStrokeColor() const;
+    float GetStrokeThickness() const;
+    Qt::PenStyle GetStrockeStyle() const;
+
+    void SetPos(const float2& pos);
+    float2 GetPos() const;
+
+    void SetSize(const float2& size);
+    float2 GetSize() const;
+
+protected:
+    QBrush brush;
+    QPen pen;
+
+    float2 pos = float2::zero;
+    float2 size = float2::zero;
+
 private:
-    ShapeType type = ShapeType::SHAPE_NULL;
+    ShapeType type = ShapeType::SHAPE_NULL;  
 };
 
 #endif // SHAPE_H

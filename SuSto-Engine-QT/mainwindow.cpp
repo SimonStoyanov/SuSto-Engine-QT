@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "hierarchyentity.h"
 #include "ui_inspector.h"
+#include "Managers/shapemanager.h"
 
 #include "globals.h"
 
@@ -25,9 +26,13 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     hierarchy = new Hierarchy(this);
+
     inspector = new Inspector(this);
+
     //rendering = new RendererWidget();
+
     drawing = new DrawingWidget();
+    ShapeManager::Instance()->SetDrawingWidget(drawing);
 
     // Init Advanced Docking
     advanced_docking_container = new ADS_NS::ContainerWidget();

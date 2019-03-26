@@ -12,7 +12,7 @@ C_ShapeRenderer::C_ShapeRenderer(Entity* owner) : Component(ComponentType::COMPO
 
 void C_ShapeRenderer::Start()
 {
-    CreateShape(ShapeType::SHAPE_CIRCLE);
+
 }
 
 void C_ShapeRenderer::CleanUp()
@@ -34,6 +34,17 @@ void C_ShapeRenderer::CreateUI()
     connect(form->shapeTypesComboBox, SIGNAL(currentIndexChanged(const QString&)),
             this, SLOT(OnComboBoxShapeChanges(const QString&)));
 
+    std::map<Qt::PenStyle, std::string> stroke_styles = ShapeManager::Instance()->GetAllStrokeStyleTypes();
+
+    for(std::map<Qt::PenStyle, std::string>::iterator it = stroke_styles.begin(); it != stroke_styles.end(); ++it)
+        form->strokeStyleComboBox->addItem(QString::fromStdString((*it).second));
+
+    connect(form->strokeStyleComboBox, SIGNAL(currentIndexChanged(const QString&)),
+            this, SLOT(OnComboBoxStrokeStyleChanges(const QString&)));
+
+    form->strokeStyleComboBox->setCurrentIndex(1);
+
+     CreateShape(ShapeType::SHAPE_CIRCLE);
 }
 
 void C_ShapeRenderer::DestroyUI()
@@ -59,13 +70,46 @@ void C_ShapeRenderer::CreateShape(ShapeType type)
     }
 
     curr_shape = ShapeManager::Instance()->CreateShape(type);
+
+    if(curr_shape != nullptr)
+    {
+        OnComboBoxStrokeStyleChanges("");
+    }
 }
 
 void C_ShapeRenderer::OnComboBoxShapeChanges(const QString& new_shape)
 {
-    ShapeType type = ShapeManager::Instance()->GetShapeTypeByShapeName(new_shape.toStdString());
+    if(form->shapeTypesComboBox->count() > 0)
+    {
+        QString curr_val = form->shapeTypesComboBox->itemText(form->shapeTypesComboBox->currentIndex());
 
-    CreateShape(type);
+        if(form->shapeTypesComboBox->currentIndex() < 0)
+            curr_val = form->shapeTypesComboBox->itemText(0);
 
-    SPOOKYLOG(new_shape.toStdString());
+        std::string new_name = curr_val.toStdString();
+
+        ShapeType type = ShapeManager::Instance()->GetShapeTypeByShapeName(new_name);
+
+        CreateShape(type);
+    }
+}
+
+void C_ShapeRenderer::OnComboBoxStrokeStyleChanges(const QString &name)
+{
+    if(curr_shape != nullptr)
+    {
+        if(form->strokeStyleComboBox->count() > 0)
+        {
+            QString curr_val = form->strokeStyleComboBox->itemText(form->strokeStyleComboBox->currentIndex());
+
+            if(form->strokeStyleComboBox->currentIndex() < 0)
+                curr_val = form->strokeStyleComboBox->itemText(0);
+
+            std::string new_name = curr_val.toStdString();
+
+            Qt::PenStyle stroke_style = ShapeManager::Instance()->GetStrokeStyleTypeByStrokeStyleName(new_name);
+
+            curr_shape->SetStrokeStyle(stroke_style);
+        }
+    }
 }

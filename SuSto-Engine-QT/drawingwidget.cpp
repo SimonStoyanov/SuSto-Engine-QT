@@ -16,7 +16,7 @@ DrawingWidget::~DrawingWidget()
 }
 
 void DrawingWidget::paintEvent(QPaintEvent *event)
-{
+{    
     setAutoFillBackground(true);
 
     std::vector<Shape*> shapes = ShapeManager::Instance()->GetShapes();
