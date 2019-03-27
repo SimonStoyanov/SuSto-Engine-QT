@@ -13,6 +13,7 @@ ShapeType Shape::GetType() const
 
 void Shape::SetFillColor(const QColor &color)
 {
+    brush.setStyle(Qt::BrushStyle::SolidPattern);
     brush.setColor(color);
 }
 

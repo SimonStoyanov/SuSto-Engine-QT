@@ -107,7 +107,11 @@
         </widget>
        </item>
        <item>
-        <widget class="QDoubleSpinBox" name="doubleSpinBox_3"/>
+        <widget class="QSpinBox" name="strokeR">
+         <property name="maximum">
+          <number>255</number>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QLabel" name="label_7">
@@ -123,7 +127,11 @@
         </widget>
        </item>
        <item>
-        <widget class="QDoubleSpinBox" name="doubleSpinBox"/>
+        <widget class="QSpinBox" name="strokeG">
+         <property name="maximum">
+          <number>255</number>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QLabel" name="label_8">
@@ -139,7 +147,11 @@
         </widget>
        </item>
        <item>
-        <widget class="QDoubleSpinBox" name="doubleSpinBox_2"/>
+        <widget class="QSpinBox" name="strokeB">
+         <property name="maximum">
+          <number>255</number>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QLabel" name="label_9">
@@ -155,7 +167,11 @@
         </widget>
        </item>
        <item>
-        <widget class="QDoubleSpinBox" name="doubleSpinBox_4"/>
+        <widget class="QSpinBox" name="strokeA">
+         <property name="maximum">
+          <number>255</number>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
@@ -172,7 +188,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>TextLabel</string>
+        <string>Fill colour</string>
        </property>
       </widget>
      </item>
@@ -192,7 +208,11 @@
         </widget>
        </item>
        <item>
-        <widget class="QDoubleSpinBox" name="doubleSpinBox_5"/>
+        <widget class="QSpinBox" name="fillR">
+         <property name="maximum">
+          <number>255</number>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QLabel" name="label_12">
@@ -208,7 +228,11 @@
         </widget>
        </item>
        <item>
-        <widget class="QDoubleSpinBox" name="doubleSpinBox_6"/>
+        <widget class="QSpinBox" name="fillG">
+         <property name="maximum">
+          <number>255</number>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QLabel" name="label_13">
@@ -224,7 +248,11 @@
         </widget>
        </item>
        <item>
-        <widget class="QDoubleSpinBox" name="doubleSpinBox_7"/>
+        <widget class="QSpinBox" name="fillB">
+         <property name="maximum">
+          <number>255</number>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QLabel" name="label_14">
@@ -240,7 +268,11 @@
         </widget>
        </item>
        <item>
-        <widget class="QDoubleSpinBox" name="doubleSpinBox_8"/>
+        <widget class="QSpinBox" name="fillA">
+         <property name="maximum">
+          <number>255</number>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>

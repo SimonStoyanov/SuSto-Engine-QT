@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>233</width>
-    <height>153</height>
+    <width>426</width>
+    <height>204</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -36,10 +36,10 @@
      <item>
       <widget class="QDoubleSpinBox" name="posx">
        <property name="minimum">
-        <double>-99999999999999.000000000000000</double>
+        <double>-99999999.000000000000000</double>
        </property>
        <property name="maximum">
-        <double>99999999999999.000000000000000</double>
+        <double>99999999.000000000000000</double>
        </property>
       </widget>
      </item>
@@ -53,10 +53,13 @@
      <item>
       <widget class="QDoubleSpinBox" name="posy">
        <property name="minimum">
-        <double>-99999999999999.000000000000000</double>
+        <double>-99999999.000000000000000</double>
        </property>
        <property name="maximum">
-        <double>99999999999999.000000000000000</double>
+        <double>99999999.000000000000000</double>
+       </property>
+       <property name="value">
+        <double>0.000000000000000</double>
        </property>
       </widget>
      </item>
@@ -70,10 +73,10 @@
      <item>
       <widget class="QDoubleSpinBox" name="posz">
        <property name="minimum">
-        <double>-99999999999999.000000000000000</double>
+        <double>-99999999.000000000000000</double>
        </property>
        <property name="maximum">
-        <double>99999999999999.000000000000000</double>
+        <double>99999999.000000000000000</double>
        </property>
       </widget>
      </item>
@@ -117,10 +120,10 @@
      <item>
       <widget class="QDoubleSpinBox" name="rotx">
        <property name="minimum">
-        <double>-99999999999999.000000000000000</double>
+        <double>-99999999.000000000000000</double>
        </property>
        <property name="maximum">
-        <double>99999999999999.000000000000000</double>
+        <double>99999999.000000000000000</double>
        </property>
       </widget>
      </item>
@@ -134,10 +137,10 @@
      <item>
       <widget class="QDoubleSpinBox" name="roty">
        <property name="minimum">
-        <double>-99999999999999.000000000000000</double>
+        <double>-99999999.000000000000000</double>
        </property>
        <property name="maximum">
-        <double>99999999999999.000000000000000</double>
+        <double>99999999.000000000000000</double>
        </property>
       </widget>
      </item>
@@ -150,8 +153,11 @@
      </item>
      <item>
       <widget class="QDoubleSpinBox" name="rotz">
+       <property name="minimum">
+        <double>-99999999.000000000000000</double>
+       </property>
        <property name="maximum">
-        <double>99999999999999.000000000000000</double>
+        <double>99999999.000000000000000</double>
        </property>
        <property name="value">
         <double>0.000000000000000</double>
@@ -163,13 +169,10 @@
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::MinimumExpanding</enum>
-       </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>0</width>
-         <height>0</height>
+         <width>40</width>
+         <height>20</height>
         </size>
        </property>
       </spacer>
@@ -198,10 +201,10 @@
      <item>
       <widget class="QDoubleSpinBox" name="sclx">
        <property name="minimum">
-        <double>-99999999999999.000000000000000</double>
+        <double>-99999999.000000000000000</double>
        </property>
        <property name="maximum">
-        <double>99999999999999.000000000000000</double>
+        <double>99999999.000000000000000</double>
        </property>
       </widget>
      </item>
@@ -215,10 +218,10 @@
      <item>
       <widget class="QDoubleSpinBox" name="scly">
        <property name="minimum">
-        <double>-99999999999999.000000000000000</double>
+        <double>-99999999.000000000000000</double>
        </property>
        <property name="maximum">
-        <double>99999999999999.000000000000000</double>
+        <double>99999999.000000000000000</double>
        </property>
       </widget>
      </item>
@@ -232,10 +235,10 @@
      <item>
       <widget class="QDoubleSpinBox" name="sclz">
        <property name="minimum">
-        <double>-99999999999999.000000000000000</double>
+        <double>-99999999.000000000000000</double>
        </property>
        <property name="maximum">
-        <double>99999999999999.000000000000000</double>
+        <double>99999999.000000000000000</double>
        </property>
       </widget>
      </item>

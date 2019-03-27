@@ -1,5 +1,6 @@
 #include "shapemanager.h"
 #include "Shapes/shapecircle.h"
+#include "Shapes/shapequad.h"
 
 ShapeManager* ShapeManager::instance = nullptr;
 
@@ -51,6 +52,7 @@ Shape* ShapeManager::CreateShape(ShapeType type)
 
     case ShapeType::SHAPE_QUAD:
     {
+        ret = new ShapeQuad();
         break;
     }
 

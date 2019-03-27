@@ -5,7 +5,7 @@ ShapeCircle::ShapeCircle() : Shape(ShapeType::SHAPE_CIRCLE)
 {
     SetSize(float2(20, 20));
 
-    SetFillColor(QColor::fromRgb(0, 0, 0));
+    SetFillColor(QColor::fromRgb(255, 0, 0, 255));
 
     SetStrokeThickness(4);
     SetStrokeColor(QColor::fromRgb(0, 0, 0));

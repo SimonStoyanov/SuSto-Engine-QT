@@ -64,6 +64,20 @@ void C_ShapeRenderer::CreateUI()
     form->sizeTextInput->setValue(80);
     form->strokeTextInput->setValue(10);
 
+    connect(form->strokeR, SIGNAL(valueChanged(int)), this, SLOT(OnUIColoursChanged(int)));
+    connect(form->strokeG, SIGNAL(valueChanged(int)), this, SLOT(OnUIColoursChanged(int)));
+    connect(form->strokeB, SIGNAL(valueChanged(int)), this, SLOT(OnUIColoursChanged(int)));
+    connect(form->strokeA, SIGNAL(valueChanged(int)), this, SLOT(OnUIColoursChanged(int)));
+
+    connect(form->fillR, SIGNAL(valueChanged(int)), this, SLOT(OnUIColoursChanged(int)));
+    connect(form->fillG, SIGNAL(valueChanged(int)), this, SLOT(OnUIColoursChanged(int)));
+    connect(form->fillB, SIGNAL(valueChanged(int)), this, SLOT(OnUIColoursChanged(int)));
+    connect(form->fillA, SIGNAL(valueChanged(int)), this, SLOT(OnUIColoursChanged(int)));
+
+    form->strokeA->setValue(255);
+    form->fillA->setValue(255);
+    form->fillR->setValue(255);
+
     CreateShape(ShapeType::SHAPE_CIRCLE);
 }
 
@@ -110,6 +124,7 @@ void C_ShapeRenderer::CreateShape(ShapeType type)
     {
         OnComboBoxStrokeStyleChanges("");
         OnUIValueChanged(0);
+        OnUIColoursChanged(0);
     }
 }
 
@@ -156,5 +171,21 @@ void C_ShapeRenderer::OnUIValueChanged(double val)
     {
         size = form->sizeTextInput->value();
         stroke = form->strokeTextInput->value();
+    }
+}
+
+void C_ShapeRenderer::OnUIColoursChanged(int val)
+{
+    if(curr_shape != nullptr)
+    {
+        QColor fill;
+        fill.setRgb(form->fillR->value(), form->fillG->value(), form->fillB->value(), form->fillA->value());
+        curr_shape->SetFillColor(fill);
+
+        QColor stroke;
+        stroke.setRgb(form->strokeR->value(), form->strokeG->value(), form->strokeB->value(), form->strokeA->value());
+        curr_shape->SetStrokeColor(stroke);
+
+        SPOOKYLOG(std::to_string( curr_shape->GetFillColor().red()));
     }
 }

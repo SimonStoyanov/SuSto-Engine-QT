@@ -68,9 +68,9 @@ void Inspector::UpdateUI()
 
                 if((*it)->GetCanDelete())
                 {
-                    QPushButton* delete_button = new QPushButton();
-                    delete_button->setText("X");
-                    h_layout->addWidget(delete_button);
+                    //QPushButton* delete_button = new QPushButton();
+                    //delete_button->setText("X");
+                    //h_layout->addWidget(delete_button);
 
                     //connect(delete_button, &QPushButton::clicked, [this, delete_button]()
                     //{RemoveComponentButton((*it));});

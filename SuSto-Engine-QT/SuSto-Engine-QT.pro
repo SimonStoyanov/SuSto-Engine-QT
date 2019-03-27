@@ -278,7 +278,8 @@ SOURCES += \
     3rdParty/MathGeoLib/Math/grisu3.c \
     3rdParty/Parson/parson.c \
     UI/GeneralWidgets/floatingcontext.cpp \
-    UI/uiutils.cpp
+    UI/uiutils.cpp \
+    Shapes/shapequad.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -627,7 +628,8 @@ HEADERS += \
     mainwindow.h \
     rendererwidget.h \
     UI/GeneralWidgets/floatingcontext.h \
-    UI/uiutils.h
+    UI/uiutils.h \
+    Shapes/shapequad.h
 
 FORMS += \
         mainwindow.ui \
