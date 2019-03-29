@@ -3,6 +3,9 @@
 #include "eventmanager.h"
 #include "globals.h"
 #include "Entity/Components/component.h"
+#include "Entity/Components/c_transform.h"
+#include "Entity/Components/c_shape_renderer.h"
+#include "Managers/jsonmanager.h"
 
 EntityManager* EntityManager::instance = nullptr;
 
@@ -121,4 +124,9 @@ ComponentType EntityManager::GetComponentTypeByComponentName(const std::string &
 std::map<ComponentType, std::string> EntityManager::GetAllComponentTypes() const
 {
     return component_types;
+}
+
+void EntityManager::SerializeEntity(Entity *&entity)
+{
+
 }

@@ -279,7 +279,8 @@ SOURCES += \
     3rdParty/Parson/parson.c \
     UI/GeneralWidgets/floatingcontext.cpp \
     UI/uiutils.cpp \
-    Shapes/shapequad.cpp
+    Shapes/shapequad.cpp \
+    Entity/entityabstraction.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -629,7 +630,8 @@ HEADERS += \
     rendererwidget.h \
     UI/GeneralWidgets/floatingcontext.h \
     UI/uiutils.h \
-    Shapes/shapequad.h
+    Shapes/shapequad.h \
+    Entity/entityabstraction.h
 
 FORMS += \
         mainwindow.ui \

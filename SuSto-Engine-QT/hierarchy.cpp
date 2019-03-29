@@ -74,3 +74,22 @@ void Hierarchy::on_buttonRemoveEntity_clicked()
         EntityManager::Instance()->DestroyEntity(selectedEntity);
     }
 }
+
+void Hierarchy::CopyEntity()
+{
+    Entity* selectedEntity = EntityManager::Instance()->GetSelectedEntity();
+    if (selectedEntity != nullptr)
+    {
+        EntityManager::Instance()->SerializeEntity(selectedEntity);
+        mainwindow->GetUI()->actionPaste->setEnabled(true);
+    }
+    else
+    {
+        SPOOKYLOG("No selected entity");
+    }
+}
+
+void Hierarchy::PasteEntity()
+{
+
+}

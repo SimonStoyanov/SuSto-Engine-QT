@@ -51,6 +51,8 @@ public:
     ComponentType GetComponentTypeByComponentName(const std::string& component_name) const;
     std::map<ComponentType, std::string> GetAllComponentTypes() const;
 
+    void SerializeEntity(Entity*& entity);
+
 private:
     void Start();
     void CleanUp();
