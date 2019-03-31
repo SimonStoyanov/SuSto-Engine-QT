@@ -22,11 +22,16 @@ public:
 public slots:
     void UpdateUI();
 
+    void UpdateEntitiesUI();
+
+    void SaveScene();
+    void LoadScene();
+
 private slots:
     void on_buttonAddEntity_clicked();
     void on_buttonRemoveEntity_clicked();
-    void CopyEntity();
-    void PasteEntity();
+
+    void DuplicateEntity();
 
 private:
     Ui::Hierarchy *ui;

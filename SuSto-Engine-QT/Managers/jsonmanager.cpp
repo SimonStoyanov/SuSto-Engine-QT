@@ -118,7 +118,12 @@ void JsonManager::UnloadJSON(JsonDoc * json)
 				++it;
 
 		}
-	}
+    }
+}
+
+void JsonManager::Start()
+{
+
 }
 
 void JsonManager::UnloadAllJSONs()

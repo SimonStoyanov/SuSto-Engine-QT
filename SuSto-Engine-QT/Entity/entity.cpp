@@ -6,8 +6,11 @@
 
 #include "globals.h"
 
-Entity::Entity()
+Entity::Entity(const std::string &set_uid, const std::string &set_instance_uid)
 {
+    uid = set_uid;
+    instance_uid = set_instance_uid;
+
     transform = (C_Transform*) AddComponent(ComponentType::COMPONENT_TRANSFORM);
 }
 
@@ -29,6 +32,16 @@ void Entity::Update()
 void Entity::CleanUp()
 {
     DestroyAllComponents();
+}
+
+void Entity::OnSaveAbstraction(DataAbstraction &abs)
+{
+    abs.AddString("name", name);
+}
+
+void Entity::OnLoadAbstraction(DataAbstraction &abs)
+{
+    name = abs.GetString("name");
 }
 
 Component *Entity::AddComponent(ComponentType type)
@@ -148,6 +161,16 @@ std::string Entity::GetName()
 void Entity::SetName(std::string name_)
 {
     name = name_;
+}
+
+std::string Entity::GetUID() const
+{
+    return uid;
+}
+
+std::string Entity::GetInstanceUID() const
+{
+    return instance_uid;
 }
 
 void Entity::UpdateAllComponents()

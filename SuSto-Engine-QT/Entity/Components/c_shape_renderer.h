@@ -2,8 +2,9 @@
 #define C_SHAPERENDERER_H
 
 #include "component.h"
-
 #include "Shapes/shape.h"
+
+class DataAbstraction;
 
 namespace Ui {
 class Shape;
@@ -19,6 +20,9 @@ public:
     void Start();
     void Update();
     void CleanUp();
+
+    void OnSaveAbstraction(DataAbstraction& abs);
+    void OnLoadAbstraction(DataAbstraction& abs);
 
     void CreateUI();
     void DestroyUI();

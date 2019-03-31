@@ -5,6 +5,7 @@
 #include "ui_shape.h"
 #include "globals.h"
 #include "Entity/Components/c_transform.h"
+#include "Managers/jsonmanager.h"
 
 C_ShapeRenderer::C_ShapeRenderer(Entity* owner) : Component(ComponentType::COMPONENT_SHAPE_RENDERER, "Shape renderer", owner, true)
 {
@@ -34,6 +35,48 @@ void C_ShapeRenderer::CleanUp()
     ShapeManager::Instance()->DestroyShape(curr_shape);
 }
 
+void C_ShapeRenderer::OnSaveAbstraction(DataAbstraction &abs)
+{
+    if(curr_shape != nullptr)
+    {
+        QColor stroke_col = curr_shape->GetStrokeColor();
+        QColor fill_col = curr_shape->GetFillColor();
+
+        abs.AddInt("shape_type", curr_shape->GetType());
+        abs.AddInt("stroke_type", curr_shape->GetStrockeStyle());
+        abs.AddFloat("size", size);
+        abs.AddFloat("stroke", stroke);
+        abs.AddFloat4("stroke_colour", float4(stroke_col.red(), stroke_col.green(), stroke_col.alpha(), stroke_col.blue()));
+        abs.AddFloat4("fill_colour", float4(fill_col.red(), fill_col.green(), fill_col.alpha(), fill_col.blue()));
+    }
+}
+
+void C_ShapeRenderer::OnLoadAbstraction(DataAbstraction &abs)
+{
+    ShapeType type = static_cast<ShapeType>(abs.GetInt("shape_type"));
+    Qt::PenStyle stroke_style = static_cast<Qt::PenStyle>(abs.GetInt("stroke_type"));
+
+    CreateShape(type);
+
+    if(curr_shape != nullptr)
+    {
+        size = abs.GetFloat("size");
+        stroke = abs.GetFloat("stroke");
+
+        float4 stroke_col = abs.GetFloat4("stroke_colour");
+        float4 fill_col = abs.GetFloat4("fill_colour");
+
+        QColor stroke_qcol = QColor::fromRgb(stroke_col.x, stroke_col.y, stroke_col.w, stroke_col.z);
+        QColor fill_qcol = QColor::fromRgb(fill_col.x, fill_col.y, fill_col.w, fill_col.z);
+
+        curr_shape->SetStrokeColor(stroke_qcol);
+        curr_shape->SetFillColor(fill_qcol);
+        curr_shape->SetStrokeStyle(stroke_style);
+    }
+
+    UpdateUI();
+}
+
 void C_ShapeRenderer::CreateUI()
 {
     form = new Ui::Shape();
@@ -56,8 +99,6 @@ void C_ShapeRenderer::CreateUI()
     connect(form->strokeStyleComboBox, SIGNAL(currentIndexChanged(const QString&)),
             this, SLOT(OnComboBoxStrokeStyleChanges(const QString&)));
 
-    form->strokeStyleComboBox->setCurrentIndex(1);
-
     connect(form->sizeTextInput, SIGNAL(valueChanged(double)), this, SLOT(OnUIValueChanged(double)));
     connect(form->strokeTextInput, SIGNAL(valueChanged(double)), this, SLOT(OnUIValueChanged(double)));
 
@@ -78,6 +119,9 @@ void C_ShapeRenderer::CreateUI()
     form->fillA->setValue(255);
     form->fillR->setValue(255);
 
+    form->shapeTypesComboBox->setCurrentIndex(0);
+    form->strokeStyleComboBox->setCurrentIndex(1);
+
     CreateShape(ShapeType::SHAPE_CIRCLE);
 }
 
@@ -88,7 +132,35 @@ void C_ShapeRenderer::DestroyUI()
 
 void C_ShapeRenderer::UpdateUI()
 {
+    if(curr_shape != nullptr)
+    {
+        QColor stroke_col = curr_shape->GetStrokeColor();
+        QColor fill_col = curr_shape->GetFillColor();
 
+        if(form->shapeTypesComboBox->count() > 0)
+        {
+            std::string shape_name = ShapeManager::Instance()->GetShapeNameByShapeType(curr_shape->GetType());
+
+            form->shapeTypesComboBox->setCurrentText(QString::fromStdString(shape_name));
+
+            std::string shape_stroke_style = ShapeManager::Instance()->GetStrokeNameByStrokeStyleType(curr_shape->GetStrockeStyle());
+
+            form->strokeStyleComboBox->setCurrentText(QString::fromStdString(shape_stroke_style));
+
+            form->sizeTextInput->setValue(size);
+            form->strokeTextInput->setValue(stroke);
+
+            form->strokeR->setValue(stroke_col.red());
+            form->strokeG->setValue(stroke_col.green());
+            form->strokeB->setValue(stroke_col.blue());
+            form->strokeA->setValue(stroke_col.alpha());
+
+            form->fillR->setValue(fill_col.red());
+            form->fillG->setValue(fill_col.green());
+            form->fillB->setValue(fill_col.blue());
+            form->fillA->setValue(fill_col.alpha());
+        }
+    }
 }
 
 QWidget *C_ShapeRenderer::GetUI() const

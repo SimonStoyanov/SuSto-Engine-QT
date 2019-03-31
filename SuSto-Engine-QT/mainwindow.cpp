@@ -49,11 +49,11 @@ MainWindow::MainWindow(QWidget *parent) :
     // TOOLBAR FILE
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(actionCreateFile()));
     connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(actionExit()));
+    connect(ui->actionSave_Scene, SIGNAL(triggered()), hierarchy, SLOT(SaveScene()));
+    connect(ui->actionLoad_Scene, SIGNAL(triggered()), hierarchy, SLOT(LoadScene()));
 
     // TOOLBAR EDIT
-    connect(ui->actionCopy, SIGNAL(triggered()), hierarchy, SLOT(CopyEntity()));
-    connect(ui->actionPaste, SIGNAL(triggered()), hierarchy, SLOT(PasteEntity()));
-    connect(ui->actionDelete, SIGNAL(triggered()), hierarchy, SLOT(on_buttonRemoveEntity_clicked()));
+    connect(ui->actionDuplicate, SIGNAL(triggered()), hierarchy, SLOT(DuplicateEntity()));
 
     // TOOLBAR HELP
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(actionAbout()));

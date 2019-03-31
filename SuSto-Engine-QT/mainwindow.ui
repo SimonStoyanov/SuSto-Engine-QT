@@ -55,9 +55,7 @@
     <addaction name="actionUndo"/>
     <addaction name="actionRedo"/>
     <addaction name="separator"/>
-    <addaction name="actionCut"/>
-    <addaction name="actionCopy"/>
-    <addaction name="actionPaste"/>
+    <addaction name="actionDuplicate"/>
     <addaction name="separator"/>
     <addaction name="actionDelete"/>
    </widget>
@@ -119,24 +117,6 @@
     <string>Redo</string>
    </property>
   </action>
-  <action name="actionCut">
-   <property name="text">
-    <string>Cut</string>
-   </property>
-  </action>
-  <action name="actionCopy">
-   <property name="text">
-    <string>Copy</string>
-   </property>
-  </action>
-  <action name="actionPaste">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="text">
-    <string>Paste</string>
-   </property>
-  </action>
   <action name="actionDelete">
    <property name="text">
     <string>Delete</string>
@@ -178,6 +158,11 @@
    </property>
    <property name="text">
     <string>Renderer</string>
+   </property>
+  </action>
+  <action name="actionDuplicate">
+   <property name="text">
+    <string>Duplicate</string>
    </property>
   </action>
  </widget>

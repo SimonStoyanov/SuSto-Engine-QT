@@ -3,6 +3,7 @@
 
 #include <string>
 #include "QWidget"
+#include "Managers/jsonmanager.h"
 
 class Entity;
 
@@ -24,6 +25,9 @@ public:
     virtual void Start(){}
     virtual void Update(){}
     virtual void CleanUp(){}
+
+    virtual void OnSaveAbstraction(DataAbstraction& abs){}
+    virtual void OnLoadAbstraction(DataAbstraction& abs){}
 
     virtual void OnComponentAdded(Component* comp) {};
     virtual void OnComponentRemoved(Component* comp){};

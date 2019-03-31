@@ -41,6 +41,7 @@ public:
     void UpdateAllEntities();
 
     Entity* CreateEntity();
+    Entity *CreateEntity(const std::string& uid, const std::string& instance_uid);
     void DestroyEntity(Entity*& entity);
     void DestroyAllEntities();
     std::vector<Entity*> GetEntities();
@@ -51,7 +52,7 @@ public:
     ComponentType GetComponentTypeByComponentName(const std::string& component_name) const;
     std::map<ComponentType, std::string> GetAllComponentTypes() const;
 
-    void SerializeEntity(Entity*& entity);
+    std::vector<Entity*> DuplicateEntity(std::vector<Entity*> entity);
 
 private:
     void Start();
@@ -60,6 +61,8 @@ private:
     void AddComponentType(ComponentType type, const std::string& component_name);
 
 private:
+    std::string base_instance_uid;
+
     static EntityManager* instance;
 
     std::vector<Entity*> entities;

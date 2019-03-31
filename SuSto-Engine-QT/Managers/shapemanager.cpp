@@ -115,6 +115,22 @@ ShapeType ShapeManager::GetShapeTypeByShapeName(const std::string &shape_name) c
     return ret;
 }
 
+std::string ShapeManager::GetShapeNameByShapeType(ShapeType type)
+{
+    std::string ret;
+
+    for(std::map<ShapeType, std::string>::const_iterator it = shapes_types.begin(); it != shapes_types.end(); ++it)
+    {
+        if((*it).first == type)
+        {
+            ret = (*it).second;
+            break;
+        }
+    }
+
+    return ret;
+}
+
 std::map<ShapeType, std::string> ShapeManager::GetAllShapeTypes()
 {
     return shapes_types;
@@ -129,6 +145,22 @@ Qt::PenStyle ShapeManager::GetStrokeStyleTypeByStrokeStyleName(const std::string
         if((*it).second.compare(stroke_style_name) == 0)
         {
             ret = (*it).first;
+            break;
+        }
+    }
+
+    return ret;
+}
+
+std::string ShapeManager::GetStrokeNameByStrokeStyleType(Qt::PenStyle style)
+{
+    std::string ret;
+
+    for(std::map<Qt::PenStyle, std::string>::const_iterator it = stroke_styles.begin(); it != stroke_styles.end(); ++it)
+    {
+        if((*it).first == style)
+        {
+            ret = (*it).second;
             break;
         }
     }

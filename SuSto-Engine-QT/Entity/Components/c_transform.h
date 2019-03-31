@@ -5,6 +5,7 @@
 #include "3rdParty/MathGeoLib/Math/float2.h"
 
 class C_ShapeRenderer;
+class DataAbstraction;
 
 namespace Ui {
 class Transform;
@@ -20,6 +21,9 @@ public:
 
     void Start();
     void CleanUp();
+
+    void OnSaveAbstraction(DataAbstraction& abs);
+    void OnLoadAbstraction(DataAbstraction& abs);
 
     void OnComponentAdded(Component* comp);
     void OnComponentRemoved(Component* comp);

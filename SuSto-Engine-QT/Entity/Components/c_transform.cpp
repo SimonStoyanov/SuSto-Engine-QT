@@ -4,6 +4,7 @@
 #include "QWidget"
 #include "ui_transform.h"
 #include "globals.h"
+#include "Managers/jsonmanager.h"
 
 C_Transform::C_Transform(Entity* owner) : Component(ComponentType::COMPONENT_TRANSFORM, "Transform", owner, true, false)
 {
@@ -23,6 +24,20 @@ void C_Transform::Start()
 void C_Transform::CleanUp()
 {
 
+}
+
+void C_Transform::OnSaveAbstraction(DataAbstraction &abs)
+{
+    abs.AddFloat2("pos", pos);
+    abs.AddFloat2("scale", scale);
+}
+
+void C_Transform::OnLoadAbstraction(DataAbstraction &abs)
+{
+    SetPos(abs.GetFloat2("pos"));
+    SetScale(abs.GetFloat2("scale"));
+
+    UpdateUI();
 }
 
 void C_Transform::OnComponentAdded(Component *comp)
@@ -74,7 +89,14 @@ void C_Transform::UpdateUI()
 {
     if(ui != nullptr)
     {
+        float2 pos = GetPos();
+        float2 scale = GetScale();
 
+        form->posx->setValue(pos.x);
+        form->posy->setValue(pos.y);
+
+        form->sclx->setValue(scale.x);
+        form->scly->setValue(scale.y);
     }
 }
 

@@ -41,8 +41,8 @@ void AppManager::CleanUp()
 
     workTimer.stop();
 
-    ShapeManager::DestroyInstance();
     EntityManager::DestroyInstance();
+    ShapeManager::DestroyInstance();
     JsonManager::DestroyInstance();
     EventManager::DestroyInstance();
 }

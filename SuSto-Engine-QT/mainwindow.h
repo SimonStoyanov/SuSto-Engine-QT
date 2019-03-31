@@ -41,9 +41,11 @@ public:
 
 
 private slots:
+
     // FILE
     void actionCreateFile();
     void actionExit();
+
     // EDIT
 
     // HELP

@@ -6,12 +6,14 @@
 #include "Entity/Components/c_transform.h"
 #include "Entity/Components/c_shape_renderer.h"
 #include "Managers/jsonmanager.h"
+#include "functions.h"
+#include "Entity/entityabstraction.h"
 
 EntityManager* EntityManager::instance = nullptr;
 
 EntityManager::EntityManager()
 {
-
+    base_instance_uid = GetUIDRandomHexadecimal();
 }
 
 void EntityManager::UpdateAllEntities()
@@ -24,7 +26,18 @@ void EntityManager::UpdateAllEntities()
 
 Entity* EntityManager::CreateEntity()
 {
-    Entity* ret = new Entity();
+    Entity* ret = new Entity(GetUIDRandomHexadecimal(), base_instance_uid);
+
+    ret->Start();
+
+    entities.push_back(ret);
+
+    return ret;
+}
+
+Entity *EntityManager::CreateEntity(const std::string &uid, const std::string &instance_uid)
+{
+    Entity* ret = new Entity(uid, instance_uid);
 
     ret->Start();
 
@@ -59,6 +72,9 @@ void EntityManager::DestroyAllEntities()
 {
     for(std::vector<Entity*>::iterator it = entities.begin(); it != entities.end(); ++it)
     {
+         if ((*it) == selectedEntity)
+             SetSelectedEntity(nullptr);
+
         (*it)->CleanUp();
         delete (*it);
     }
@@ -126,7 +142,14 @@ std::map<ComponentType, std::string> EntityManager::GetAllComponentTypes() const
     return component_types;
 }
 
-void EntityManager::SerializeEntity(Entity *&entity)
+std::vector<Entity *> EntityManager::DuplicateEntity(std::vector<Entity *> entity)
 {
+    std::vector<Entity*> ret;
 
+    EntityAbstraction abs;
+    abs.Abstract(entity);
+    ret = abs.DeAbstract();
+
+    return ret;
 }
+

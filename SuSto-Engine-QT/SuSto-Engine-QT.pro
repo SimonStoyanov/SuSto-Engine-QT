@@ -280,7 +280,8 @@ SOURCES += \
     UI/GeneralWidgets/floatingcontext.cpp \
     UI/uiutils.cpp \
     Shapes/shapequad.cpp \
-    Entity/entityabstraction.cpp
+    Entity/entityabstraction.cpp \
+    functions.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -631,7 +632,8 @@ HEADERS += \
     UI/GeneralWidgets/floatingcontext.h \
     UI/uiutils.h \
     Shapes/shapequad.h \
-    Entity/entityabstraction.h
+    Entity/entityabstraction.h \
+    functions.h
 
 FORMS += \
         mainwindow.ui \

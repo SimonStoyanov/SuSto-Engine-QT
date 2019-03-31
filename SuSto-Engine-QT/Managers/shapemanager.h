@@ -44,9 +44,11 @@ public:
     std::vector<Shape*> GetShapes() const;
 
     ShapeType GetShapeTypeByShapeName(const std::string& shape_name) const;
+    std::string GetShapeNameByShapeType(ShapeType type);
     std::map<ShapeType, std::string> GetAllShapeTypes();
 
     Qt::PenStyle GetStrokeStyleTypeByStrokeStyleName(const std::string& stroke_style_name) const;
+    std::string GetStrokeNameByStrokeStyleType(Qt::PenStyle style);
     std::map<Qt::PenStyle, std::string> GetAllStrokeStyleTypes();
 
 private:

@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include "Managers/jsonmanager.h"
 
 class Entity;
 class DataAbstraction;
@@ -37,6 +38,7 @@ public:
     std::vector<Entity*> DeAbstract();
 
     bool Serialize(const std::string& path, const std::string& name, const std::string& extension);
+    bool Serialize(const std::string& filepath);
     bool DeSerialize(const std::string& filepath);
 
     void Clear();

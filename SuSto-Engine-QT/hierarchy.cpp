@@ -1,11 +1,14 @@
-#include "hierarchy.h"
+﻿#include "hierarchy.h"
 #include "ui_hierarchy.h"
 #include "Entity/entity.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "inspector.h"
-
+#include "UI/uiutils.h"
+#include "Entity/entityabstraction.h"
+#include "globals.h"
 #include "hierarchyentity.h"
+#include "QFileDialog"
 
 #include "Managers/entitymanager.h"
 
@@ -35,6 +38,59 @@ void Hierarchy::UpdateUI()
     {
         (*it)->UpdateUI();
     }
+}
+
+void Hierarchy::UpdateEntitiesUI()
+{
+    UIUtils::RemoveWidgetsFromLayout(ui->scrollLayout);
+
+    h_entities.clear();
+
+    std::vector<Entity*> entities = EntityManager::Instance()->GetEntities();
+
+    for(std::vector<Entity*>::iterator it = entities.begin(); it != entities.end(); ++it)
+    {
+        HierarchyEntity* new_entity_in_hierarchy = new HierarchyEntity((*it), this);
+        ui->scrollLayout->addWidget(new_entity_in_hierarchy);
+        h_entities.push_back(new_entity_in_hierarchy);
+    }
+}
+
+void Hierarchy::SaveScene()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, ("Save Scene"),
+                                                      "scene_name",
+                                                      ("Scenes (*.spookyscene)"));
+
+    std::vector<Entity*> entities = EntityManager::Instance()->GetEntities();
+
+    EntityAbstraction abs;
+    abs.Abstract(entities);
+
+    abs.Serialize(fileName.toStdString());
+
+    SPOOKYLOG(fileName.toStdString());
+
+}
+
+void Hierarchy::LoadScene()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, ("Load Scene"),
+                                                      "scene_name",
+                                                      ("Scenes (*.spookyscene)"));
+
+    EntityAbstraction abs;
+    bool loaded = abs.DeSerialize(fileName.toStdString());
+
+    if(loaded)
+    {
+        EntityManager::Instance()->DestroyAllEntities();
+
+        abs.DeAbstract();
+    }
+
+    UpdateEntitiesUI();
+    UpdateUI();
 }
 
 void Hierarchy::on_buttonAddEntity_clicked()
@@ -75,21 +131,19 @@ void Hierarchy::on_buttonRemoveEntity_clicked()
     }
 }
 
-void Hierarchy::CopyEntity()
+void Hierarchy::DuplicateEntity()
 {
     Entity* selectedEntity = EntityManager::Instance()->GetSelectedEntity();
-    if (selectedEntity != nullptr)
+
+    if(selectedEntity != nullptr)
     {
-        EntityManager::Instance()->SerializeEntity(selectedEntity);
-        mainwindow->GetUI()->actionPaste->setEnabled(true);
+        std::vector<Entity*> entities;
+        entities.push_back(selectedEntity);
+
+        EntityManager::Instance()->DuplicateEntity(entities);
     }
-    else
-    {
-        SPOOKYLOG("No selected entity");
-    }
+
+    UpdateEntitiesUI();
+    mainwindow->GetInspector()->UpdateUI();
 }
 
-void Hierarchy::PasteEntity()
-{
-
-}
