@@ -5,6 +5,7 @@ In this release, the user can do the next things with entities:
 * Delete
 * Rename
 * Add Component 
+* Duplicate
 
 Entities have a component system, with the next implemented components:
 * Transform
@@ -18,3 +19,5 @@ Entities have a component system, with the next implemented components:
 	- Strok style
 	- Stroke colour
 	- Change colour of the shape
+
+Moreover, you can save and load scenes.
