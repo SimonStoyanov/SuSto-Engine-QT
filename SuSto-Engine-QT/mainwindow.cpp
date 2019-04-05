@@ -49,6 +49,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // TOOLBAR FILE
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(actionCreateFile()));
     connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(actionExit()));
+    connect(ui->actionCreate_New_Scene, SIGNAL(triggered()), hierarchy, SLOT(NewScene()));
     connect(ui->actionSave_Scene, SIGNAL(triggered()), hierarchy, SLOT(SaveScene()));
     connect(ui->actionLoad_Scene, SIGNAL(triggered()), hierarchy, SLOT(LoadScene()));
 

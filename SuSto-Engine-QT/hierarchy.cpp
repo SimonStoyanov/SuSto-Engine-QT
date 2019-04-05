@@ -56,11 +56,17 @@ void Hierarchy::UpdateEntitiesUI()
     }
 }
 
+void Hierarchy::NewScene()
+{
+    EntityManager::Instance()->DestroyAllEntities();
+
+    UpdateEntitiesUI();
+    UpdateUI();
+}
+
 void Hierarchy::SaveScene()
 {
-    QString fileName = QFileDialog::getSaveFileName(this, ("Save Scene"),
-                                                      "scene_name",
-                                                      ("Scenes (*.spookyscene)"));
+    QString fileName = QFileDialog::getSaveFileName(this, ("Save Scene"), "scene_name", ("Scenes (*.spookyscene)"));
 
     std::vector<Entity*> entities = EntityManager::Instance()->GetEntities();
 
@@ -75,9 +81,7 @@ void Hierarchy::SaveScene()
 
 void Hierarchy::LoadScene()
 {
-    QString fileName = QFileDialog::getOpenFileName(this, ("Load Scene"),
-                                                      "scene_name",
-                                                      ("Scenes (*.spookyscene)"));
+    QString fileName = QFileDialog::getOpenFileName(this, ("Load Scene"), "scene_name", ("Scenes (*.spookyscene)"));
 
     EntityAbstraction abs;
     bool loaded = abs.DeSerialize(fileName.toStdString());

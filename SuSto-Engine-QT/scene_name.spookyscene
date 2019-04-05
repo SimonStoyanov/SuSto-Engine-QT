@@ -1,0 +1,60 @@
+{
+    "entities_count": 1,
+    "entity_0": {
+        "uid": "4d2dad33",
+        "parent_uid": "",
+        "ints_count": 1,
+        "int_name_0": "components_count",
+        "int_value_0": 2,
+        "strings_count": 1,
+        "string_name_0": "name",
+        "string_value_0": "entity_0",
+        "components": [
+            {
+                "ints_count": 1,
+                "int_name_0": "type",
+                "int_value_0": 0,
+                "floats2_count": 2,
+                "float2_name_0": "pos",
+                "float2_value_0": [
+                    0,
+                    0
+                ],
+                "float2_name_1": "scale",
+                "float2_value_1": [
+                    1,
+                    1
+                ]
+            },
+            {
+                "ints_count": 3,
+                "int_name_0": "shape_type",
+                "int_value_0": 0,
+                "int_name_1": "stroke_type",
+                "int_value_1": 1,
+                "int_name_2": "type",
+                "int_value_2": 1,
+                "floats_count": 2,
+                "float_name_0": "size",
+                "float_value_0": 80,
+                "float_name_1": "stroke",
+                "float_value_1": 10,
+                "floats4_count": 2,
+                "float4_name_0": "fill_colour",
+                "float4_value_0": [
+                    255,
+                    0,
+                    0,
+                    255
+                ],
+                "float4_name_1": "stroke_colour",
+                "float4_value_1": [
+                    0,
+                    0,
+                    0,
+                    255
+                ]
+            }
+        ]
+    }
+}

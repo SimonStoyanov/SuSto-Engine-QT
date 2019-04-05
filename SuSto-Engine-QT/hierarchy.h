@@ -24,6 +24,7 @@ public slots:
 
     void UpdateEntitiesUI();
 
+    void NewScene();
     void SaveScene();
     void LoadScene();
 
