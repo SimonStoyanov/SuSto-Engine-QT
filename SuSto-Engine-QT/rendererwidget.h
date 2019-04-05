@@ -3,11 +3,13 @@
 
 #include <QOpenGLWidget>
 
+class MainWindow;
+
 class RendererWidget : public QOpenGLWidget
 {
     Q_OBJECT
 public:
-    explicit RendererWidget(QWidget *parent = nullptr);
+    explicit RendererWidget(MainWindow* mainwindow_, QWidget *parent = nullptr);
 
     void initializeGL();
     void resizeGL();
@@ -16,6 +18,9 @@ public:
 signals:
 
 public slots:
+
+private:
+    MainWindow* main_window = nullptr;
 };
 
 #endif // RENDERERWIDGET_H

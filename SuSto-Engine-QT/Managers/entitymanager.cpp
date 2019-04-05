@@ -108,7 +108,6 @@ void EntityManager::SetSelectedEntity(Entity* entity)
 void EntityManager::Start()
 {
     AddComponentType(ComponentType::COMPONENT_TRANSFORM, "Transform");
-    AddComponentType(ComponentType::COMPONENT_SHAPE_RENDERER, "Shape Renderer");
 }
 
 void EntityManager::CleanUp()

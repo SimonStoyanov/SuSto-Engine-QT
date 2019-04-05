@@ -32,7 +32,6 @@ void AppManager::Start()
 void AppManager::Update()
 {
     EntityManager::Instance()->UpdateAllEntities();
-    ShapeManager::Instance()->RepaintDrawingWidget();
 }
 
 void AppManager::CleanUp()
@@ -42,7 +41,6 @@ void AppManager::CleanUp()
     workTimer.stop();
 
     EntityManager::DestroyInstance();
-    ShapeManager::DestroyInstance();
     JsonManager::DestroyInstance();
     EventManager::DestroyInstance();
 }
