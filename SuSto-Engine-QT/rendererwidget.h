@@ -21,6 +21,12 @@ public slots:
 
 private:
     MainWindow* main_window = nullptr;
+
+    void keyPressEvent(QKeyEvent *event);
+    void keyReleaseEvent(QKeyEvent *event);
+    void mousePressEvent(QKeyEvent *event);
+    void mouseReleaseEvent(QKeyEvent *event);
+    void mouseDoubleClickEvent(QKeyEvent *event);
 };
 
 #endif // RENDERERWIDGET_H
