@@ -348,8 +348,7 @@ SOURCES += \
     mainwindow.cpp \
     rendererwidget.cpp \
     3rdParty/MathGeoLib/Math/grisu3.c \
-    3rdParty/Parson/parson.c \
-    3rdParty/TinyDialgs/tinyfiledialogs.c
+    3rdParty/Parson/parson.c
 
 HEADERS += \
         mainwindow.h \
@@ -770,7 +769,6 @@ HEADERS += \
     3rdParty/MathGeoLib/MathGeoLib.h \
     3rdParty/MathGeoLib/MathGeoLibFwd.h \
     3rdParty/Parson/parson.h \
-    3rdParty/TinyDialgs/tinyfiledialogs.h \
     Entity/Components/c_shape_renderer.h \
     Entity/Components/c_transform.h \
     Entity/Components/component.h \
