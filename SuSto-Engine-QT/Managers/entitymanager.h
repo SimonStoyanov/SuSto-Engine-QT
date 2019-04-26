@@ -9,6 +9,8 @@
 
 class EntityManager
 {
+    friend class AppManager;
+
 private:
     EntityManager();
     void operator delete(void *) {}

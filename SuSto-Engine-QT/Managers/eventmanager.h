@@ -30,6 +30,8 @@ private:
 
 class EventManager
 {
+    friend class AppManager;
+
 private:
     EventManager();
     void operator delete(void *) {}
@@ -40,8 +42,6 @@ public:
         if(instance == nullptr)
         {
             instance = new EventManager();
-
-            instance->Start();
         }
 
         return instance;

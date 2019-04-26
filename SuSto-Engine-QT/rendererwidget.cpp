@@ -1,4 +1,5 @@
 #include "rendererwidget.h"
+#include "Managers/rendermanager.h"
 
 #pragma comment(lib, "OpenGL32.lib")
 
@@ -9,10 +10,12 @@ RendererWidget::RendererWidget(MainWindow* _mainwindow_, QWidget *parent)
 
 void RendererWidget::initializeGL()
 {
+    initializeOpenGLFunctions();
 
+    RenderManager::Instance()->SetGL(this);
 }
 
-void RendererWidget::resizeGL()
+void RendererWidget::resizeGL(int w, int h)
 {
 
 }
@@ -23,27 +26,3 @@ void RendererWidget::paintGL()
     glClear(GL_COLOR_BUFFER_BIT);
 }
 
-void RendererWidget::keyPressEvent(QKeyEvent *event)
-{
-
-}
-
-void RendererWidget::keyReleaseEvent(QKeyEvent *event)
-{
-
-}
-
-void RendererWidget::mousePressEvent(QKeyEvent *event)
-{
-
-}
-
-void RendererWidget::mouseReleaseEvent(QKeyEvent *event)
-{
-
-}
-
-void RendererWidget::mouseDoubleClickEvent(QKeyEvent *event)
-{
-
-}

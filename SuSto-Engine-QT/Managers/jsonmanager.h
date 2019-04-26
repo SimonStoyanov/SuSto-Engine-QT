@@ -115,6 +115,8 @@ private:
 
 class JsonManager
 {
+    friend class AppManager;
+
 private:
     JsonManager();
     void operator delete(void *) {}
@@ -125,8 +127,6 @@ public:
         if(instance == nullptr)
         {
             instance = new JsonManager();
-
-            instance->Start();
         }
 
         return instance;

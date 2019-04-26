@@ -8,6 +8,9 @@
 
 class ShapeManager
 {
+    friend class AppManager;
+
+private:
     ShapeManager();
     void operator delete(void *) {}
 

@@ -2,18 +2,19 @@
 #define RENDERERWIDGET_H
 
 #include <QOpenGLWidget>
+#include <QOpenGLFunctions_3_3_Core>
 
 class MainWindow;
 
-class RendererWidget : public QOpenGLWidget
+class RendererWidget : public QOpenGLWidget, public QOpenGLFunctions_3_3_Core
 {
     Q_OBJECT
 public:
     explicit RendererWidget(MainWindow* mainwindow_, QWidget *parent = nullptr);
 
-    void initializeGL();
-    void resizeGL();
-    void paintGL();
+    void initializeGL() override;
+    void resizeGL(int w, int h) override;
+    void paintGL() override;
 
 signals:
 
@@ -22,11 +23,6 @@ public slots:
 private:
     MainWindow* main_window = nullptr;
 
-    void keyPressEvent(QKeyEvent *event);
-    void keyReleaseEvent(QKeyEvent *event);
-    void mousePressEvent(QKeyEvent *event);
-    void mouseReleaseEvent(QKeyEvent *event);
-    void mouseDoubleClickEvent(QKeyEvent *event);
 };
 
 #endif // RENDERERWIDGET_H

@@ -348,7 +348,8 @@ SOURCES += \
     mainwindow.cpp \
     rendererwidget.cpp \
     3rdParty/MathGeoLib/Math/grisu3.c \
-    3rdParty/Parson/parson.c
+    3rdParty/Parson/parson.c \
+    Managers/rendermanager.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -794,7 +795,8 @@ HEADERS += \
     hierarchyentity.h \
     inspector.h \
     mainwindow.h \
-    rendererwidget.h
+    rendererwidget.h \
+    Managers/rendermanager.h
 
 FORMS += \
         mainwindow.ui \
@@ -841,4 +843,3 @@ DEPENDPATH += $$PWD/../AdvancedDockingSystem/include
 DISTFILES += \
     3rdParty/Grid/grid.frag \
     3rdParty/Grid/grid.vert
-

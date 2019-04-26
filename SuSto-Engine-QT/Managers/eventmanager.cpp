@@ -27,7 +27,9 @@ void EventDelegate::RemoveListener(const std::function<void(Event*)>& function)
 
 void EventDelegate::CallListeners(Event* ev)
 {
-    for (std::vector<std::function<void(Event*)>>::iterator it = listeners.begin(); it != listeners.end(); ++it)
+    std::vector<std::function<void(Event*)>> to_call = listeners;
+
+    for (std::vector<std::function<void(Event*)>>::iterator it = to_call.begin(); it != to_call.end(); ++it)
     {
         if ((*it))
             (*it)(ev);
