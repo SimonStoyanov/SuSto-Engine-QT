@@ -351,6 +351,7 @@ SOURCES += \
     3rdParty/Parson/parson.c \
     Managers/rendermanager.cpp \
     Managers/shadermanager.cpp
+    Managers/cameramanager.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -799,6 +800,7 @@ HEADERS += \
     rendererwidget.h \
     Managers/rendermanager.h \
     Managers/shadermanager.h
+    Managers/cameramanager.h
 
 FORMS += \
         mainwindow.ui \

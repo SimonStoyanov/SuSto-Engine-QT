@@ -33,10 +33,13 @@ void AppManager::Start()
     workTimer.start();
 
     connect(&workTimer, SIGNAL(timeout()), this, SLOT(Update()));
+    dtTimer.start();
 }
 
 void AppManager::Update()
 {
+    dt = dtTimer.msec()/1000;
+    dtTimer.start();
     EntityManager::Instance()->UpdateAllEntities();
 }
 
