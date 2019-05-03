@@ -1,6 +1,7 @@
 #ifndef APPMANAGER_H
 #define APPMANAGER_H
 
+#include "QTime"
 #include "QTimer"
 #include "QWidget"
 
@@ -39,6 +40,10 @@ public:
 
     void Init();
 
+    const float GetDT() const {
+        return dt;
+    }
+
 private:
     void Start();
     void CleanUp();
@@ -50,6 +55,9 @@ private:
      static AppManager* instance;
 
      QTimer workTimer;
+     QTime dtTimer;
+
+     float dt;
 };
 
 #endif // APPMANAGER_H

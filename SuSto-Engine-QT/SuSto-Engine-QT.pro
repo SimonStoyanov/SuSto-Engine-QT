@@ -349,7 +349,8 @@ SOURCES += \
     rendererwidget.cpp \
     3rdParty/MathGeoLib/Math/grisu3.c \
     3rdParty/Parson/parson.c \
-    Managers/rendermanager.cpp
+    Managers/rendermanager.cpp \
+    Managers/cameramanager.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -796,7 +797,8 @@ HEADERS += \
     inspector.h \
     mainwindow.h \
     rendererwidget.h \
-    Managers/rendermanager.h
+    Managers/rendermanager.h \
+    Managers/cameramanager.h
 
 FORMS += \
         mainwindow.ui \

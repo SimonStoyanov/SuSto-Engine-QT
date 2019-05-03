@@ -1,5 +1,6 @@
 #include "rendererwidget.h"
 #include "Managers/rendermanager.h"
+#include "Managers/cameramanager.h"
 
 #pragma comment(lib, "OpenGL32.lib")
 
