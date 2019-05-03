@@ -301,6 +301,532 @@ uint RenderManager::LoadTextureToVRAM(uint w, uint h, GLubyte *tex_data, GLint f
     return buff_id;
 }
 
+uint RenderManager::GenVertexArrayBuffer() const
+{
+    uint ret = 0;
+
+    gl->glGenVertexArrays(1, (GLuint*)&ret);
+
+    return ret;
+}
+
+void RenderManager::BindVertexArrayBuffer(uint id) const
+{
+    gl->glBindVertexArray(id);
+
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR)
+    {
+        SPOOKYLOG("Error bind vertex array buffer: " + GetErrorString(error));
+    }
+}
+
+void RenderManager::UnbindVertexArrayBuffer() const
+{
+    gl->glBindVertexArray(0);
+
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR)
+    {
+        SPOOKYLOG("Error unbind array buffer: " + GetErrorString(error));
+    }
+}
+
+uint RenderManager::GenFrameBuffer() const
+{
+    uint ret = 0;
+
+    gl->glGenFramebuffers(1, (GLuint*)&ret);
+
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR)
+    {
+        SPOOKYLOG("Error generating frame buffer: " + GetErrorString(error));
+    }
+
+    return ret;
+}
+
+void RenderManager::BindFrameBuffer(uint id) const
+{
+    BindFrameBuffer(GL_FRAMEBUFFER, id);
+}
+
+void RenderManager::BindFrameBuffer(uint target, uint id) const
+{
+    gl->glBindFramebuffer(target, id);
+
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR)
+    {
+        SPOOKYLOG("Error binding frame buffer: " + GetErrorString(error));
+    }
+}
+
+void RenderManager::BlitFrameBuffer(uint x, uint y, uint w, uint h) const
+{
+    gl->glBlitFramebuffer(x, y, w, h,  // src rect
+        x, y, w, h,  // dst rect
+        GL_COLOR_BUFFER_BIT, // buffer mask
+        GL_NEAREST); // scale filter
+
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR)
+    {
+        SPOOKYLOG("Error bliting frame buffer: " + GetErrorString(error));
+    }
+}
+
+void RenderManager::RenderFrameBuffer(uint id) const
+{
+    gl->glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, id);
+
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR)
+    {
+        SPOOKYLOG("Error rendering frame buffer: " + GetErrorString(error));
+    }
+}
+
+void RenderManager::UnbindFrameBuffer() const
+{
+    UnbindFrameBuffer(GL_FRAMEBUFFER);
+}
+
+void RenderManager::UnbindFrameBuffer(uint target) const
+{
+    gl->glBindFramebuffer(target, 0);
+
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR)
+    {
+        SPOOKYLOG("Error unbinding frame buffer: " + GetErrorString(error));
+    }
+}
+
+uint RenderManager::CheckFrameBufferStatus()
+{
+    uint ret = 0;
+
+    ret = gl->glCheckFramebufferStatus(GL_FRAMEBUFFER);
+
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR)
+    {
+        SPOOKYLOG("Error checking frame buffer status: " + GetErrorString(error));
+    }
+
+    return ret;
+}
+
+void RenderManager::DeleteFrameBuffer(uint &id)
+{
+    if (id > 0)
+    {
+        gl->glDeleteFramebuffers(1, &id);
+
+        GLenum error = glGetError();
+        if (error != GL_NO_ERROR)
+        {
+            SPOOKYLOG("Error deleting frame buffer: " + GetErrorString(error));
+        }
+    }
+}
+
+uint RenderManager::CreateVertexShader(const char *source, std::string &compilation_error_msg)
+{
+    GLuint vertexShader = 0;
+
+    vertexShader = gl->glCreateShader(GL_VERTEX_SHADER);
+
+    gl->glShaderSource(vertexShader, 1, &source, NULL);
+    gl->glCompileShader(vertexShader);
+
+    GLint success;
+    GLchar infoLog[512];
+    gl->glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+
+    if (success == 0)
+    {
+        gl->glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+
+        SPOOKYLOG("Vertex shader compilation error: " + std::string(infoLog));
+
+        gl->glDeleteShader(vertexShader);
+
+        compilation_error_msg = infoLog;
+        vertexShader = 0;
+    }
+
+    return vertexShader;
+}
+
+uint RenderManager::CreateFragmentShader(const char *source, std::string &compilation_error_msg)
+{
+    GLuint fragmentShader = 0;
+
+    fragmentShader = gl->glCreateShader(GL_FRAGMENT_SHADER);
+
+    gl->glShaderSource(fragmentShader, 1, &source, NULL);
+    gl->glCompileShader(fragmentShader);
+
+    GLint success;
+    GLchar infoLog[512];
+    gl->glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+
+    if (success == 0)
+    {
+        gl->glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+
+        SPOOKYLOG("Fragment shader compilation error: " + std::string(infoLog));
+
+        gl->glDeleteShader(fragmentShader);
+
+        compilation_error_msg = infoLog;
+        fragmentShader = 0;
+    }
+
+    return fragmentShader;
+}
+
+uint RenderManager::CreateGeometryShader(const char *source, std::string &compilation_error_msg)
+{
+    GLuint geometryShader = 0;
+
+    geometryShader = gl->glCreateShader(GL_GEOMETRY_SHADER);
+
+    gl->glShaderSource(geometryShader, 1, &source, NULL);
+    gl->glCompileShader(geometryShader);
+
+    GLint success;
+    GLchar infoLog[512];
+    gl->glGetShaderiv(geometryShader, GL_COMPILE_STATUS, &success);
+
+    if (success == 0)
+    {
+        gl->glGetShaderInfoLog(geometryShader, 512, NULL, infoLog);
+
+        SPOOKYLOG("Geometry shader compilation error: " + std::string(infoLog));
+
+        gl->glDeleteShader(geometryShader);
+
+        compilation_error_msg = infoLog;
+        geometryShader = 0;
+    }
+
+    return geometryShader;
+}
+
+void RenderManager::DeleteShader(uint shader_id)
+{
+    if (shader_id > 0)
+    {
+        gl->glDeleteShader(shader_id);
+
+        GLenum error = glGetError();
+        if (error != GL_NO_ERROR)
+        {
+            SPOOKYLOG("Error deleting shader: " + GetErrorString(error));
+        }
+    }
+}
+
+void RenderManager::BindAttributeLocation(uint program_id, uint index, const char *name)
+{
+    gl->glBindAttribLocation(program_id, index, name);
+
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR)
+    {
+        SPOOKYLOG("Error binding attribute locaiton on shader: " + GetErrorString(error));
+    }
+}
+
+GLint RenderManager::GetVertexAttributeArray(uint program, const char *name)
+{
+    GLint ret = -1;
+
+    ret = gl->glGetAttribLocation(program, name);
+
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR)
+    {
+        SPOOKYLOG("Error getting vertex attribute array: " + GetErrorString(error));
+    }
+
+    return ret;
+}
+
+void RenderManager::EnableVertexAttributeArray(uint id)
+{
+    gl->glEnableVertexAttribArray(id);
+
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR)
+    {
+        SPOOKYLOG("Error enabling vertex attribute array: " + GetErrorString(error));
+    }
+}
+
+void RenderManager::DisableVertexAttributeArray(uint id)
+{
+    gl->glDisableVertexAttribArray(id);
+
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR)
+    {
+        SPOOKYLOG("Error disabling vertex attribute array: " + GetErrorString(error));
+    }
+}
+
+void RenderManager::SetVertexAttributePointer(uint id, uint element_size, uint elements_gap, uint infogap)
+{
+    gl->glVertexAttribPointer(id, element_size, GL_FLOAT, GL_FALSE, elements_gap * sizeof(GLfloat), (void*)(infogap * sizeof(GLfloat)));
+
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR)
+    {
+        SPOOKYLOG("Error Setting vertex attribute pointer: " + GetErrorString(error));
+    }
+}
+
+uint RenderManager::GetAttributesCount(uint program)
+{
+    uint ret = 0;
+
+    GLint count = 0;
+    gl->glGetProgramiv(program, GL_ACTIVE_ATTRIBUTES, &count);
+
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR)
+    {
+        SPOOKYLOG("Error getting attributes count on program " + std::to_string(program) + ": " + GetErrorString(error));
+    }
+
+    ret = count;
+
+    return ret;
+}
+
+void RenderManager::GetAttributesInfo(uint program, uint index, std::string &name, GLenum &type)
+{
+    const GLsizei bufSize = 100;
+    GLchar c_name[bufSize];
+    GLsizei length;
+    GLint size;
+
+    gl->glGetActiveAttrib(program, (GLuint)index, bufSize, &length, &size, &type, c_name);
+
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR)
+    {
+         SPOOKYLOG("Error getting attribute info on program " + std::to_string(program) + ": " + GetErrorString(error));
+    }
+}
+
+void RenderManager::SetUniformMatrix(uint program, const char *name, const float *data)
+{
+    GLint modelLoc = gl->glGetUniformLocation(program, name);
+
+    if (modelLoc != -1)
+        gl->glUniformMatrix4fv(modelLoc, 1, GL_FALSE, data);
+
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR)
+    {
+        SPOOKYLOG("Error setting uniform matrix " + std::to_string(program) + ": " + GetErrorString(error));
+    }
+}
+
+void RenderManager::SetUniformFloat(uint program, const char *name, float data)
+{
+    GLint modelLoc = gl->glGetUniformLocation(program, name);
+
+    if (modelLoc != -1)
+        gl->glUniform1f(modelLoc, data);
+
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR)
+    {
+        SPOOKYLOG("Error setting uniform float " + std::to_string(program) + ": " + GetErrorString(error));
+    }
+}
+
+void RenderManager::SetUniformInt(uint program, const char *name, int data)
+{
+    GLint modelLoc = gl->glGetUniformLocation(program, name);
+
+    if (modelLoc != -1)
+        gl->glUniform1i(modelLoc, data);
+
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR)
+    {
+        SPOOKYLOG("Error setting uniform int " + std::to_string(program) + ": " + GetErrorString(error));
+    }
+}
+
+void RenderManager::SetUniformBool(uint program, const char *name, bool data)
+{
+    GLint modelLoc = gl->glGetUniformLocation(program, name);
+
+    if (modelLoc != -1)
+        gl->glUniform1i(modelLoc, data);
+
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR)
+    {
+        SPOOKYLOG("Error setting uniform bool " + std::to_string(program) + ": " + GetErrorString(error));
+    }
+}
+
+void RenderManager::SetUniformVec3(uint program, const char *name, const float3 &data)
+{
+    GLint modelLoc = gl->glGetUniformLocation(program, name);
+
+    if (modelLoc != -1)
+        gl->glUniform3f(modelLoc, data.x, data.y, data.z);
+
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR)
+    {
+        SPOOKYLOG("Error setting uniform vec3 " + std::to_string(program) + ": " + GetErrorString(error));
+    }
+}
+
+void RenderManager::SetUniformVec4(uint program, const char *name, const float4 &data)
+{
+    GLint modelLoc = gl->glGetUniformLocation(program, name);
+
+    if (modelLoc != -1)
+        gl->glUniform4f(modelLoc, data.x, data.y, data.w, data.z);
+
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR)
+    {
+        SPOOKYLOG("Error setting uniform vec4 " + std::to_string(program) + ": " + GetErrorString(error));
+    }
+}
+
+uint RenderManager::GetUniformsCount(uint program)
+{
+    uint ret = 0;
+
+    GLint count = 0;
+    gl->glGetProgramiv(program, GL_ACTIVE_UNIFORMS, &count);
+
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR)
+    {
+        SPOOKYLOG("Error getting uniforms count on program " + std::to_string(program) + ": " + GetErrorString(error));
+    }
+
+    ret = count;
+
+    return ret;
+}
+
+void RenderManager::GetUniformInfo(uint program, uint index, std::string &name, GLenum &type)
+{
+    const GLsizei bufSize = 100;
+    GLchar c_name[bufSize];
+    GLsizei length;
+    GLint size;
+
+    gl->glGetActiveUniform(program, (GLuint)index, bufSize, &length, &size, &type, c_name);
+
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR)
+    {
+        SPOOKYLOG("Error getting uniforms info on program " + std::to_string(program) + ": " + GetErrorString(error));
+    }
+
+    name = c_name;
+}
+
+uint RenderManager::CreateShaderProgram()
+{
+    uint ret = gl->glCreateProgram();
+
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR)
+    {
+        SPOOKYLOG("Error creating shader program");
+    }
+
+    return ret;
+}
+
+void RenderManager::UseShaderProgram(uint id)
+{
+    gl->glUseProgram(id);
+
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR)
+    {
+        SPOOKYLOG("Error using shader program " + std::to_string(id) + ": " + GetErrorString(error));
+    }
+}
+
+void RenderManager::AttachShaderToProgram(uint program, uint shader)
+{
+    if (program > 0 && shader > 0)
+    {
+        gl->glAttachShader(program, shader);
+
+        GLenum error = glGetError();
+        if (error != GL_NO_ERROR)
+        {
+            SPOOKYLOG("Error attaching shader to program " + std::to_string(program) + ": " + GetErrorString(error));
+        }
+    }
+}
+
+bool RenderManager::LinkProgram(uint program, std::string &link_error)
+{
+    bool ret = false;
+
+    if (program != 0)
+    {
+        gl->glLinkProgram(program);
+
+        GLint success;
+        GLint valid;
+        gl->glGetProgramiv(program, GL_LINK_STATUS, &success);
+        gl->glGetProgramiv(program, GL_VALIDATE_STATUS, &valid);
+
+        ret = true;
+
+        if (!success || !valid)
+        {
+            GLchar infoLog[512];
+            gl->glGetProgramInfoLog(program, 512, NULL, infoLog);
+
+            SPOOKYLOG("Error linking program: " + std::string(infoLog));
+
+            link_error = infoLog;
+
+            ret = false;
+        }
+    }
+
+    return ret;
+}
+
+void RenderManager::DeleteProgram(uint program)
+{
+    if (program > 0)
+    {
+        gl->glDeleteProgram(program);
+
+        GLenum error = glGetError();
+        if (error != GL_NO_ERROR)
+        {
+            SPOOKYLOG("Error deleting shader program " + std::to_string(program) + ": " + GetErrorString(error));
+        }
+    }
+}
+
 
 
 
