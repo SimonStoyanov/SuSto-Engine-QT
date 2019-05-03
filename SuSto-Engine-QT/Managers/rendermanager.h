@@ -4,6 +4,7 @@
 #include <vector>
 #include "drawingwidget.h"
 #include <QOpenGLFunctions_3_3_Core>
+#include "3rdParty/MathGeoLib/MathGeoLib.h"
 
 class RendererWidget;
 
@@ -78,15 +79,10 @@ public:
     void LoadElementArrayToVRAM(uint size, uint* values, GLenum type = GL_STATIC_DRAW) const;
     uint LoadTextureToVRAM(uint w, uint h, GLubyte* tex_data, GLint format) const;
 
-    /*
-    void UpdateVRAMArray(uint size, const float* values, GLenum type = GL_STATIC_DRAW) const;
-
-    void PushMatrix();
-    void PopMatrix();
-    void MultMatrix(float* matrix);
     // --------------------------------------------------------
 
     // Shaders ------------------------------------------------
+
     uint GenVertexArrayBuffer() const;
     void BindVertexArrayBuffer(uint id) const;
     void UnbindVertexArrayBuffer() const;
@@ -97,17 +93,14 @@ public:
     void BlitFrameBuffer(uint x, uint y, uint w, uint h) const;
     void RenderFrameBuffer(uint id) const;
     void UnbindFrameBuffer() const;
+    void UnbindFrameBuffer(uint target) const;
     uint CheckFrameBufferStatus();
     void DeleteFrameBuffer(uint& id);
 
-    uint CreateVertexShader(const char* source, std::string& compilation_error_msg = std::string());
-    uint CreateFragmentShader(const char* source, std::string& compilation_error_msg = std::string());
-    uint CreateGeometryShader(const char* source, std::string& compilation_error_msg = std::string());
+    uint CreateVertexShader(const char* source, std::string& compilation_error_msg);
+    uint CreateFragmentShader(const char* source, std::string& compilation_error_msg);
+    uint CreateGeometryShader(const char* source, std::string& compilation_error_msg);
     void DeleteShader(uint shader_id);
-
-    uint GetProgramBinary(uint program_id, uint buff_size, char* buff) const;
-    int GetProgramSize(uint program_id) const;
-    void LoadProgramFromBinary(uint program_id, uint buff_size, const char* buff);
 
     void BindAttributeLocation(uint program_id, uint index, const char* name);
 
@@ -131,9 +124,10 @@ public:
 
     uint CreateShaderProgram();
     void UseShaderProgram(uint id);
-    void AttachShaderToProgram(uint program_id, uint shader_id);
-    bool LinkProgram(uint program_id, std::string& link_error = std::string());
-    void DeleteProgram(uint program_id);*/
+    void AttachShaderToProgram(uint program, uint shader_id);
+    bool LinkProgram(uint program, std::string& link_error);
+    void DeleteProgram(uint program);
+
     // --------------------------------------------------------
 
 private:
