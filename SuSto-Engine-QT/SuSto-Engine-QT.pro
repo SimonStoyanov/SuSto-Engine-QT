@@ -350,7 +350,8 @@ SOURCES += \
     3rdParty/MathGeoLib/Math/grisu3.c \
     3rdParty/Parson/parson.c \
     Managers/rendermanager.cpp \
-    Managers/shadermanager.cpp
+    Managers/shadermanager.cpp \
+    Managers/cameramanager.cpp
     Managers/cameramanager.cpp
 
 HEADERS += \
@@ -799,7 +800,8 @@ HEADERS += \
     mainwindow.h \
     rendererwidget.h \
     Managers/rendermanager.h \
-    Managers/shadermanager.h
+    Managers/shadermanager.h \
+    Managers/cameramanager.h
     Managers/cameramanager.h
 
 FORMS += \
