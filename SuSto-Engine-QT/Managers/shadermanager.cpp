@@ -331,7 +331,11 @@ bool ShaderProgram::LinkProgram()
             linked = RenderManager::Instance()->LinkProgram(id, link_error);
 
             if (linked)
+            {
+                SPOOKYLOG("Shader program with id " + std::to_string(id) + " linked");
+
                 ret = true;
+            }
         }
     }
 

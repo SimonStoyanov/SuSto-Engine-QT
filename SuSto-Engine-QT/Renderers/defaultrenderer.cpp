@@ -78,6 +78,12 @@ void DefaultRenderer::Start()
     Shader* fsh = ShaderManager::Instance()->CreateShader(ShaderType::FRAGMENT);
     fsh->SetShaderCode(fragment_code);
 
+    program = ShaderManager::Instance()->CreateShaderProgram();
+    program->AddShader(vsh);
+    program->AddShader(fsh);
+
+    program->LinkProgram();
+
 }
 
 void DefaultRenderer::Render(const float4x4 &view, const float4x4 &projection)
@@ -87,5 +93,5 @@ void DefaultRenderer::Render(const float4x4 &view, const float4x4 &projection)
 
 void DefaultRenderer::CleanUp()
 {
-
+    ShaderManager::Instance()->DestroyShaderProgram(program);
 }
