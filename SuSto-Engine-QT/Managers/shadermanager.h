@@ -4,6 +4,10 @@
 #include <string>
 #include <vector>
 
+class Shader;
+class ShaderProgram;
+enum ShaderType;
+
 class ShaderManager
 {
     friend class AppManager;
@@ -35,7 +39,7 @@ public:
         }
     }
 
-private:
+public:
     void Start();
     void CleanUp();
 
@@ -69,7 +73,7 @@ enum ShaderType
 
 class Shader
 {
-    friend class ModuleShader;
+    friend class ShaderManager;
 
 private:
     void operator delete(void *) {}
@@ -98,7 +102,7 @@ private:
 
 class ShaderProgram
 {
-    friend class ModuleShader;
+    friend class ShaderManager;
 
 private:
     void operator delete(void *) {}
@@ -123,14 +127,14 @@ public:
     bool GetLinked() const;
     const char* GetLinkError() const;
 
-    uint GetID() const;
+    int GetID() const;
 
 private:
     void UnlinkProgram();
 
 
 private:
-    uint id = 0;
+    int id = 0;
 
     std::vector<Shader*> vertex_shaders;
     std::vector<Shader*> fragment_shaders;

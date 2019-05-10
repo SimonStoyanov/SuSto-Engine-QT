@@ -1,4 +1,5 @@
 #include "shadermanager.h"
+#include "Managers/rendermanager.h"
 
 ShaderManager* ShaderManager::instance = nullptr;
 
@@ -6,8 +7,6 @@ ShaderManager::ShaderManager()
 {
 
 }
-
-#include "Managers/rendermanager.h"
 
 void ShaderManager::Start()
 {
@@ -168,7 +167,7 @@ const char * Shader::GetCompilationError()
     return compilation_error.c_str();
 }
 
-uint Shader::GetID() const
+int Shader::GetID() const
 {
     return id;
 }
@@ -340,107 +339,6 @@ void ShaderProgram::UseProgram()
     }
 }
 
-void ShaderProgram::SetProgramParameters(ShaderProgramParameters para)
-{
-    if (id > 0 && linked)
-    {
-        int count = RenderManager::Instance()->GetUniformsCount(id);
-
-        for (int i = 0; i < count; ++i)
-        {
-            std::string uniform_name;
-            GLenum uniform_type;
-
-            RenderManager::Instance()->GetUniformInfo(id, i, uniform_name, uniform_type);
-
-            switch (uniform_type)
-            {
-            case GL_INT:
-            {
-                std::map<std::string, int> int_vals = para.GetIntValues();
-
-                for (std::map<std::string, int>::iterator it = int_vals.begin(); it != int_vals.end(); ++it)
-                {
-                    if (it->first.compare(uniform_name) == 0)
-                    {
-                        int val = int_vals[uniform_name];
-
-                        RenderManager::Instance()->SetUniformInt(id, uniform_name.c_str(), val);
-                    }
-                }
-
-                break;
-            }
-            case GL_FLOAT_VEC3:
-            {
-                std::map<std::string, float3> vector3_vals = para.GetVector3Values();
-
-                for (std::map<std::string, float3>::iterator it = vector3_vals.begin(); it != vector3_vals.end(); ++it)
-                {
-                    if (it->first.compare(uniform_name) == 0)
-                    {
-                        float3 val = vector3_vals[uniform_name];
-
-                        RenderManager::Instance()->SetUniformVec3(id, uniform_name.c_str(), val);
-                    }
-                }
-
-                break;
-            }
-            case GL_FLOAT_VEC4:
-            {
-                std::map<std::string, float4> vector4_vals = para.GetVector4Values();
-
-                for (std::map<std::string, float4>::iterator it = vector4_vals.begin(); it != vector4_vals.end(); ++it)
-                {
-                    if (it->first.compare(uniform_name) == 0)
-                    {
-                        float4 val = vector4_vals[uniform_name];
-
-                        RenderManager::Instance()->SetUniformVec4(id, uniform_name.c_str(), val);
-                    }
-                }
-
-                break;
-            }
-            case GL_BOOL:
-            {
-                std::map<std::string, bool> bool_vals = para.GetBoolValues();
-
-                for (std::map<std::string, bool>::iterator it = bool_vals.begin(); it != bool_vals.end(); ++it)
-                {
-                    if (it->first.compare(uniform_name) == 0)
-                    {
-                        bool val = bool_vals[uniform_name];
-
-                        RenderManager::Instance()->SetUniformBool(id, uniform_name.c_str(), val);
-                    }
-                }
-                break;
-            }
-            case GL_SAMPLER_2D:
-            {
-                std::map<std::string, uint> text_vals = para.GetTextureValues();
-
-                for (std::map<std::string, uint>::iterator it = text_vals.begin(); it != text_vals.end(); ++it)
-                {
-                    if (it->first.compare(uniform_name) == 0)
-                    {
-                        uint index = text_vals[uniform_name];
-
-                        RenderManager::Instance()->SetUniformInt(id, uniform_name.c_str(), index);
-                    }
-                }
-                break;
-            }
-
-            default:
-                break;
-            }
-        }
-    }
-}
-
 std::vector<Shader*> ShaderProgram::GetVertexShaders() const
 {
     return vertex_shaders;
@@ -466,7 +364,7 @@ const char * ShaderProgram::GetLinkError() const
     return link_error.c_str();
 }
 
-uint ShaderProgram::GetID() const
+int ShaderProgram::GetID() const
 {
     return id;
 }

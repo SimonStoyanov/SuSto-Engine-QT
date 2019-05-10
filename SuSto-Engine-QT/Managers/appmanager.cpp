@@ -4,6 +4,8 @@
 #include "shapemanager.h"
 #include "jsonmanager.h"
 #include "rendermanager.h"
+#include "shadermanager.h"
+#include "scenerenderermanager.h"
 #include "globals.h"
 #include "QTimer"
 #include "QObject"
@@ -26,7 +28,9 @@ void AppManager::Start()
 
     JsonManager::Instance()->Start();
     RenderManager::Instance()->Start();
+    ShaderManager::Instance()->Start();
     EventManager::Instance()->Start();
+    SceneRendererManager::Instance()->Start();
     EntityManager::Instance()->Start();
 
     workTimer.setInterval(33);
@@ -50,8 +54,10 @@ void AppManager::CleanUp()
     workTimer.stop();
 
     EntityManager::DestroyInstance();
-    JsonManager::DestroyInstance();
+    SceneRendererManager::DestroyInstance();
     EventManager::DestroyInstance();
+    ShaderManager::DestroyInstance();
     RenderManager::DestroyInstance();
+    JsonManager::DestroyInstance();
 }
 
