@@ -69,13 +69,36 @@ class CameraManager
         friend class AppManager;
 
 public:
+    static CameraManager* Instance()
+    {
+        if(instance == nullptr)
+        {
+            instance = new CameraManager();
+
+            instance->Start();
+        }
+
+        return instance;
+    }
+
+    static void DestroyInstance()
+    {
+        if(instance != nullptr)
+        {
+            instance->CleanUp();
+
+            delete instance;
+
+            instance = nullptr;
+        }
+    }
+
     CameraManager();
     ~CameraManager();
 
-    bool Awake();
-    bool Start();
-    bool Update();
-    bool CleanUp();
+    void Start();
+    void Update();
+    void CleanUp();
 
     Camera3D* CreateCamera();
     void DestroyCamera(Camera3D* cam);
@@ -92,10 +115,6 @@ public:
     const float GetWheelSpeed() const;
     const float GetCameraSpeed() const;
 
-    void SetCurrentCamera(Camera3D* set);
-    Camera3D* GetCurrentCamera() const;
-    void SetCurrentCameraToEditorCamera();
-
     const float* GetViewMatrix() const;
 
 private:
@@ -103,7 +122,6 @@ private:
 
 private:
     Camera3D* editor_camera = nullptr;
-    Camera3D* current_camera = nullptr;
 
     std::vector<Camera3D*> cameras;
 
@@ -112,6 +130,8 @@ private:
     float camera_speed = 0.0f;
     float wheel_speed = 0.0f;
     float mouse_sensitivity = 0.0f;
+
+    static CameraManager* instance;
 };
 
 #endif // CAMERAMANAGER_H

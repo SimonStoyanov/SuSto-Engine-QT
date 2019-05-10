@@ -6,6 +6,7 @@
 #include "rendermanager.h"
 #include "shadermanager.h"
 #include "scenerenderermanager.h"
+#include "cameramanager.h"
 #include "globals.h"
 #include "QTimer"
 #include "QObject"
@@ -32,6 +33,7 @@ void AppManager::Start()
     EventManager::Instance()->Start();
     SceneRendererManager::Instance()->Start();
     EntityManager::Instance()->Start();
+    CameraManager::Instance()->Start();
 
     workTimer.setInterval(33);
     workTimer.start();
@@ -53,6 +55,7 @@ void AppManager::CleanUp()
 
     workTimer.stop();
 
+    CameraManager::DestroyInstance();
     EntityManager::DestroyInstance();
     SceneRendererManager::DestroyInstance();
     EventManager::DestroyInstance();

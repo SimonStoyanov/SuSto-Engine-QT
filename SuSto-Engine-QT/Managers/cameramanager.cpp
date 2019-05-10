@@ -9,33 +9,37 @@
 //----CAMERA MANAGER----//
 //----------------------//
 
+CameraManager* CameraManager::instance = nullptr;
+
 CameraManager::CameraManager()
 {
     editor_camera = CreateCamera();
-    current_camera = editor_camera;
-    current_camera->SetFrustumCulling(false);
 }
 
 CameraManager::~CameraManager()
 {}
 
+void CameraManager::Start()
+{
+    editor_camera = CreateCamera();
+
+}
+
 // -----------------------------------------------------------------
-bool CameraManager::CleanUp()
+void CameraManager::CleanUp()
 {
     bool ret = true;
 
     SPOOKYLOG("Cleaning cameras");
 
     DestroyAllCameras();
-
-    return ret;
 }
 
 Camera3D * CameraManager::CreateCamera()
 {
     Camera3D* ret = nullptr;
 
-    ret = new Camera3D;
+    ret = new Camera3D();
     cameras.push_back(ret);
 
     return ret;
@@ -105,34 +109,15 @@ const float CameraManager::GetCameraSpeed() const
     return camera_speed;
 }
 
-void CameraManager::SetCurrentCamera(Camera3D * set)
-{
-    if (set != nullptr)
-        current_camera = set;
-}
-
-Camera3D * CameraManager::GetCurrentCamera() const
-{
-    return current_camera;
-}
-
-void CameraManager::SetCurrentCameraToEditorCamera()
-{
-    current_camera = editor_camera;
-}
-
 const float * CameraManager::GetViewMatrix() const
 {
-    return current_camera->GetOpenGLViewMatrix().ptr();
+    return editor_camera->GetOpenGLViewMatrix().ptr();
 }
 
 // -----------------------------------------------------------------
-bool CameraManager::Update()
+void CameraManager::Update()
 {
     bool ret = true;
-
-    if (editor_camera == nullptr)
-        return true;
 
     float cam_speed = camera_speed * AppManager::Instance()->GetDT();
     float whe_speed = wheel_speed * AppManager::Instance()->GetDT();
@@ -215,12 +200,11 @@ bool CameraManager::Update()
         editor_camera->Focus(float3(0, 0, 0), 10);
     }
 */
-    return ret;
 }
 
 const bool CameraManager::IsMouseInsideWindow() const
 {
-    return PointInRect(float2(App->input->GetMouseX(), App->input->GetMouseY()), App->editorUI->GameRect());
+   return true;
 }
 
 //----------------//
@@ -232,14 +216,14 @@ Camera3D::Camera3D()
     frustum.SetKind(FrustumProjectiveSpace::FrustumSpaceGL, FrustumHandedness::FrustumRightHanded);
 
     frustum.SetPos(float3(0, 1, -1));
-    frustum.SetFront(float3::unitZ);
-    frustum.SetUp(float3::unitY);
+    //frustum.SetFront(float3::unitZ);
+    /*frustum.SetUp(float3::unitY);
     aspect_ratio = 0;
 
     SetNearPlaneDistance(0.1f);
     SetFarPlaneDistance(10000.0f);
     SetAspectRatio(1.3f);
-    SetFOV(60);
+    SetFOV(60);*/
 }
 
 void Camera3D::SetPosition(const float3 & pos)
@@ -488,9 +472,9 @@ Frustum Camera3D::GetFrustum()
 
 void Camera3D::keyPressEvent(QKeyEvent *event)
 {
-    switch (event->key()) {
+    /*switch (event->key()) {
         case (Qt::key_)
-    }
+    }*/
 }
 
 void Camera3D::Focus(const float3 & focus_center, const float & distance)

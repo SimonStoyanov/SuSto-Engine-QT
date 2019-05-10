@@ -5,6 +5,8 @@
 
 #include "Renderers/renderer.h"
 
+class Camera3D;
+
 class SceneRendererManager
 {
     friend class AppManager;

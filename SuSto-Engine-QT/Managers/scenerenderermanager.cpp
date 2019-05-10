@@ -1,5 +1,6 @@
 #include "scenerenderermanager.h"
 #include "Renderers/defaultrenderer.h"
+#include "Managers/cameramanager.h"
 
 SceneRendererManager* SceneRendererManager::instance = nullptr;
 
@@ -25,7 +26,8 @@ void SceneRendererManager::StartRenderers()
 
 void SceneRendererManager::RenderOnCamera()
 {
-
+    float4x4 view_mat = CameraManager::Instance()->GetEditorCamera()->GetOpenGLViewMatrix();
+    float4x4 proj_mat = CameraManager::Instance()->GetEditorCamera()->GetOpenGLProjectionMatrix();
 }
 
 Renderer *SceneRendererManager::AddRenderer(Renderer *renderer)
