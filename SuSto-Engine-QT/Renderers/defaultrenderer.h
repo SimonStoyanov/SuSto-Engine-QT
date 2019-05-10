@@ -3,6 +3,8 @@
 
 #include "Renderers/Renderer.h"
 
+class ShaderProgram;
+
 class DefaultRenderer : public Renderer
 {
 public:
@@ -11,6 +13,9 @@ public:
     void Start();
     void Render(const float4x4& view, const float4x4& projection);
     void CleanUp();
+
+private:
+    ShaderProgram* program = nullptr;
 };
 
 #endif // DEFAULTRENDERER_H
