@@ -10,12 +10,17 @@ SceneRendererManager::SceneRendererManager()
 
 void SceneRendererManager::Start()
 {
-    //AddRenderer(new DefaultRenderer());
+
 }
 
 void SceneRendererManager::CleanUp()
 {
     DestroyAllRenderers();
+}
+
+void SceneRendererManager::StartRenderers()
+{
+    AddRenderer(new DefaultRenderer());
 }
 
 void SceneRendererManager::RenderOnCamera()

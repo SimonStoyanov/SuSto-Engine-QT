@@ -354,7 +354,7 @@ SOURCES += \
     Managers/scenerenderermanager.cpp \
     Renderers/renderer.cpp \
     Renderers/defaultrenderer.cpp \
-    Renderers/vertexbuffer.cpp
+    Renderers/vertexbuffer.cpp \
     Managers/cameramanager.cpp
 
 HEADERS += \
@@ -808,7 +808,7 @@ HEADERS += \
     renderer.h \
     Renderers/renderer.h \
     Renderers/defaultrenderer.h \
-    Renderers/vertexbuffer.h
+    Renderers/vertexbuffer.h \
     Managers/cameramanager.h
 
 FORMS += \

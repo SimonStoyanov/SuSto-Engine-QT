@@ -4,6 +4,7 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 #include "rendererwidget.h"
+#include "Managers/scenerenderermanager.h"
 
 #pragma comment(lib, "OpenGL32.lib")
 
@@ -17,6 +18,13 @@ RenderManager::RenderManager()
 void RenderManager::SetGL(RendererWidget *widget)
 {
     gl = widget;
+
+    if(gl != nullptr)
+    {
+        SPOOKYLOG("OpenGL initialized");
+
+        SceneRendererManager::Instance()->StartRenderers();
+    }
 }
 
 void RenderManager::Start()
@@ -437,7 +445,7 @@ uint RenderManager::CreateVertexShader(const char *source, std::string &compilat
 {
     GLuint vertexShader = 0;
 
-    vertexShader = gl->glCreateShader(GL_VERTEX_SHADER);
+    vertexShader = gl->glCreateShader(GL_VERTEX_SHADER);  
 
     gl->glShaderSource(vertexShader, 1, &source, NULL);
     gl->glCompileShader(vertexShader);

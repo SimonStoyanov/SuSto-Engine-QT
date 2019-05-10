@@ -1,5 +1,6 @@
 #include "shadermanager.h"
 #include "Managers/rendermanager.h"
+#include "globals.h"
 
 ShaderManager* ShaderManager::instance = nullptr;
 
@@ -130,23 +131,29 @@ bool Shader::SetShaderCode(const char * code)
 
     id = 0;
     compiles = false;
+    std::string shader_type = "";
 
     switch (type)
     {
     case ShaderType::VERTEX:
         id = RenderManager::Instance()->CreateVertexShader(code, compilation_error);
+        shader_type = "Vertex";
         break;
     case ShaderType::FRAGMENT:
         id = RenderManager::Instance()->CreateFragmentShader(code, compilation_error);
+        shader_type = "Fragment";
         break;
     case ShaderType::GEOMETRY:
         id = RenderManager::Instance()->CreateGeometryShader(code, compilation_error);
+        shader_type = "Veometry";
     }
 
     if (id > 0)
     {
         compiles = true;
         ret = true;
+
+        SPOOKYLOG(shader_type + " shader with id " + std::to_string(id) + " compiled");
     }
 
     return ret;

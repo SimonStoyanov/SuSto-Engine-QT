@@ -44,6 +44,8 @@ private:
     static SceneRendererManager* instance;
 
 public:
+    void StartRenderers();
+
     void RenderOnCamera();
 
 private:
