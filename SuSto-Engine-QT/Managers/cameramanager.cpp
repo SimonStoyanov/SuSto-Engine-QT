@@ -3,6 +3,7 @@
 #include "globals.h"
 #include "Entity/entity.h"
 #include <QTime>
+#include <QKeyEvent>
 
 //----------------------//
 //----CAMERA MANAGER----//
@@ -137,7 +138,7 @@ bool CameraManager::Update()
     float whe_speed = wheel_speed * AppManager::Instance()->GetDT();
     float mou_speed = mouse_sensitivity * AppManager::Instance()->GetDT();
 
-    SSif (App->input->GetKeyRepeat(SDL_SCANCODE_LSHIFT))
+    /*if (App->input->GetKeyRepeat(SDL_SCANCODE_LSHIFT))
         cam_speed = camera_speed/2 * AppManager::Instance()->GetDT();
 
     if (IsMouseInsideWindow())
@@ -213,7 +214,7 @@ bool CameraManager::Update()
     {
         editor_camera->Focus(float3(0, 0, 0), 10);
     }
-
+*/
     return ret;
 }
 
@@ -483,6 +484,13 @@ bool Camera3D::GetFrustumCulling()
 Frustum Camera3D::GetFrustum()
 {
     return frustum;
+}
+
+void Camera3D::keyPressEvent(QKeyEvent *event)
+{
+    switch (event->key()) {
+        case (Qt::key_)
+    }
 }
 
 void Camera3D::Focus(const float3 & focus_center, const float & distance)

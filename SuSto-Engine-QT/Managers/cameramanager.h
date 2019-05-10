@@ -3,6 +3,8 @@
 
 #include "3rdParty/MathGeoLib/MathGeoLib.h"
 
+class QKeyEvent;
+
 class Camera3D
 {
 public:
@@ -51,6 +53,8 @@ public:
     bool GetFrustumCulling();
 
     Frustum GetFrustum();
+
+    void keyPressEvent(QKeyEvent * event);
 
 private:
     Frustum  frustum;
