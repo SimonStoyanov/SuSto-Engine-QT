@@ -38,7 +38,7 @@ public:
         }
     }
 
-    void Init();
+    void Init(QApplication& app);
 
     const float GetDT() const {
         return dt;

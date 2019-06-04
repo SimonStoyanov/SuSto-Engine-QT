@@ -28,6 +28,11 @@ void SceneRendererManager::RenderOnCamera()
 {
     float4x4 view_mat = CameraManager::Instance()->GetEditorCamera()->GetOpenGLViewMatrix();
     float4x4 proj_mat = CameraManager::Instance()->GetEditorCamera()->GetOpenGLProjectionMatrix();
+
+    for(std::vector<Renderer*>::iterator it = renderers.begin(); it != renderers.end(); ++it)
+    {
+        (*it)->Render(view_mat, proj_mat);
+    }
 }
 
 Renderer *SceneRendererManager::AddRenderer(Renderer *renderer)

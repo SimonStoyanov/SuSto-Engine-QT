@@ -1,6 +1,7 @@
 #include "rendererwidget.h"
 #include "Managers/rendermanager.h"
 #include "Managers/cameramanager.h"
+#include "Managers/scenerenderermanager.h"
 #include "globals.h"
 
 #pragma comment(lib, "OpenGL32.lib")
@@ -26,5 +27,7 @@ void RendererWidget::paintGL()
 {
     glClearColor(1.5f, 0.7f, 0.9f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+
+    SceneRendererManager::Instance()->RenderOnCamera();
 }
 

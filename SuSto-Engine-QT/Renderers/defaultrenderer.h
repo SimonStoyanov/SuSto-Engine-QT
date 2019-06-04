@@ -16,6 +16,8 @@ public:
 
 private:
     ShaderProgram* program = nullptr;
+
+    int vao = 0;
 };
 
 #endif // DEFAULTRENDERER_H

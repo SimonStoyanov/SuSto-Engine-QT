@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
     QApplication app(argc, argv);
     app.setStyle(new DarkStyle);
 
-    AppManager::Instance()->Init();
+    AppManager::Instance()->Init(app);
 
     FramelessWindow framelessWindow;
     framelessWindow.setWindowIcon(QIcon("Resources/spooky.ico"));

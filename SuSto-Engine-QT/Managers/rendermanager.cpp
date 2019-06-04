@@ -3,6 +3,7 @@
 #include <QSurfaceFormat>
 #include <gl/GL.h>
 #include <gl/GLU.h>
+#include "gl/GLU.h"
 #include "rendererwidget.h"
 #include "Managers/scenerenderermanager.h"
 
@@ -48,8 +49,8 @@ void RenderManager::CleanUp()
 }
 
 std::string RenderManager::GetErrorString(GLenum name) const
-{
-    const char* error = (const char*)glGetString(name);
+{    
+    const char* error = (const char*)gluErrorString(name);
 
     return error;
 }

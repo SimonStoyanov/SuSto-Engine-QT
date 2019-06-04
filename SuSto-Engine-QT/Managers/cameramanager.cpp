@@ -25,7 +25,6 @@ void CameraManager::Start()
 
 }
 
-// -----------------------------------------------------------------
 void CameraManager::CleanUp()
 {
     bool ret = true;
@@ -216,14 +215,14 @@ Camera3D::Camera3D()
     frustum.SetKind(FrustumProjectiveSpace::FrustumSpaceGL, FrustumHandedness::FrustumRightHanded);
 
     frustum.SetPos(float3(0, 1, -1));
-    //frustum.SetFront(float3::unitZ);
-    /*frustum.SetUp(float3::unitY);
+    frustum.SetFront(float3::unitZ);
+    frustum.SetUp(float3::unitY);
     aspect_ratio = 0;
 
     SetNearPlaneDistance(0.1f);
     SetFarPlaneDistance(10000.0f);
     SetAspectRatio(1.3f);
-    SetFOV(60);*/
+    SetFOV(60);
 }
 
 void Camera3D::SetPosition(const float3 & pos)

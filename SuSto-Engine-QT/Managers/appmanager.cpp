@@ -1,3 +1,4 @@
+#include "qapplication.h"
 #include "appmanager.h"
 #include "entitymanager.h"
 #include "eventmanager.h"
@@ -7,6 +8,7 @@
 #include "shadermanager.h"
 #include "scenerenderermanager.h"
 #include "cameramanager.h"
+#include "inputmanager.h"
 #include "globals.h"
 #include "QTimer"
 #include "QObject"
@@ -18,9 +20,9 @@ AppManager::AppManager() : QObject (nullptr)
 
 }
 
-void AppManager::Init()
+void AppManager::Init(QApplication& app)
 {
-
+    app.installEventFilter(InputManager::Instance());
 }
 
 void AppManager::Start()
@@ -34,6 +36,7 @@ void AppManager::Start()
     SceneRendererManager::Instance()->Start();
     EntityManager::Instance()->Start();
     CameraManager::Instance()->Start();
+    InputManager::Instance()->Start();
 
     workTimer.setInterval(33);
     workTimer.start();
@@ -46,7 +49,9 @@ void AppManager::Update()
 {
     dt = dtTimer.msec()/1000;
     dtTimer.start();
+
     EntityManager::Instance()->UpdateAllEntities();
+    InputManager::Instance()->Update();
 }
 
 void AppManager::CleanUp()
@@ -55,6 +60,7 @@ void AppManager::CleanUp()
 
     workTimer.stop();
 
+    InputManager::DestroyInstance();
     CameraManager::DestroyInstance();
     EntityManager::DestroyInstance();
     SceneRendererManager::DestroyInstance();
