@@ -1,6 +1,7 @@
 #include "scenerenderermanager.h"
 #include "Renderers/defaultrenderer.h"
 #include "Managers/cameramanager.h"
+#include "globals.h"
 
 SceneRendererManager* SceneRendererManager::instance = nullptr;
 

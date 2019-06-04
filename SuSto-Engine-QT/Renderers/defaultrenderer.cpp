@@ -139,9 +139,9 @@ void DefaultRenderer::Render(const float4x4 &view, const float4x4 &projection)
 
     float4x4 size_mat = float4x4::identity;
 
-    size_mat = float4x4::FromTRS(float3::zero, Quat::identity, float3(100, 100, 1));
+    size_mat = float4x4::FromTRS(float3::zero, Quat::identity, float3(100, 500, 1));
 
-    float4x4 world_transform = float4x4::FromTRS(float3::zero, Quat::identity, float3(1, 1, 1));
+    float4x4 world_transform = float4x4::FromTRS(float3::zero, Quat::identity, float3(1, 2, 1));
 
     RenderManager::Instance()->SetUniformFloat(program->GetID(), "z_pos", 1);
 

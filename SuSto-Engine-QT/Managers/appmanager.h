@@ -40,7 +40,8 @@ public:
 
     void Init(QApplication& app);
 
-    const float GetDT() const {
+    const float GetDT() const
+    {
         return dt;
     }
 
@@ -57,7 +58,7 @@ private:
      QTimer workTimer;
      QTime dtTimer;
 
-     float dt;
+     float dt = 0.0f;
 };
 
 #endif // APPMANAGER_H

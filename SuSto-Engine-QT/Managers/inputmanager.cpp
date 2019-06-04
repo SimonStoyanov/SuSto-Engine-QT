@@ -110,9 +110,6 @@ void InputManager::Update()
         }
     }
 
-    SPOOKYLOG(std::to_string(keys_repeat.size()));
-
-
     keys_to_check.clear();
 }
 

@@ -47,11 +47,14 @@ void AppManager::Start()
 
 void AppManager::Update()
 {
-    dt = dtTimer.msec()/1000;
-    dtTimer.start();
+    dt = (float)-dtTimer.msec() / 1000.0f;
+
+    QTime timer;
+    dtTimer = timer;
 
     EntityManager::Instance()->UpdateAllEntities();
     InputManager::Instance()->Update();
+    CameraManager::Instance()->Update();
 }
 
 void AppManager::CleanUp()

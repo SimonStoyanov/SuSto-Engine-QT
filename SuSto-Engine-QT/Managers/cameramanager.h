@@ -54,8 +54,6 @@ public:
 
     Frustum GetFrustum();
 
-    void keyPressEvent(QKeyEvent * event);
-
 private:
     Frustum  frustum;
     float       aspect_ratio = 0.0f;

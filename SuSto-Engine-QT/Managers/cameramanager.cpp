@@ -4,6 +4,7 @@
 #include "Entity/entity.h"
 #include <QTime>
 #include <QKeyEvent>
+#include "Managers/inputmanager.h"
 
 //----------------------//
 //----CAMERA MANAGER----//
@@ -21,8 +22,6 @@ CameraManager::~CameraManager()
 
 void CameraManager::Start()
 {
-    editor_camera = CreateCamera();
-
 }
 
 void CameraManager::CleanUp()
@@ -118,9 +117,32 @@ void CameraManager::Update()
 {
     bool ret = true;
 
-    float cam_speed = camera_speed * AppManager::Instance()->GetDT();
+    float cam_speed = 30000 * AppManager::Instance()->GetDT();
     float whe_speed = wheel_speed * AppManager::Instance()->GetDT();
     float mou_speed = mouse_sensitivity * AppManager::Instance()->GetDT();
+
+    if(InputManager::Instance()->KeyRepeat(Qt::Key::Key_W))
+    {
+        editor_camera->MoveFront(cam_speed);
+    }
+
+    if(InputManager::Instance()->KeyRepeat(Qt::Key::Key_A))
+    {
+        editor_camera->MoveLeft(cam_speed);
+    }
+
+    if(InputManager::Instance()->KeyRepeat(Qt::Key::Key_D))
+    {
+        editor_camera->MoveRight(cam_speed);
+    }
+
+    SPOOKYLOG(std::to_string(editor_camera->GetFrustum().Pos().x) + " " +
+              std::to_string(editor_camera->GetFrustum().Pos().y) + " " +
+              std::to_string(editor_camera->GetFrustum().Pos().z));
+
+    SPOOKYLOG(std::to_string(editor_camera->GetFrustum().ViewMatrix()[0][0]) + " " +
+              std::to_string(editor_camera->GetFrustum().ViewMatrix()[1][0]) + " " +
+              std::to_string(editor_camera->GetFrustum().ViewMatrix()[2][0]));
 
     /*if (App->input->GetKeyRepeat(SDL_SCANCODE_LSHIFT))
         cam_speed = camera_speed/2 * AppManager::Instance()->GetDT();
@@ -214,7 +236,7 @@ Camera3D::Camera3D()
 {
     frustum.SetKind(FrustumProjectiveSpace::FrustumSpaceGL, FrustumHandedness::FrustumRightHanded);
 
-    frustum.SetPos(float3(0, 1, -1));
+    frustum.SetPos(float3(0, 1, -10));
     frustum.SetFront(float3::unitZ);
     frustum.SetUp(float3::unitY);
     aspect_ratio = 0;
@@ -336,6 +358,7 @@ void Camera3D::MoveFront(const float & speed)
 
     float3 movement = float3::zero;
     movement += frustum.Front() * speed;
+
     frustum.Translate(movement);
 }
 
@@ -467,13 +490,6 @@ bool Camera3D::GetFrustumCulling()
 Frustum Camera3D::GetFrustum()
 {
     return frustum;
-}
-
-void Camera3D::keyPressEvent(QKeyEvent *event)
-{
-    /*switch (event->key()) {
-        case (Qt::key_)
-    }*/
 }
 
 void Camera3D::Focus(const float3 & focus_center, const float & distance)
