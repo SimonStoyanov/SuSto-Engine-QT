@@ -26,7 +26,21 @@ void SceneRendererManager::StartRenderers()
 }
 
 void SceneRendererManager::RenderOnCamera()
+{    
+    RenderOnCamera(last_w, last_h);
+}
+
+void SceneRendererManager::RenderOnCamera(int w, int h)
 {
+    if(last_w != w || last_h != h)
+    {
+        float ratio = (float)w / (float)h;
+        CameraManager::Instance()->GetEditorCamera()->SetAspectRatio(ratio);
+
+        last_w = w;
+        last_h = h;
+    }
+
     float4x4 view_mat = CameraManager::Instance()->GetEditorCamera()->GetOpenGLViewMatrix();
     float4x4 proj_mat = CameraManager::Instance()->GetEditorCamera()->GetOpenGLProjectionMatrix();
 

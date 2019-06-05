@@ -9,6 +9,7 @@
 #include "scenerenderermanager.h"
 #include "cameramanager.h"
 #include "inputmanager.h"
+#include "meshmanager.h"
 #include "globals.h"
 #include "QTimer"
 #include "QObject"
@@ -22,12 +23,14 @@ AppManager::AppManager() : QObject (nullptr)
 
 void AppManager::Init(QApplication& app)
 {
-    app.installEventFilter(InputManager::Instance());
+
 }
 
-void AppManager::Start()
+void AppManager::Start(QApplication& app)
 {
     SPOOKYLOG("Application Manager Start");
+
+    app.installEventFilter(InputManager::Instance());
 
     JsonManager::Instance()->Start();
     RenderManager::Instance()->Start();
@@ -37,8 +40,9 @@ void AppManager::Start()
     EntityManager::Instance()->Start();
     CameraManager::Instance()->Start();
     InputManager::Instance()->Start();
+    MeshManager::Instance()->Start();
 
-    workTimer.setInterval(33);
+    workTimer.setInterval(5);
     workTimer.start();
 
     connect(&workTimer, SIGNAL(timeout()), this, SLOT(Update()));
@@ -55,14 +59,18 @@ void AppManager::Update()
     EntityManager::Instance()->UpdateAllEntities();
     InputManager::Instance()->Update();
     CameraManager::Instance()->Update();
+    RenderManager::Instance()->Update();
 }
 
-void AppManager::CleanUp()
+void AppManager::CleanUp(QApplication& app)
 {
     SPOOKYLOG("Application Manager CleanUp");
 
     workTimer.stop();
 
+    app.removeEventFilter(InputManager::Instance());
+
+    MeshManager::DestroyInstance();
     InputManager::DestroyInstance();
     CameraManager::DestroyInstance();
     EntityManager::DestroyInstance();

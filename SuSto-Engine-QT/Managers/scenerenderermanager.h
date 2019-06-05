@@ -49,6 +49,7 @@ public:
     void StartRenderers();
 
     void RenderOnCamera();
+    void RenderOnCamera(int w, int h);
 
 private:
     Renderer *AddRenderer(Renderer* render);
@@ -57,6 +58,9 @@ private:
 
 private:
     std::vector<Renderer*> renderers;
+
+    int last_w = 0;
+    int last_h = 0;
 };
 
 #endif // SCENERENDERERMANAGER_H

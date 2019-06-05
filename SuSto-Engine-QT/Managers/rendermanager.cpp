@@ -43,6 +43,14 @@ void RenderManager::Start()
     QSurfaceFormat::setDefaultFormat(format);
 }
 
+void RenderManager::Update()
+{
+    if(gl != nullptr)
+    {
+        gl->update();
+    }
+}
+
 void RenderManager::CleanUp()
 {
 
@@ -428,7 +436,7 @@ uint RenderManager::CheckFrameBufferStatus()
     return ret;
 }
 
-void RenderManager::DeleteFrameBuffer(uint &id)
+void RenderManager::DeleteFrameBuffer(uint id)
 {
     if (id > 0)
     {

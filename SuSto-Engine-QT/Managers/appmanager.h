@@ -19,8 +19,6 @@ public:
         if(instance == nullptr)
         {
             instance = new AppManager();
-
-            instance->Start();
         }
 
         return instance;
@@ -30,8 +28,6 @@ public:
     {
         if(instance != nullptr)
         {
-            instance->CleanUp();
-
             delete instance;
 
             instance = nullptr;
@@ -39,15 +35,13 @@ public:
     }
 
     void Init(QApplication& app);
+    void Start(QApplication& app);
+    void CleanUp(QApplication& app);
 
     const float GetDT() const
     {
         return dt;
     }
-
-private:
-    void Start();
-    void CleanUp();
 
 private slots:
     void Update();

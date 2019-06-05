@@ -10,6 +10,7 @@ int main(int argc, char *argv[])
     app.setStyle(new DarkStyle);
 
     AppManager::Instance()->Init(app);
+    AppManager::Instance()->Start(app);
 
     FramelessWindow framelessWindow;
     framelessWindow.setWindowIcon(QIcon("Resources/spooky.ico"));
@@ -22,6 +23,7 @@ int main(int argc, char *argv[])
 
     int ret = app.exec();
 
+    AppManager::Instance()->CleanUp(app);
     AppManager::DestroyInstance();
 
     return ret;

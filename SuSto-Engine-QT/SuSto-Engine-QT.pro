@@ -358,7 +358,9 @@ SOURCES += \
     Renderers/defaultrenderer.cpp \
     Renderers/vertexbuffer.cpp \
     Managers/cameramanager.cpp \
-    Managers/inputmanager.cpp
+    Managers/inputmanager.cpp \
+    Renderers/mesh.cpp \
+    Managers/meshmanager.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -813,7 +815,56 @@ HEADERS += \
     Renderers/defaultrenderer.h \
     Renderers/vertexbuffer.h \
     Managers/cameramanager.h \
-    Managers/inputmanager.h
+    Managers/inputmanager.h \
+    Renderers/mesh.h \
+    Managers/meshmanager.h \
+    3rdParty/Assimp/include/assimp/Compiler/poppack1.h \
+    3rdParty/Assimp/include/assimp/Compiler/pstdint.h \
+    3rdParty/Assimp/include/assimp/Compiler/pushpack1.h \
+    3rdParty/Assimp/include/assimp/ai_assert.h \
+    3rdParty/Assimp/include/assimp/anim.h \
+    3rdParty/Assimp/include/assimp/camera.h \
+    3rdParty/Assimp/include/assimp/cexport.h \
+    3rdParty/Assimp/include/assimp/cfileio.h \
+    3rdParty/Assimp/include/assimp/cimport.h \
+    3rdParty/Assimp/include/assimp/color4.h \
+    3rdParty/Assimp/include/assimp/color4.inl \
+    3rdParty/Assimp/include/assimp/config.h \
+    3rdParty/Assimp/include/assimp/DefaultIOStream.h \
+    3rdParty/Assimp/include/assimp/DefaultIOSystem.h \
+    3rdParty/Assimp/include/assimp/DefaultLogger.hpp \
+    3rdParty/Assimp/include/assimp/Defines.h \
+    3rdParty/Assimp/include/assimp/defs.h \
+    3rdParty/Assimp/include/assimp/Exporter.hpp \
+    3rdParty/Assimp/include/assimp/Importer.hpp \
+    3rdParty/Assimp/include/assimp/importerdesc.h \
+    3rdParty/Assimp/include/assimp/IOStream.hpp \
+    3rdParty/Assimp/include/assimp/IOSystem.hpp \
+    3rdParty/Assimp/include/assimp/light.h \
+    3rdParty/Assimp/include/assimp/Logger.hpp \
+    3rdParty/Assimp/include/assimp/LogStream.hpp \
+    3rdParty/Assimp/include/assimp/material.h \
+    3rdParty/Assimp/include/assimp/material.inl \
+    3rdParty/Assimp/include/assimp/matrix3x3.h \
+    3rdParty/Assimp/include/assimp/matrix3x3.inl \
+    3rdParty/Assimp/include/assimp/matrix4x4.h \
+    3rdParty/Assimp/include/assimp/matrix4x4.inl \
+    3rdParty/Assimp/include/assimp/mesh.h \
+    3rdParty/Assimp/include/assimp/metadata.h \
+    3rdParty/Assimp/include/assimp/NullLogger.hpp \
+    3rdParty/Assimp/include/assimp/postprocess.h \
+    3rdParty/Assimp/include/assimp/ProgressHandler.hpp \
+    3rdParty/Assimp/include/assimp/quaternion.h \
+    3rdParty/Assimp/include/assimp/quaternion.inl \
+    3rdParty/Assimp/include/assimp/scene.h \
+    3rdParty/Assimp/include/assimp/SceneCombiner.h \
+    3rdParty/Assimp/include/assimp/texture.h \
+    3rdParty/Assimp/include/assimp/types.h \
+    3rdParty/Assimp/include/assimp/vector2.h \
+    3rdParty/Assimp/include/assimp/vector2.inl \
+    3rdParty/Assimp/include/assimp/vector3.h \
+    3rdParty/Assimp/include/assimp/vector3.inl \
+    3rdParty/Assimp/include/assimp/version.h
 
 FORMS += \
         mainwindow.ui \
@@ -860,3 +911,17 @@ DEPENDPATH += $$PWD/../AdvancedDockingSystem/include
 DISTFILES += \
     3rdParty/Grid/grid.frag \
     3rdParty/Grid/grid.vert
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/3rdParty/Assimp/lib/ -lassimp
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/3rdParty/Assimp/lib/ -lassimpd
+else:unix: LIBS += -L$$PWD/3rdParty/Assimp/lib/ -lassimp
+
+INCLUDEPATH += $$PWD/3rdParty/Assimp/include
+DEPENDPATH += $$PWD/3rdParty/Assimp/include
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/3rdParty/Assimp/lib/ -lassimp
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/3rdParty/Assimp/lib/ -lassimpd
+else:unix: LIBS += -L$$PWD/3rdParty/Assimp/lib/ -lassimp
+
+INCLUDEPATH += $$PWD/3rdParty/Assimp/include
+DEPENDPATH += $$PWD/3rdParty/Assimp/include

@@ -95,7 +95,7 @@ public:
     void UnbindFrameBuffer() const;
     void UnbindFrameBuffer(uint target) const;
     uint CheckFrameBufferStatus();
-    void DeleteFrameBuffer(uint& id);
+    void DeleteFrameBuffer(uint id);
 
     uint CreateVertexShader(const char* source, std::string& compilation_error_msg);
     uint CreateFragmentShader(const char* source, std::string& compilation_error_msg);
@@ -132,6 +132,7 @@ public:
 
 private:
     void Start();
+    void Update();
     void CleanUp();
 
 
