@@ -8,6 +8,7 @@
 class SubMesh
 {
     friend class MeshManager;
+    friend class DefaultRenderer;
 
 public:
     SubMesh();
@@ -16,6 +17,14 @@ public:
 
     void LoadToVRAM();
     void UnloadFromVRAM();
+
+    int GetLoaded() const;
+
+    int GetVao() const;
+    int GetVbo() const;
+    int GetVbio() const;
+
+    int GetElementsCount();
 
 private:
     std::vector<float> vertex_buffer;
@@ -26,11 +35,14 @@ private:
     bool loaded = false;
 
     int vao = 0;
+    int vbo = 0;
+    int vbio = 0;
 };
 
 class Mesh
 {
     friend class MeshManager;
+    friend class DefaultRenderer;
 
 private:
     Mesh();

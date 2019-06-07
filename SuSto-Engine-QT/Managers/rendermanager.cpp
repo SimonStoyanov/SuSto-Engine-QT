@@ -318,6 +318,17 @@ uint RenderManager::LoadTextureToVRAM(uint w, uint h, GLubyte *tex_data, GLint f
     return buff_id;
 }
 
+void RenderManager::DrawElements(GLenum mode, uint elements_count)
+{
+     gl->glDrawElements(mode, elements_count, GL_UNSIGNED_INT, (void*)0);
+
+     GLenum error = glGetError();
+     if (error != GL_NO_ERROR)
+     {
+         SPOOKYLOG("Error drawing elements: " + GetErrorString(error));
+     }
+}
+
 uint RenderManager::GenVertexArrayBuffer() const
 {
     uint ret = 0;
@@ -566,7 +577,7 @@ GLint RenderManager::GetVertexAttributeArray(uint program, const char *name)
     ret = gl->glGetAttribLocation(program, name);
 
     GLenum error = glGetError();
-    if (error != GL_NO_ERROR)
+    if (error != GL_NO_ERROR || ret == -1)
     {
         SPOOKYLOG("Error getting vertex attribute array: " + GetErrorString(error));
     }
@@ -581,7 +592,7 @@ void RenderManager::EnableVertexAttributeArray(uint id)
     GLenum error = glGetError();
     if (error != GL_NO_ERROR)
     {
-        SPOOKYLOG("Error enabling vertex attribute array: " + GetErrorString(error));
+        SPOOKYLOG("Error enabling vertex attribute array with location: " +  std::to_string(id) + " " + GetErrorString(error));
     }
 }
 
@@ -603,7 +614,7 @@ void RenderManager::SetVertexAttributePointer(uint id, uint element_size, uint e
     GLenum error = glGetError();
     if (error != GL_NO_ERROR)
     {
-        SPOOKYLOG("Error Setting vertex attribute pointer: " + GetErrorString(error));
+        SPOOKYLOG("Error setting vertex attribute pointer with location: " + std::to_string(id) + " " + GetErrorString(error));
     }
 }
 

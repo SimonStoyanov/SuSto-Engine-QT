@@ -6,6 +6,7 @@
 
 class Shader;
 class ShaderProgram;
+class Mesh;
 enum ShaderType;
 
 class ShaderManager

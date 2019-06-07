@@ -47,14 +47,13 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionCreate_New_Scene, SIGNAL(triggered()), hierarchy, SLOT(NewScene()));
     connect(ui->actionSave_Scene, SIGNAL(triggered()), hierarchy, SLOT(SaveScene()));
     connect(ui->actionLoad_Scene, SIGNAL(triggered()), hierarchy, SLOT(LoadScene()));
+    //connect(ui->acti, SIGNAL(triggered()), hierarchy, SLOT(LoadScene()));
 
     // TOOLBAR EDIT
     connect(ui->actionDuplicate, SIGNAL(triggered()), hierarchy, SLOT(DuplicateEntity()));
 
     // TOOLBAR HELP
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(actionAbout()));
-
-    // INSPECTOR
 }
 
 MainWindow::~MainWindow()

@@ -2,6 +2,8 @@
 #include "Renderers/vertexbuffer.h"
 #include "Managers/shadermanager.h"
 #include "Managers/rendermanager.h"
+#include "Managers/meshmanager.h"
+#include "Renderers/mesh.h"
 
 DefaultRenderer::DefaultRenderer()
 {
@@ -10,25 +12,59 @@ DefaultRenderer::DefaultRenderer()
 
 void DefaultRenderer::Start()
 {
-    VertexBuffer quad_vertex_buffer;
+    mesh = MeshManager::Instance()->LoadMesh("C:/Users/Guillem/Desktop/PalmTree/PalmTree.obj");
 
-    quad_vertex_buffer.AddFloat3(float3(-0.5f, 0.5f, 0));
-    quad_vertex_buffer.AddFloat2(float2(0.0f, 0.0f));
+    /*mesh = new Mesh();
+    SubMesh* submesh = new SubMesh();
+    submesh->vertex_buffer.push_back(-0.5f);
+    submesh->vertex_buffer.push_back(0.5f);
+    submesh->vertex_buffer.push_back(0);
+    submesh->vertex_buffer.push_back(0);
+    submesh->vertex_buffer.push_back(0);
+    submesh->vertex_buffer.push_back(0);
+    submesh->vertex_buffer.push_back(0);
+    submesh->vertex_buffer.push_back(0);
 
-    quad_vertex_buffer.AddFloat3(float3(0.5f, 0.5f, 0));
-    quad_vertex_buffer.AddFloat2(float2(1.0f, 0.0f));
+    submesh->vertex_buffer.push_back(0.5f);
+    submesh->vertex_buffer.push_back(0.5f);
+    submesh->vertex_buffer.push_back(0);
+    submesh->vertex_buffer.push_back(0);
+    submesh->vertex_buffer.push_back(0);
+    submesh->vertex_buffer.push_back(0);
+    submesh->vertex_buffer.push_back(1);
+    submesh->vertex_buffer.push_back(0);
 
-    quad_vertex_buffer.AddFloat3(float3(0.5f, -0.5f, 0));
-    quad_vertex_buffer.AddFloat2(float2(1.0f, 1.0f));
+    submesh->vertex_buffer.push_back(0.5f);
+    submesh->vertex_buffer.push_back(-0.5f);
+    submesh->vertex_buffer.push_back(0);
+    submesh->vertex_buffer.push_back(0);
+    submesh->vertex_buffer.push_back(0);
+    submesh->vertex_buffer.push_back(0);
+    submesh->vertex_buffer.push_back(0);
+    submesh->vertex_buffer.push_back(1);
 
-    quad_vertex_buffer.AddFloat3(float3(-0.5f, -0.5f, 0));
-    quad_vertex_buffer.AddFloat2(float2(0.0f, 1.0f));
+    submesh->vertex_buffer.push_back(-0.5f);
+    submesh->vertex_buffer.push_back(-0.5f);
+    submesh->vertex_buffer.push_back(0);
+    submesh->vertex_buffer.push_back(0);
+    submesh->vertex_buffer.push_back(0);
+    submesh->vertex_buffer.push_back(0);
+    submesh->vertex_buffer.push_back(0);
+    submesh->vertex_buffer.push_back(1);
 
-    uint indices[] =
-    {
-        0, 1, 3,
-        1, 2, 3
-    };
+    submesh->index_buffer.push_back(0);
+    submesh->index_buffer.push_back(1);
+    submesh->index_buffer.push_back(3);
+    submesh->index_buffer.push_back(1);
+    submesh->index_buffer.push_back(2);
+    submesh->index_buffer.push_back(3);
+
+    mesh->sub_meshes.push_back(submesh);
+
+    */
+
+    MeshManager::Instance()->LoadToVRAM(mesh);
+
 
     const char* vertex_code =
     "#version 330 core\n \
@@ -51,7 +87,7 @@ void DefaultRenderer::Start()
         oCol = col;\
         oHasTexture = hasTexture;\
         oUvs = uvs; \
-        gl_Position = Projection * View * Model * vec4(vec3(position.x, position.y, z_pos), 1);\
+        gl_Position = Projection * View * Model * vec4(vec3(position.x, position.y, position.z), 1);\
     }";
 
     const char* fragment_code =
@@ -84,81 +120,50 @@ void DefaultRenderer::Start()
     program->AddShader(fsh);
 
     program->LinkProgram();
-
-    // VAO
-    vao = RenderManager::Instance()->GenVertexArrayBuffer();
-    RenderManager::Instance()->BindVertexArrayBuffer(vao);
-
-    // VBO
-    int vbo = RenderManager::Instance()->GenBuffer();
-    RenderManager::Instance()->BindArrayBuffer(vbo);
-
-    RenderManager::Instance()->LoadArrayToVRAM(quad_vertex_buffer.GetSize(), quad_vertex_buffer.GetBuffer(), GL_STATIC_DRAW);
-
-
-    // Set info
-    GLint posAttrib =  RenderManager::Instance()->GetVertexAttributeArray(program->GetID(), "position");
-    RenderManager::Instance()->EnableVertexAttributeArray(posAttrib);
-    RenderManager::Instance()->SetVertexAttributePointer(posAttrib, 3, 5, 0);
-
-    GLint uvsAttrib =  RenderManager::Instance()->GetVertexAttributeArray(program->GetID(), "uvs");
-    RenderManager::Instance()->EnableVertexAttributeArray(uvsAttrib);
-    RenderManager::Instance()->SetVertexAttributePointer(uvsAttrib, 2, 5, 3);
-
-    // VBIO
-    uint vbio = RenderManager::Instance()->GenBuffer();
-    RenderManager::Instance()->BindElementArrayBuffer(vbio);
-
-    RenderManager::Instance()->LoadElementArrayToVRAM(sizeof(indices), &indices[0], GL_STATIC_DRAW);
-
-    // Clear
-    RenderManager::Instance()->UnbindVertexArrayBuffer();
-
-    RenderManager::Instance()->DisableVertexAttributeArray(posAttrib);
-    RenderManager::Instance()->DisableVertexAttributeArray(uvsAttrib);
-
-    quad_vertex_buffer.Clear();
 }
 
 void DefaultRenderer::Render(const float4x4 &view, const float4x4 &projection)
 {
-    // Rendering test quad
-
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glDepthFunc(GL_LESS);
 
     program->UseProgram();
 
-    RenderManager::Instance()->BindVertexArrayBuffer(vao);
-
-    RenderManager::Instance()->SetUniformMatrix(program->GetID(), "View", view.ptr());
-    RenderManager::Instance()->SetUniformMatrix(program->GetID(), "Projection", projection.ptr());
-
-    float4 colour = float4(1, 1, 1, 1);
-
-    float4x4 size_mat = float4x4::identity;
-
-    size_mat = float4x4::FromTRS(float3::zero, Quat::identity, float3(100, 500, 1));
-
-    float4x4 world_transform = float4x4::FromTRS(float3::zero, Quat::identity, float3(1, 2, 1));
-
-    RenderManager::Instance()->SetUniformFloat(program->GetID(), "z_pos", 1);
-
-    RenderManager::Instance()->SetUniformVec4(program->GetID(), "col", colour);
-    RenderManager::Instance()->SetUniformInt(program->GetID(), "hasTexture", false);
-
-    RenderManager::Instance()->SetUniformMatrix(program->GetID(), "Model", world_transform.Transposed().ptr());
-
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
-
-    GLenum error = glGetError();
-    if (error != GL_NO_ERROR)
+    if(mesh != nullptr)
     {
+        std::vector<SubMesh*> submeshes = mesh->GetSubMeshes();
 
+        for(std::vector<SubMesh*>::iterator it = submeshes.begin(); it != submeshes.end(); ++it)
+        {
+            if((*it)->GetLoaded())
+            {
+                RenderManager::Instance()->BindVertexArrayBuffer((*it)->GetVao());
+
+                RenderManager::Instance()->SetUniformMatrix(program->GetID(), "View", view.ptr());
+                RenderManager::Instance()->SetUniformMatrix(program->GetID(), "Projection", projection.ptr());
+
+                float4 colour = float4(1, 1, 1, 1);
+
+                float4x4 size_mat = float4x4::identity;
+
+                size_mat = float4x4::FromTRS(float3::zero, Quat::identity, float3(100, 50, 50));
+
+                float4x4 world_transform = float4x4::FromTRS(float3::zero, Quat::identity, float3(1, 2, 1));
+
+                RenderManager::Instance()->SetUniformFloat(program->GetID(), "z_pos", 1);
+
+                RenderManager::Instance()->SetUniformVec4(program->GetID(), "col", colour);
+                RenderManager::Instance()->SetUniformInt(program->GetID(), "hasTexture", false);
+
+                RenderManager::Instance()->SetUniformMatrix(program->GetID(), "Model", world_transform.Transposed().ptr());
+
+                RenderManager::Instance()->DrawElements(GL_TRIANGLES, (*it)->GetElementsCount());
+
+                RenderManager::Instance()->UnbindVertexArrayBuffer();
+            }
+        }
     }
-
-    RenderManager::Instance()->UnbindVertexArrayBuffer();
 
     glDisable(GL_BLEND);
     glDisable(GL_DEPTH_TEST);

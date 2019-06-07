@@ -3,6 +3,8 @@
 
 #include "3rdParty/MathGeoLib/MathGeoLib.h"
 
+class Mesh;
+
 class Renderer
 {
 public:

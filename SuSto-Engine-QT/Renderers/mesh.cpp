@@ -19,3 +19,28 @@ void SubMesh::CleanUp()
 {
 
 }
+
+int SubMesh::GetLoaded() const
+{
+    return loaded;
+}
+
+int SubMesh::GetVao() const
+{
+    return vao;
+}
+
+int SubMesh::GetVbo() const
+{
+    return vbo;
+}
+
+int SubMesh::GetVbio() const
+{
+    return vbio;
+}
+
+int SubMesh::GetElementsCount()
+{
+    return index_buffer.size();
+}

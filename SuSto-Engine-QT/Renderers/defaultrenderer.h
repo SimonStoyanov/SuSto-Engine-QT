@@ -4,6 +4,7 @@
 #include "Renderers/Renderer.h"
 
 class ShaderProgram;
+class Mesh;
 
 class DefaultRenderer : public Renderer
 {
@@ -18,6 +19,8 @@ private:
     ShaderProgram* program = nullptr;
 
     int vao = 0;
+
+    Mesh* mesh = nullptr;
 };
 
 #endif // DEFAULTRENDERER_H

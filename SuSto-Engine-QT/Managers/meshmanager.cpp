@@ -8,44 +8,54 @@
 #include <assimp/cfileio.h>
 #include <assimp/Importer.hpp>
 #include <assimp/importerdesc.h>
-#include <assimp/scene.h>
 
 MeshManager* MeshManager::instance = nullptr;
 
 MeshManager::MeshManager()
 {
-
+    Assimp::DefaultLogger::create();
+    const uint severity = Assimp::Logger::Debugging | Assimp::Logger::Info | Assimp::Logger::Err | Assimp::Logger::Warn;
+    Assimp::DefaultLogger::get()->attachStream(new AssimpLogger(),severity);
 }
 
 Mesh* MeshManager::LoadMesh(const std::string &filepath)
 {
-    Mesh* ret = nullptr;
+    Mesh* ret = new Mesh();
+
+    bool all_correct = true;
 
     Assimp::Importer importer;
 
     QFile file(filepath.c_str());
 
-    bool all_correct = file.open(QIODevice::ReadOnly);
+    all_correct = file.open(QIODevice::ReadOnly);
+
+    QByteArray data = file.readAll();
 
     if(all_correct)
     {
-        QByteArray data = file.readAll();
+        const aiScene* scene = aiImportFile(filepath.c_str(), aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals | aiProcess_OptimizeMeshes |
+                                            aiProcess_PreTransformVertices | aiProcess_ImproveCacheLocality);
 
-        /*const aiScene* scene = importer.ReadFileFromMemory(data.data(), data.size(),
-         aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals | aiProcess_OptimizeMeshes |
-         aiProcess_PreTransformVertices | aiProcess_ImproveCacheLocality);*/
-
-        const aiScene* scene = aiImportFile(filepath.c_str(), aiProcessPreset_TargetRealtime_MaxQuality);
-
-        all_correct = (scene != nullptr) && (scene->mRootNode != nullptr) && (scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE == false);
+        all_correct = (scene != nullptr) && (scene->mRootNode != nullptr) && ((scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) == false);
 
         if(all_correct)
         {
+            if(debug_logs)
+            {
+                SPOOKYLOG("Mesh scene properly loaded: " + filepath);
+            }
 
+            ProcessNode(scene, scene->mRootNode, ret);
         }
         else
         {
-            SPOOKYLOG("Error loading mesh scene: " + filepath);
+            if(scene == nullptr)
+                SPOOKYLOG("Error loading mesh scene [scene was nullptr]: " + filepath);
+            else if(scene->mRootNode == nullptr)
+                SPOOKYLOG("Error loading mesh scene [scene root node was nullptr]: " + filepath);
+            else if(scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE)
+                SPOOKYLOG("Error loading mesh scene [scene flag incomplete]: " + filepath);
         }
     }
     else
@@ -66,7 +76,7 @@ void MeshManager::CleanUp()
 
 }
 
-void MeshManager::ProcessNode(aiScene *scene, aiNode *node, Mesh *mesh)
+void MeshManager::ProcessNode(const aiScene *scene, aiNode *node, Mesh *mesh)
 {
     std::vector<aiNode*> nodes_to_check;
     nodes_to_check.push_back(node);
@@ -80,6 +90,8 @@ void MeshManager::ProcessNode(aiScene *scene, aiNode *node, Mesh *mesh)
             aiMesh* aimesh = scene->mMeshes[curr_node->mMeshes[i]];
 
             SubMesh* sub_mesh = ProcessMesh(scene, aimesh);
+
+            mesh->sub_meshes.push_back(sub_mesh);
         }
 
         for(int i = 0; i < curr_node->mNumChildren; ++i)
@@ -93,18 +105,14 @@ void MeshManager::ProcessNode(aiScene *scene, aiNode *node, Mesh *mesh)
     }
 }
 
-SubMesh *MeshManager::ProcessMesh(aiScene *scene, aiMesh *mesh)
+SubMesh *MeshManager::ProcessMesh(const aiScene *scene, aiMesh *mesh)
 {
     SubMesh* ret = new SubMesh();
 
     ret->has_uvs = mesh->HasTextureCoords(0);
 
     ret->vertex_buffer.reserve(mesh->mNumVertices * 2 * 3);
-
-    if(ret->has_uvs)
-    {
-        ret->vertex_buffer.reserve(mesh->mNumVertices * 2);
-    }
+    ret->vertex_buffer.reserve(mesh->mNumVertices * 2);
 
     for(int i = 0; i < mesh->mNumVertices; ++i)
     {
@@ -126,6 +134,11 @@ SubMesh *MeshManager::ProcessMesh(aiScene *scene, aiMesh *mesh)
             ret->vertex_buffer.push_back(aiuvs.x);
             ret->vertex_buffer.push_back(aiuvs.y);
         }
+        else
+        {
+            ret->vertex_buffer.push_back(0);
+            ret->vertex_buffer.push_back(0);
+        }
     }
 
     ret->index_buffer.reserve(mesh->mNumFaces * 3);
@@ -138,7 +151,7 @@ SubMesh *MeshManager::ProcessMesh(aiScene *scene, aiMesh *mesh)
         {
             for(int f = 0; f < aiface.mNumIndices; ++f)
             {
-                uint indice = aiface.mIndices[i];
+                uint indice = aiface.mIndices[f];
 
                 ret->index_buffer.push_back(indice);
             }
@@ -154,6 +167,8 @@ void MeshManager::LoadToVRAM(Mesh *mesh)
     {
         std::vector<SubMesh*> sub_meshes = mesh->GetSubMeshes();
 
+        SPOOKYLOG(std::to_string(sub_meshes.size()));
+
         for(std::vector<SubMesh*>::iterator it = sub_meshes.begin(); it != sub_meshes.end(); ++it)
         {
             SubMesh* curr_submesh = (*it);
@@ -167,20 +182,39 @@ void MeshManager::LoadToVRAM(Mesh *mesh)
                 RenderManager::Instance()->BindVertexArrayBuffer(curr_submesh->vao);
 
                 // VBO
-                int vbo = RenderManager::Instance()->GenBuffer();
-                RenderManager::Instance()->BindArrayBuffer(vbo);
+                curr_submesh->vbo = RenderManager::Instance()->GenBuffer();
+                RenderManager::Instance()->BindArrayBuffer(curr_submesh->vbo);
 
-                RenderManager::Instance()->LoadArrayToVRAM(curr_submesh->vertex_buffer.size(),
+                RenderManager::Instance()->LoadArrayToVRAM(curr_submesh->vertex_buffer.size() * sizeof(float),
                                                            &curr_submesh->vertex_buffer[0], GL_STATIC_DRAW);
 
-                // VBIO
-                uint vbio = RenderManager::Instance()->GenBuffer();
-                RenderManager::Instance()->BindElementArrayBuffer(vbio);
+                RenderManager::Instance()->EnableVertexAttributeArray(0);
+                RenderManager::Instance()->EnableVertexAttributeArray(1);
+                RenderManager::Instance()->EnableVertexAttributeArray(2);
 
-                RenderManager::Instance()->LoadElementArrayToVRAM(curr_submesh->index_buffer.size(), &curr_submesh->index_buffer[0], GL_STATIC_DRAW);
+                // Set info
+                RenderManager::Instance()->SetVertexAttributePointer(0, 3, 8, 0);
+                RenderManager::Instance()->SetVertexAttributePointer(1, 3, 8, 3);
+                RenderManager::Instance()->SetVertexAttributePointer(2, 2, 8, 6);
+
+                // VBIO
+                curr_submesh->vbio = RenderManager::Instance()->GenBuffer();
+                RenderManager::Instance()->BindElementArrayBuffer(curr_submesh->vbio);
+
+                RenderManager::Instance()->LoadElementArrayToVRAM(curr_submesh->index_buffer.size() * sizeof(uint),
+                                                                  &curr_submesh->index_buffer[0], GL_STATIC_DRAW);
+
+                SPOOKYLOG("Loading mesh to VRAM with vao: " + std::to_string((curr_submesh->vao)));
+
+                SPOOKYLOG("Loaded " + std::to_string(curr_submesh->vertex_buffer.size()) + " vertices to VRAM");
+                SPOOKYLOG("Loaded " + std::to_string(curr_submesh->index_buffer.size()) + " indices to VRAM");
 
                 // Clear
                 RenderManager::Instance()->UnbindVertexArrayBuffer();
+
+                RenderManager::Instance()->DisableVertexAttributeArray(0);
+                RenderManager::Instance()->DisableVertexAttributeArray(1);
+                RenderManager::Instance()->DisableVertexAttributeArray(2);
             }
         }
     }
@@ -206,6 +240,11 @@ void MeshManager::UnloadFromVRAM(Mesh *mesh)
             }
         }
     }
+}
+
+std::vector<Mesh *> MeshManager::GetAllMeshes() const
+{
+    return meshes;
 }
 
 

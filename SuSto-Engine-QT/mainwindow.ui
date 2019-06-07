@@ -46,7 +46,10 @@
     <addaction name="actionSave_Scene"/>
     <addaction name="actionLoad_Scene"/>
     <addaction name="separator"/>
+    <addaction name="actionLoad_Mesh"/>
+    <addaction name="separator"/>
     <addaction name="actionExit"/>
+    <addaction name="actionQt_Es_una_merda"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
@@ -163,6 +166,29 @@
   <action name="actionDuplicate">
    <property name="text">
     <string>Duplicate</string>
+   </property>
+  </action>
+  <action name="actionLoadMesh">
+   <property name="text">
+    <string>LoadMesh</string>
+   </property>
+  </action>
+  <action name="actionLoad_Mesh">
+   <property name="text">
+    <string>Load Mesh</string>
+   </property>
+  </action>
+  <action name="actionPuta_Bassura_de_qUT">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Puta Bassura de  qUT</string>
+   </property>
+  </action>
+  <action name="actionQt_Es_una_merda">
+   <property name="text">
+    <string>Qt Es una merda</string>
    </property>
   </action>
  </widget>

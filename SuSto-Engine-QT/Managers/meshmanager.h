@@ -2,12 +2,27 @@
 #define MESHMANAGER_H
 
 #include <vector>
+#include <assimp/scene.h>
+#include <assimp/DefaultLogger.hpp>
+#include "globals.h"
 
-class aiScene;
-class aiNode;
-class aiMesh;
 class Mesh;
 class SubMesh;
+
+class AssimpLogger : public Assimp::LogStream
+{
+public:
+    AssimpLogger()
+    {
+
+    }
+    ~AssimpLogger()
+    {}
+    void write(const char* message)
+    {
+        SPOOKYLOG(message);
+    }
+};
 
 class MeshManager
 {
@@ -46,18 +61,22 @@ public:
     void LoadToVRAM(Mesh* mesh);
     void UnloadFromVRAM(Mesh* mesh);
 
+    std::vector<Mesh*> GetAllMeshes() const;
+
 private:
     void Start();
     void CleanUp();
 
-    void ProcessNode(aiScene* scene, aiNode* node, Mesh* mesh);
-    SubMesh* ProcessMesh(aiScene* scene, aiMesh* mesh);
+    void ProcessNode(const aiScene* scene, aiNode* node, Mesh* mesh);
+    SubMesh* ProcessMesh(const aiScene* scene, aiMesh* mesh);
 
 private:
     static MeshManager* instance;
 
 private:
     std::vector<Mesh*> meshes;
+
+    bool debug_logs = true;
 };
 
 #endif // MESHMANAGER_H

@@ -79,6 +79,8 @@ public:
     void LoadElementArrayToVRAM(uint size, uint* values, GLenum type = GL_STATIC_DRAW) const;
     uint LoadTextureToVRAM(uint w, uint h, GLubyte* tex_data, GLint format) const;
 
+    void DrawElements(GLenum mode, uint elements_count);
+
     // --------------------------------------------------------
 
     // Shaders ------------------------------------------------
