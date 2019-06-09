@@ -4,6 +4,9 @@
 #include "Managers/rendermanager.h"
 #include "Managers/meshmanager.h"
 #include "Renderers/mesh.h"
+#include "Managers/entitymanager.h"
+#include "Entity/Components/c_mesh_renderer.h"
+#include "Entity/Components/c_transform.h"
 
 DefaultRenderer::DefaultRenderer()
 {
@@ -12,64 +15,17 @@ DefaultRenderer::DefaultRenderer()
 
 void DefaultRenderer::Start()
 {
-    mesh = MeshManager::Instance()->LoadMesh("C:/Users/Guillem/Desktop/PalmTree/PalmTree.obj");
+    //Mesh* curr_mesh = MeshManager::Instance()->LoadMesh("C:/Users/Guillem/Desktop/PalmTree/PalmTree.obj");
+    //MeshManager::Instance()->LoadToVRAM(curr_mesh);
 
-    /*mesh = new Mesh();
-    SubMesh* submesh = new SubMesh();
-    submesh->vertex_buffer.push_back(-0.5f);
-    submesh->vertex_buffer.push_back(0.5f);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(0);
-
-    submesh->vertex_buffer.push_back(0.5f);
-    submesh->vertex_buffer.push_back(0.5f);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(1);
-    submesh->vertex_buffer.push_back(0);
-
-    submesh->vertex_buffer.push_back(0.5f);
-    submesh->vertex_buffer.push_back(-0.5f);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(1);
-
-    submesh->vertex_buffer.push_back(-0.5f);
-    submesh->vertex_buffer.push_back(-0.5f);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(1);
-
-    submesh->index_buffer.push_back(0);
-    submesh->index_buffer.push_back(1);
-    submesh->index_buffer.push_back(3);
-    submesh->index_buffer.push_back(1);
-    submesh->index_buffer.push_back(2);
-    submesh->index_buffer.push_back(3);
-
-    mesh->sub_meshes.push_back(submesh);
-
-    */
-
-    MeshManager::Instance()->LoadToVRAM(mesh);
-
+    //Mesh* curr_mesh2 = MeshManager::Instance()->LoadMesh("C:/Users/Guillem/Desktop/Patrick/Patrick.obj");
+    //MeshManager::Instance()->LoadToVRAM(curr_mesh2);
 
     const char* vertex_code =
     "#version 330 core\n \
     layout(location = 0) in vec3 position; \n \
-    layout(location = 1) in vec2 uvs; \n \
+    layout(location = 1) in vec3 normals; \n \
+    layout(location = 2) in vec2 uvs; \n \
     \
     uniform mat4 Model; \
     uniform mat4 View; \
@@ -130,40 +86,56 @@ void DefaultRenderer::Render(const float4x4 &view, const float4x4 &projection)
 
     program->UseProgram();
 
-    if(mesh != nullptr)
+    std::vector<Entity*> entities = EntityManager::Instance()->GetEntities();
+
+    for(std::vector<Entity*>::iterator it = entities.begin(); it != entities.end(); ++it)
     {
-        std::vector<SubMesh*> submeshes = mesh->GetSubMeshes();
+        C_Transform* transform = (*it)->GetTransform();
+        C_MeshRenderer* mesh_renderer = (C_MeshRenderer*)(*it)->GetComponent(ComponentType::COMPONENT_MESH_RENDERER);
 
-        for(std::vector<SubMesh*>::iterator it = submeshes.begin(); it != submeshes.end(); ++it)
+        Quat rotation = Quat::FromEulerXYZ(DEGTORAD(transform->GetRotationDegrees().x), DEGTORAD(transform->GetRotationDegrees().y),
+                                           DEGTORAD(transform->GetRotationDegrees().z));
+
+        float4x4 transform_mat = float4x4::FromTRS(transform->GetPos(), rotation, transform->GetScale());
+
+        if(mesh_renderer != nullptr)
         {
-            if((*it)->GetLoaded())
+            Mesh* curr_mesh = mesh_renderer->GetMesh();
+
+            if(curr_mesh != nullptr)
             {
-                RenderManager::Instance()->BindVertexArrayBuffer((*it)->GetVao());
+                std::vector<SubMesh*> submeshes = curr_mesh->GetSubMeshes();
 
-                RenderManager::Instance()->SetUniformMatrix(program->GetID(), "View", view.ptr());
-                RenderManager::Instance()->SetUniformMatrix(program->GetID(), "Projection", projection.ptr());
+                for(std::vector<SubMesh*>::iterator it = submeshes.begin(); it != submeshes.end(); ++it)
+                {
+                    if((*it)->GetLoaded())
+                    {
+                        RenderManager::Instance()->BindVertexArrayBuffer((*it)->GetVao());
 
-                float4 colour = float4(1, 1, 1, 1);
+                        RenderManager::Instance()->SetUniformMatrix(program->GetID(), "View", view.ptr());
+                        RenderManager::Instance()->SetUniformMatrix(program->GetID(), "Projection", projection.ptr());
 
-                float4x4 size_mat = float4x4::identity;
+                        float4 colour = float4(1, 1, 1, 1);
 
-                size_mat = float4x4::FromTRS(float3::zero, Quat::identity, float3(100, 50, 50));
+                        float4x4 world_transform = transform_mat;
 
-                float4x4 world_transform = float4x4::FromTRS(float3::zero, Quat::identity, float3(1, 2, 1));
+                        RenderManager::Instance()->SetUniformFloat(program->GetID(), "z_pos", 1);
 
-                RenderManager::Instance()->SetUniformFloat(program->GetID(), "z_pos", 1);
+                        RenderManager::Instance()->SetUniformVec4(program->GetID(), "col", colour);
+                        RenderManager::Instance()->SetUniformInt(program->GetID(), "hasTexture", false);
 
-                RenderManager::Instance()->SetUniformVec4(program->GetID(), "col", colour);
-                RenderManager::Instance()->SetUniformInt(program->GetID(), "hasTexture", false);
+                        RenderManager::Instance()->SetUniformMatrix(program->GetID(), "Model", world_transform.Transposed().ptr());
 
-                RenderManager::Instance()->SetUniformMatrix(program->GetID(), "Model", world_transform.Transposed().ptr());
+                        RenderManager::Instance()->DrawElements(GL_TRIANGLES, (*it)->GetElementsCount());
 
-                RenderManager::Instance()->DrawElements(GL_TRIANGLES, (*it)->GetElementsCount());
-
-                RenderManager::Instance()->UnbindVertexArrayBuffer();
+                        RenderManager::Instance()->UnbindVertexArrayBuffer();
+                    }
+                }
             }
         }
     }
+
+    //program->StopUsingProgram();
 
     glDisable(GL_BLEND);
     glDisable(GL_DEPTH_TEST);

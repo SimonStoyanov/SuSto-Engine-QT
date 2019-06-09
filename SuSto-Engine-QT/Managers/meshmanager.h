@@ -55,12 +55,13 @@ public:
         }
     }
 
-public:
+public:    
     Mesh* LoadMesh(const std::string& filepath);
 
     void LoadToVRAM(Mesh* mesh);
     void UnloadFromVRAM(Mesh* mesh);
 
+    Mesh *GetLoadedMeshFromFilepath(const std::string& filepath);
     std::vector<Mesh*> GetAllMeshes() const;
 
 private:

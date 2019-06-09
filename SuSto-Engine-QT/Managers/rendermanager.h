@@ -42,6 +42,8 @@ public:
 public:
     void SetGL(RendererWidget* widget);
 
+    void UseGL();
+
     std::string GetErrorString(GLenum name) const;
 
     // OpenGl control -----------------------------------------
@@ -61,6 +63,7 @@ public:
     void UnbindElementArrayBuffer() const;
 
     uint GenTexture() const;
+    void SetActiveTexture(uint target);
     void BindTexture(uint id) const;
     void BindTexture(uint target, uint id) const;
     void UnbindTexture() const;
@@ -73,11 +76,14 @@ public:
 
     void Set2DMultisample(uint samples, uint width, uint height);
     void SetFrameBufferTexture2D(uint target, uint id);
+    void SetFrameBufferTexture2D(uint target, uint attachment, uint id);
     void RenderStorageMultisample(uint samples, uint width, uint height);
 
     void LoadArrayToVRAM(uint size, const float* values, GLenum type = GL_STATIC_DRAW) const;
     void LoadElementArrayToVRAM(uint size, uint* values, GLenum type = GL_STATIC_DRAW) const;
     uint LoadTextureToVRAM(uint w, uint h, GLubyte* tex_data, GLint format) const;
+    uint LoadTextureToVRAM(uint w, uint h, GLubyte* tex_data, GLint internal_format, GLint format, GLint type) const;
+    void LoadTextureToVRAM(uint texture_id, uint w, uint h, GLubyte* tex_data, GLint internal_format, GLint format, GLint type);
 
     void DrawElements(GLenum mode, uint elements_count);
 
@@ -98,6 +104,7 @@ public:
     void UnbindFrameBuffer(uint target) const;
     uint CheckFrameBufferStatus();
     void DeleteFrameBuffer(uint id);
+    void DrawBuffer(uint mode);
 
     uint CreateVertexShader(const char* source, std::string& compilation_error_msg);
     uint CreateFragmentShader(const char* source, std::string& compilation_error_msg);

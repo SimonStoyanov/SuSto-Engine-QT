@@ -9,6 +9,7 @@ class SubMesh
 {
     friend class MeshManager;
     friend class DefaultRenderer;
+    friend class RenderTargetRenderer;
 
 public:
     SubMesh();
@@ -42,17 +43,23 @@ private:
 class Mesh
 {
     friend class MeshManager;
-    friend class DefaultRenderer;
+    friend class RenderTargetRenderer;
 
 private:
-    Mesh();
+    Mesh(const std::string& file_path);
     void operator delete(void *) {}
+
+public:
+    std::string GetFilePath() const;
 
 public:
     std::vector<SubMesh*> GetSubMeshes() const;
 
 private:
     std::vector<SubMesh*> sub_meshes;
+
+    std::string file_path = "";
+    std::string file_name = "";
 };
 
 #endif // MESH_H

@@ -4,6 +4,7 @@
 #include "3rdParty/MathGeoLib/MathGeoLib.h"
 
 class Mesh;
+class RenderTarget;
 
 class Renderer
 {

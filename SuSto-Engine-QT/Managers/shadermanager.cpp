@@ -350,6 +350,11 @@ void ShaderProgram::UseProgram()
     }
 }
 
+void ShaderProgram::StopUsingProgram()
+{
+    RenderManager::Instance()->UseShaderProgram(0);
+}
+
 std::vector<Shader*> ShaderProgram::GetVertexShaders() const
 {
     return vertex_shaders;

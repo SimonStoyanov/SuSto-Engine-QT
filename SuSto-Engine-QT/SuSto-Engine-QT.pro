@@ -360,7 +360,10 @@ SOURCES += \
     Managers/cameramanager.cpp \
     Managers/inputmanager.cpp \
     Renderers/mesh.cpp \
-    Managers/meshmanager.cpp
+    Managers/meshmanager.cpp \
+    Entity/Components/c_mesh_renderer.cpp \
+    Renderers/rendertarget.cpp \
+    Renderers/rendertargetrenderer.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -864,7 +867,10 @@ HEADERS += \
     3rdParty/Assimp/include/assimp/vector2.inl \
     3rdParty/Assimp/include/assimp/vector3.h \
     3rdParty/Assimp/include/assimp/vector3.inl \
-    3rdParty/Assimp/include/assimp/version.h
+    3rdParty/Assimp/include/assimp/version.h \
+    Entity/Components/c_mesh_renderer.h \
+    Renderers/rendertarget.h \
+    Renderers/rendertargetrenderer.h
 
 FORMS += \
         mainwindow.ui \
@@ -875,7 +881,8 @@ FORMS += \
     transform.ui \
     drawingwidget.ui \
     shape.ui \
-    floatingcontext.ui
+    floatingcontext.ui \
+    meshrenderer.ui
 
 QT += opengl \
 

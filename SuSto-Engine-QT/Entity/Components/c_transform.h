@@ -33,11 +33,14 @@ public:
     void UpdateUI();
     QWidget* GetUI() const;
 
-    void SetPos(const float2& set);
-    float2 GetPos() const;
+    void SetPos(const float3& set);
+    float3 GetPos() const;
 
-    void SetScale(const float2& set);
-    float2 GetScale() const;
+    void SetRotationDegrees(const float3& set);
+    float3 GetRotationDegrees() const;
+
+    void SetScale(const float3& set);
+    float3 GetScale() const;
 
 private slots:
     void OnUIValueChanged(double val);
@@ -46,8 +49,9 @@ private:
     QWidget* ui = nullptr;
     Ui::Transform* form = nullptr;
 
-    float2 pos = float2::zero;
-    float2 scale = float2::one;
+    float3 pos = float3::zero;
+    float3 rotation = float3::zero;
+    float3 scale = float3::one;
 
     C_ShapeRenderer* shape_renderer = nullptr;
 };

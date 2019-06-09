@@ -6,6 +6,8 @@
 #include "Renderers/renderer.h"
 
 class Camera3D;
+class RenderTargetRenderer;
+class RenderTarget;
 
 class SceneRendererManager
 {
@@ -48,8 +50,14 @@ private:
 public:
     void StartRenderers();
 
+    void BindRenderTarget(int w, int h);
+    void BindRenderTarget();
+    void UnbindRenderTarget();
+
     void RenderOnCamera();
     void RenderOnCamera(int w, int h);
+
+    void RenderRenderTarget();
 
 private:
     Renderer *AddRenderer(Renderer* render);
@@ -58,6 +66,9 @@ private:
 
 private:
     std::vector<Renderer*> renderers;
+
+    RenderTargetRenderer* render_target_renderer = nullptr;
+    RenderTarget* render_target = nullptr;
 
     int last_w = 0;
     int last_h = 0;

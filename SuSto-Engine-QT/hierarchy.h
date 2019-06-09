@@ -28,6 +28,10 @@ public slots:
     void SaveScene();
     void LoadScene();
 
+    void LoadModel();
+    void LoadMesh();
+    void LoadTexture();
+
 private slots:
     void on_buttonAddEntity_clicked();
     void on_buttonRemoveEntity_clicked();

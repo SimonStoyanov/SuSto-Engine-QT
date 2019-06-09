@@ -11,6 +11,7 @@
 #include "QFileDialog"
 
 #include "Managers/entitymanager.h"
+#include "Managers/meshmanager.h"
 
 #include "globals.h"
 
@@ -95,6 +96,41 @@ void Hierarchy::LoadScene()
 
     UpdateEntitiesUI();
     UpdateUI();
+}
+
+void Hierarchy::LoadModel()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, ("Load Scene"), "scene_name", (""));
+
+    SPOOKYLOG("Loading: " + fileName.toStdString());
+
+    Entity* new_entity = EntityManager::Instance()->LoadModel(fileName.toStdString());
+
+    HierarchyEntity* new_entity_in_hierarchy = new HierarchyEntity(new_entity, this);
+
+    ui->scrollLayout->addWidget(new_entity_in_hierarchy);
+
+    h_entities.push_back(new_entity_in_hierarchy);
+
+    UpdateEntitiesUI();
+    UpdateUI();
+}
+
+void Hierarchy::LoadMesh()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, ("Load Scene"), "scene_name", (""));
+
+    Mesh* loaded_mesh = MeshManager::Instance()->LoadMesh(fileName.toStdString());
+
+    if(loaded_mesh != nullptr)
+    {
+        MeshManager::Instance()->LoadToVRAM(loaded_mesh);
+    }
+}
+
+void Hierarchy::LoadTexture()
+{
+
 }
 
 void Hierarchy::on_buttonAddEntity_clicked()

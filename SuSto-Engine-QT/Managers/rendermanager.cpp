@@ -28,6 +28,14 @@ void RenderManager::SetGL(RendererWidget *widget)
     }
 }
 
+void RenderManager::UseGL()
+{
+    if(gl != nullptr)
+    {
+        gl->makeCurrent();
+    }
+}
+
 void RenderManager::Start()
 {
     QSurfaceFormat format = QSurfaceFormat::defaultFormat();
@@ -164,6 +172,17 @@ uint RenderManager::GenTexture() const
     return ret;
 }
 
+void RenderManager::SetActiveTexture(uint target)
+{
+     gl->glActiveTexture(target);
+
+     GLenum error = glGetError();
+     if (error != GL_NO_ERROR)
+     {
+         SPOOKYLOG("Error bind texture: " + GetErrorString(error));
+     }
+}
+
 void RenderManager::BindTexture(uint id) const
 {
     BindTexture(GL_TEXTURE_2D, id);
@@ -254,7 +273,12 @@ void RenderManager::Set2DMultisample(uint samples, uint width, uint height)
 
 void RenderManager::SetFrameBufferTexture2D(uint target, uint id)
 {
-    gl->glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, target, id, 0);
+    SetFrameBufferTexture2D(target, GL_COLOR_ATTACHMENT0, id);
+}
+
+void RenderManager::SetFrameBufferTexture2D(uint target, uint attachment, uint id)
+{
+    gl->glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, target, id, 0);
 
     GLenum error = glGetError();
     if (error != GL_NO_ERROR)
@@ -298,16 +322,21 @@ void RenderManager::LoadElementArrayToVRAM(uint size, uint *values, GLenum type)
 
 uint RenderManager::LoadTextureToVRAM(uint w, uint h, GLubyte *tex_data, GLint format) const
 {
+    return LoadTextureToVRAM(w, h, tex_data, format, format, GL_UNSIGNED_BYTE);
+}
+
+uint RenderManager::LoadTextureToVRAM(uint w, uint h, GLubyte *tex_data, GLint internal_format, GLint format, GLint type) const
+{
     uint buff_id = 0;
 
     gl->glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     gl->glGenTextures(1, &buff_id);
     gl->glBindTexture(GL_TEXTURE_2D, buff_id);
+    gl->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    gl->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    gl->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
     gl->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    gl->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    gl->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    gl->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    gl->glTexImage2D(GL_TEXTURE_2D, 0, format, w, h, 0, format, GL_UNSIGNED_BYTE, tex_data);
+    gl->glTexImage2D(GL_TEXTURE_2D, 0, internal_format, w, h, 0, format, type, tex_data);
 
     GLenum error = glGetError();
     if (error != GL_NO_ERROR)
@@ -316,6 +345,16 @@ uint RenderManager::LoadTextureToVRAM(uint w, uint h, GLubyte *tex_data, GLint f
     }
 
     return buff_id;
+}
+
+void RenderManager::LoadTextureToVRAM(uint texture_id, uint w, uint h, GLubyte *tex_data, GLint internal_format, GLint format, GLint type)
+{
+    gl->glBindTexture(GL_TEXTURE_2D, texture_id);
+    gl->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    gl->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    gl->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+    gl->glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    gl->glTexImage2D(GL_TEXTURE_2D, 0, internal_format, w, h, 0, format, type, tex_data);
 }
 
 void RenderManager::DrawElements(GLenum mode, uint elements_count)
@@ -345,7 +384,7 @@ void RenderManager::BindVertexArrayBuffer(uint id) const
     GLenum error = glGetError();
     if (error != GL_NO_ERROR)
     {
-        SPOOKYLOG("Error bind vertex array buffer: " + GetErrorString(error));
+        SPOOKYLOG("Error bind vertex array buffer with id " + std::to_string(id) + ": "+ GetErrorString(error));
     }
 }
 
@@ -458,6 +497,17 @@ void RenderManager::DeleteFrameBuffer(uint id)
         {
             SPOOKYLOG("Error deleting frame buffer: " + GetErrorString(error));
         }
+    }
+}
+
+void RenderManager::DrawBuffer(uint mode)
+{
+    gl->glDrawBuffer(mode);
+
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR)
+    {
+        SPOOKYLOG("Error drawing buffer: " + GetErrorString(error));
     }
 }
 

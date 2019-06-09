@@ -2,6 +2,7 @@
 #include <qfile.h>
 #include "Managers/rendermanager.h"
 #include "Renderers/mesh.h"
+#include "Managers/eventmanager.h"
 
 #include <assimp/cimport.h>
 #include <assimp/postprocess.h>
@@ -20,47 +21,60 @@ MeshManager::MeshManager()
 
 Mesh* MeshManager::LoadMesh(const std::string &filepath)
 {
-    Mesh* ret = new Mesh();
+    Mesh* ret = nullptr;
 
     bool all_correct = true;
 
-    Assimp::Importer importer;
+    all_correct = GetLoadedMeshFromFilepath(filepath) == nullptr;
 
     QFile file(filepath.c_str());
 
-    all_correct = file.open(QIODevice::ReadOnly);
-
-    QByteArray data = file.readAll();
-
     if(all_correct)
     {
-        const aiScene* scene = aiImportFile(filepath.c_str(), aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals | aiProcess_OptimizeMeshes |
-                                            aiProcess_PreTransformVertices | aiProcess_ImproveCacheLocality);
-
-        all_correct = (scene != nullptr) && (scene->mRootNode != nullptr) && ((scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) == false);
+        all_correct = file.open(QIODevice::ReadOnly);
+        file.close();
 
         if(all_correct)
         {
-            if(debug_logs)
-            {
-                SPOOKYLOG("Mesh scene properly loaded: " + filepath);
-            }
+            ret = new Mesh(filepath);
 
-            ProcessNode(scene, scene->mRootNode, ret);
+            const aiScene* scene = aiImportFile(filepath.c_str(), aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals | aiProcess_OptimizeMeshes |
+                                                aiProcess_PreTransformVertices | aiProcess_ImproveCacheLocality);
+
+            all_correct = (scene != nullptr) && (scene->mRootNode != nullptr) && ((scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) == false);
+
+            if(all_correct)
+            {
+                if(debug_logs)
+                {
+                    SPOOKYLOG("Mesh scene properly loaded: " + filepath);
+                }
+
+                ProcessNode(scene, scene->mRootNode, ret);
+            }
+            else
+            {
+                if(scene == nullptr)
+                    SPOOKYLOG("Error loading mesh scene [scene was nullptr]: " + filepath);
+                else if(scene->mRootNode == nullptr)
+                    SPOOKYLOG("Error loading mesh scene [scene root node was nullptr]: " + filepath);
+                else if(scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE)
+                    SPOOKYLOG("Error loading mesh scene [scene flag incomplete]: " + filepath);
+            }
         }
         else
         {
-            if(scene == nullptr)
-                SPOOKYLOG("Error loading mesh scene [scene was nullptr]: " + filepath);
-            else if(scene->mRootNode == nullptr)
-                SPOOKYLOG("Error loading mesh scene [scene root node was nullptr]: " + filepath);
-            else if(scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE)
-                SPOOKYLOG("Error loading mesh scene [scene flag incomplete]: " + filepath);
+            SPOOKYLOG("Error opening mesh file: " + filepath);
+        }
+
+        if(all_correct)
+        {
+            meshes.push_back(ret);
         }
     }
     else
     {
-        SPOOKYLOG("Error opening mesh file: " + filepath);
+        SPOOKYLOG("Mesh file was already loaded: " + filepath);
     }
 
     return ret;
@@ -165,6 +179,8 @@ void MeshManager::LoadToVRAM(Mesh *mesh)
 {
     if(mesh != nullptr)
     {
+        RenderManager::Instance()->UseGL();
+
         std::vector<SubMesh*> sub_meshes = mesh->GetSubMeshes();
 
         SPOOKYLOG(std::to_string(sub_meshes.size()));
@@ -215,6 +231,8 @@ void MeshManager::LoadToVRAM(Mesh *mesh)
                 RenderManager::Instance()->DisableVertexAttributeArray(0);
                 RenderManager::Instance()->DisableVertexAttributeArray(1);
                 RenderManager::Instance()->DisableVertexAttributeArray(2);
+
+                EventManager::Instance()->SendEvent(new Event(EventType::EVENT_MESH_LOADED));
             }
         }
     }
@@ -240,6 +258,23 @@ void MeshManager::UnloadFromVRAM(Mesh *mesh)
             }
         }
     }
+}
+
+Mesh* MeshManager::GetLoadedMeshFromFilepath(const std::string &filepath)
+{
+    Mesh* ret = nullptr;
+
+    for(std::vector<Mesh*>::iterator it = meshes.begin(); it != meshes.end(); ++it)
+    {
+        if((*it)->file_path.compare(filepath) == 0)
+        {
+            ret = (*it);
+
+            break;
+        }
+    }
+
+    return ret;
 }
 
 std::vector<Mesh *> MeshManager::GetAllMeshes() const

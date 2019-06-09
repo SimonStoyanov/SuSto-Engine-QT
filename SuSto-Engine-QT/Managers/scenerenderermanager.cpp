@@ -1,6 +1,8 @@
 #include "scenerenderermanager.h"
 #include "Renderers/defaultrenderer.h"
+#include "Renderers/rendertargetrenderer.h"
 #include "Managers/cameramanager.h"
+#include "Renderers/rendertarget.h"
 #include "globals.h"
 
 SceneRendererManager* SceneRendererManager::instance = nullptr;
@@ -22,7 +24,29 @@ void SceneRendererManager::CleanUp()
 
 void SceneRendererManager::StartRenderers()
 {
+    render_target = new RenderTarget();
+    render_target->Start();
+
+    render_target_renderer = new RenderTargetRenderer();
+    render_target_renderer->Start();
+
     AddRenderer(new DefaultRenderer());
+}
+
+void SceneRendererManager::BindRenderTarget()
+{
+    BindRenderTarget(last_w, last_h);
+}
+void SceneRendererManager::BindRenderTarget(int w, int h)
+{
+    render_target->Resize(float2(w, h));
+
+    render_target->Bind();
+}
+
+void SceneRendererManager::UnbindRenderTarget()
+{
+    render_target->UnBind();
 }
 
 void SceneRendererManager::RenderOnCamera()
@@ -48,6 +72,15 @@ void SceneRendererManager::RenderOnCamera(int w, int h)
     {
         (*it)->Render(view_mat, proj_mat);
     }
+}
+
+void SceneRendererManager::RenderRenderTarget()
+{
+    float4x4 view_mat = CameraManager::Instance()->GetEditorCamera()->GetOpenGLViewMatrix();
+    float4x4 proj_mat = CameraManager::Instance()->GetEditorCamera()->GetOpenGLProjectionMatrix();
+
+    render_target_renderer->SetTarget(render_target);
+    render_target_renderer->Render(view_mat, proj_mat);
 }
 
 Renderer *SceneRendererManager::AddRenderer(Renderer *renderer)

@@ -19,15 +19,7 @@ void C_ShapeRenderer::Start()
 
 void C_ShapeRenderer::Update()
 {
-    if(curr_shape != nullptr)
-    {
-        curr_shape->SetPos(GetOwner()->GetTransform()->GetPos());
 
-        float2 new_size = GetOwner()->GetTransform()->GetScale() * size;
-        curr_shape->SetSize(new_size);
-
-        curr_shape->SetStrokeThickness(stroke);
-    }
 }
 
 void C_ShapeRenderer::CleanUp()

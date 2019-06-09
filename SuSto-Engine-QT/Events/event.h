@@ -4,6 +4,7 @@
 enum EventType
 {
     EVENT_SELECT_ENTITY_CHANGE,
+    EVENT_MESH_LOADED,
 
     EVENT_NULL
 };

@@ -55,7 +55,7 @@ public:
     Frustum GetFrustum();
 
 private:
-    Frustum  frustum;
+    Frustum     frustum;
     float       aspect_ratio = 0.0f;
     float       vertical_fov = 0.0f;
 

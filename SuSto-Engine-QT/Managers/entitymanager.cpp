@@ -8,6 +8,8 @@
 #include "Managers/jsonmanager.h"
 #include "functions.h"
 #include "Entity/entityabstraction.h"
+#include "Entity/Components/c_mesh_renderer.h"
+#include "Managers/meshmanager.h"
 
 EntityManager* EntityManager::instance = nullptr;
 
@@ -108,6 +110,7 @@ void EntityManager::SetSelectedEntity(Entity* entity)
 void EntityManager::Start()
 {
     AddComponentType(ComponentType::COMPONENT_TRANSFORM, "Transform");
+    AddComponentType(ComponentType::COMPONENT_MESH_RENDERER, "Mesh Renderer");
 }
 
 void EntityManager::CleanUp()
@@ -148,6 +151,27 @@ std::vector<Entity *> EntityManager::DuplicateEntity(std::vector<Entity *> entit
     EntityAbstraction abs;
     abs.Abstract(entity);
     ret = abs.DeAbstract();
+
+    return ret;
+}
+
+Entity* EntityManager::LoadModel(const std::string &filepath)
+{
+    Entity* ret = nullptr;
+
+    Mesh* loaded_mesh = MeshManager::Instance()->LoadMesh(filepath);
+
+    if(loaded_mesh != nullptr)
+    {
+        MeshManager::Instance()->LoadToVRAM(loaded_mesh);
+
+        Entity* new_entity = CreateEntity();
+        new_entity->SetName("Model");
+
+        C_MeshRenderer* c_mesh = (C_MeshRenderer*)new_entity->AddComponent(ComponentType::COMPONENT_MESH_RENDERER);
+
+        c_mesh->SetMesh(loaded_mesh);
+    }
 
     return ret;
 }

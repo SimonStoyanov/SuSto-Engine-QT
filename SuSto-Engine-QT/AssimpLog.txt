@@ -1,0 +1,24 @@
+Info,  T14136: Load C:/Users/Guillem/Desktop/PalmTree/PalmTree.obj
+Info,  T14136: Found a matching importer for this file format: Wavefront Object Importer.
+Info,  T14136: Import root directory is 'C:/Users/Guillem/Desktop/PalmTree\'
+Info,  T14136: Entering post processing pipeline
+Info,  T14136: Removed 2 nodes and 0 animation channels (3 output nodes)
+Info,  T14136: Kept 0 lights and 0 cameras
+Info,  T14136: Moved 2 meshes to WCS (number of output meshes: 2)
+Warn,  T14136: Mesh 0: Not suitable for vcache optimization
+Warn,  T14136: Mesh 1: Not suitable for vcache optimization
+Info,  T14136: Cache relevant are 0 meshes (0 faces). Average output ACMR is -nan(ind)
+Info,  T14136: Leaving post processing pipeline
+Info,  T14136: Load C:/Users/Guillem/Desktop/Patrick/Patrick.obj
+Info,  T14136: Found a matching importer for this file format: Wavefront Object Importer.
+Info,  T14136: Import root directory is 'C:/Users/Guillem/Desktop/Patrick\'
+Error, T14136: OBJ: No object detected to attach a new mesh instance.
+Info,  T14136: Entering post processing pipeline
+Info,  T14136: Removed 2 nodes and 0 animation channels (7 output nodes)
+Info,  T14136: Kept 0 lights and 0 cameras
+Info,  T14136: Moved 31 meshes to WCS (number of output meshes: 6)
+Info,  T14136: TriangulateProcess finished. All polygons have been triangulated.
+Info,  T14136: GenVertexNormalsProcess finished. Vertex normals have been calculated
+Warn,  T14136: Mesh 2: Not suitable for vcache optimization
+Info,  T14136: Cache relevant are 5 meshes (2976 faces). Average output ACMR is 2.026882
+Info,  T14136: Leaving post processing pipeline

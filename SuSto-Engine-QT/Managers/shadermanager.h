@@ -119,6 +119,7 @@ public:
 
     bool LinkProgram();
     void UseProgram();
+    void StopUsingProgram();
     void SetProgramParameters(ShaderProgramParameters para);
 
     std::vector<Shader*> GetVertexShaders() const;

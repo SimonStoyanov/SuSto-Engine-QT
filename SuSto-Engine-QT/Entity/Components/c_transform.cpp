@@ -28,14 +28,11 @@ void C_Transform::CleanUp()
 
 void C_Transform::OnSaveAbstraction(DataAbstraction &abs)
 {
-    abs.AddFloat2("pos", pos);
-    abs.AddFloat2("scale", scale);
+
 }
 
 void C_Transform::OnLoadAbstraction(DataAbstraction &abs)
 {
-    SetPos(abs.GetFloat2("pos"));
-    SetScale(abs.GetFloat2("scale"));
 
     UpdateUI();
 }
@@ -89,14 +86,20 @@ void C_Transform::UpdateUI()
 {
     if(ui != nullptr)
     {
-        float2 pos = GetPos();
-        float2 scale = GetScale();
+        float3 pos = GetPos();
+        float3 scale = GetScale();
 
         form->posx->setValue(pos.x);
         form->posy->setValue(pos.y);
+        form->posz->setValue(pos.z);
+
+        form->rotx->setValue(rotation.x);
+        form->roty->setValue(rotation.y);
+        form->rotz->setValue(rotation.z);
 
         form->sclx->setValue(scale.x);
         form->scly->setValue(scale.y);
+        form->sclz->setValue(scale.z);
     }
 }
 
@@ -105,28 +108,39 @@ QWidget *C_Transform::GetUI() const
     return ui;
 }
 
-void C_Transform::SetPos(const float2 &set)
+void C_Transform::SetPos(const float3 &set)
 {
     pos = set;
 }
 
-float2 C_Transform::GetPos() const
+float3 C_Transform::GetPos() const
 {
     return pos;
 }
 
-void C_Transform::SetScale(const float2 &set)
+void C_Transform::SetRotationDegrees(const float3 &set)
+{
+    rotation = set;
+}
+
+float3 C_Transform::GetRotationDegrees() const
+{
+    return rotation;
+}
+
+void C_Transform::SetScale(const float3 &set)
 {
     scale = set;
 }
 
-float2 C_Transform::GetScale() const
+float3 C_Transform::GetScale() const
 {
     return scale;
 }
 
 void C_Transform::OnUIValueChanged(double val)
 {
-    SetPos(float2(form->posx->value(), form->posy->value()));
-    SetScale(float2(form->sclx->value(), form->scly->value()));
+    SetPos(float3(form->posx->value(), form->posy->value(), form->posz->value()));
+    SetRotationDegrees(float3(form->rotx->value(), form->roty->value(), form->rotz->value()));
+    SetScale(float3(form->sclx->value(), form->scly->value(), form->sclz->value()));
 }

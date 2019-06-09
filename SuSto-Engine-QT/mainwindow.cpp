@@ -45,9 +45,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(actionCreateFile()));
     connect(ui->actionExit, SIGNAL(triggered()), this, SLOT(actionExit()));
     connect(ui->actionCreate_New_Scene, SIGNAL(triggered()), hierarchy, SLOT(NewScene()));
-    connect(ui->actionSave_Scene, SIGNAL(triggered()), hierarchy, SLOT(SaveScene()));
-    connect(ui->actionLoad_Scene, SIGNAL(triggered()), hierarchy, SLOT(LoadScene()));
-    //connect(ui->acti, SIGNAL(triggered()), hierarchy, SLOT(LoadScene()));
+    connect(ui->actionLoadModel, SIGNAL(triggered()), hierarchy, SLOT(LoadModel()));
+    connect(ui->actionLoad_Mesh, SIGNAL(triggered()), hierarchy, SLOT(LoadMesh()));
+    connect(ui->actionLoadTexture, SIGNAL(triggered()), hierarchy, SLOT(LoadTexture()));
 
     // TOOLBAR EDIT
     connect(ui->actionDuplicate, SIGNAL(triggered()), hierarchy, SLOT(DuplicateEntity()));
