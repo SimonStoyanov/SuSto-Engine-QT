@@ -12,6 +12,7 @@
 #include "meshmanager.h"
 #include "globals.h"
 #include "QTimer"
+#include "texturemanager.h"
 #include "QObject"
 
 AppManager* AppManager::instance = nullptr;
@@ -41,6 +42,7 @@ void AppManager::Start(QApplication& app)
     CameraManager::Instance()->Start();
     InputManager::Instance()->Start();
     MeshManager::Instance()->Start();
+    TextureManager::Instance()->Start();
 
     workTimer.setInterval(5);
     workTimer.start();
@@ -70,6 +72,7 @@ void AppManager::CleanUp(QApplication& app)
 
     app.removeEventFilter(InputManager::Instance());
 
+    TextureManager::DestroyInstance();
     MeshManager::DestroyInstance();
     InputManager::DestroyInstance();
     CameraManager::DestroyInstance();

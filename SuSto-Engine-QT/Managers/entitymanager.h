@@ -56,7 +56,7 @@ public:
 
     std::vector<Entity*> DuplicateEntity(std::vector<Entity*> entity);
 
-    Entity* LoadModel(const std::string& filepath);
+    std::vector<Entity*> LoadModel(const std::string& filepath);
 
 private:
     void Start();

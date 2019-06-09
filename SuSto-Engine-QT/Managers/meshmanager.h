@@ -5,6 +5,7 @@
 #include <assimp/scene.h>
 #include <assimp/DefaultLogger.hpp>
 #include "globals.h"
+#include <filesystem>
 
 class Mesh;
 class SubMesh;
@@ -56,20 +57,21 @@ public:
     }
 
 public:    
-    Mesh* LoadMesh(const std::string& filepath);
+    std::vector<Mesh*> LoadMesh(const std::string& filepath);
 
     void LoadToVRAM(Mesh* mesh);
     void UnloadFromVRAM(Mesh* mesh);
 
-    Mesh *GetLoadedMeshFromFilepath(const std::string& filepath);
+    std::vector<Mesh*> GetLoadedMeshesFromFilepath(const std::string& filepath);
+    Mesh* GetLoadedMeshFromFilepathPlusName(const std::string& filepath_plus_name);
     std::vector<Mesh*> GetAllMeshes() const;
 
 private:
     void Start();
     void CleanUp();
 
-    void ProcessNode(const aiScene* scene, aiNode* node, Mesh* mesh);
-    SubMesh* ProcessMesh(const aiScene* scene, aiMesh* mesh);
+    void ProcessNode(const aiScene* scene, aiNode* node, std::vector<Mesh*>& mesh_list, std::experimental::filesystem::path path);
+    Mesh* ProcessMesh(const aiScene* aiscene, aiMesh* aimesh, std::experimental::filesystem::path path);
 
 private:
     static MeshManager* instance;

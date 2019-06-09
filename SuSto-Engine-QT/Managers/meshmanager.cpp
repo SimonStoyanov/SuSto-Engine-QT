@@ -10,6 +10,8 @@
 #include <assimp/Importer.hpp>
 #include <assimp/importerdesc.h>
 
+#include <filesystem>
+
 MeshManager* MeshManager::instance = nullptr;
 
 MeshManager::MeshManager()
@@ -19,13 +21,15 @@ MeshManager::MeshManager()
     Assimp::DefaultLogger::get()->attachStream(new AssimpLogger(),severity);
 }
 
-Mesh* MeshManager::LoadMesh(const std::string &filepath)
+std::vector<Mesh*> MeshManager::LoadMesh(const std::string &filepath)
 {
-    Mesh* ret = nullptr;
+    std::vector<Mesh*> ret;
+
+    std::experimental::filesystem::path path = filepath;
 
     bool all_correct = true;
 
-    all_correct = GetLoadedMeshFromFilepath(filepath) == nullptr;
+    all_correct = GetLoadedMeshesFromFilepath(filepath).size() == 0;
 
     QFile file(filepath.c_str());
 
@@ -36,10 +40,8 @@ Mesh* MeshManager::LoadMesh(const std::string &filepath)
 
         if(all_correct)
         {
-            ret = new Mesh(filepath);
-
             const aiScene* scene = aiImportFile(filepath.c_str(), aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals | aiProcess_OptimizeMeshes |
-                                                aiProcess_PreTransformVertices | aiProcess_ImproveCacheLocality);
+                                                aiProcess_PreTransformVertices | aiProcess_ImproveCacheLocality | aiProcess_CalcTangentSpace);
 
             all_correct = (scene != nullptr) && (scene->mRootNode != nullptr) && ((scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) == false);
 
@@ -50,7 +52,7 @@ Mesh* MeshManager::LoadMesh(const std::string &filepath)
                     SPOOKYLOG("Mesh scene properly loaded: " + filepath);
                 }
 
-                ProcessNode(scene, scene->mRootNode, ret);
+                ProcessNode(scene, scene->mRootNode, ret, path);
             }
             else
             {
@@ -66,15 +68,18 @@ Mesh* MeshManager::LoadMesh(const std::string &filepath)
         {
             SPOOKYLOG("Error opening mesh file: " + filepath);
         }
-
-        if(all_correct)
-        {
-            meshes.push_back(ret);
-        }
     }
     else
     {
         SPOOKYLOG("Mesh file was already loaded: " + filepath);
+    }
+
+    if(all_correct)
+    {
+        for(std::vector<Mesh*>::iterator it = ret.begin(); it != ret.end(); ++it)
+        {
+            meshes.push_back(*it);
+        }
     }
 
     return ret;
@@ -90,7 +95,7 @@ void MeshManager::CleanUp()
 
 }
 
-void MeshManager::ProcessNode(const aiScene *scene, aiNode *node, Mesh *mesh)
+void MeshManager::ProcessNode(const aiScene *aiscene, aiNode *node, std::vector<Mesh*>& mesh_list, std::experimental::filesystem::path path)
 {
     std::vector<aiNode*> nodes_to_check;
     nodes_to_check.push_back(node);
@@ -101,11 +106,11 @@ void MeshManager::ProcessNode(const aiScene *scene, aiNode *node, Mesh *mesh)
 
         for(int i = 0; i < curr_node->mNumMeshes; ++i)
         {
-            aiMesh* aimesh = scene->mMeshes[curr_node->mMeshes[i]];
+            aiMesh* aimesh = aiscene->mMeshes[curr_node->mMeshes[i]];
 
-            SubMesh* sub_mesh = ProcessMesh(scene, aimesh);
+            Mesh* new_mesh = ProcessMesh(aiscene, aimesh, path);
 
-            mesh->sub_meshes.push_back(sub_mesh);
+            mesh_list.push_back(new_mesh);
         }
 
         for(int i = 0; i < curr_node->mNumChildren; ++i)
@@ -119,19 +124,21 @@ void MeshManager::ProcessNode(const aiScene *scene, aiNode *node, Mesh *mesh)
     }
 }
 
-SubMesh *MeshManager::ProcessMesh(const aiScene *scene, aiMesh *mesh)
+Mesh *MeshManager::ProcessMesh(const aiScene *aiscene, aiMesh * aimesh, std::experimental::filesystem::path path)
 {
-    SubMesh* ret = new SubMesh();
+    Mesh* ret = new Mesh(path.string());
 
-    ret->has_uvs = mesh->HasTextureCoords(0);
+    ret->name = aimesh->mName.C_Str();
 
-    ret->vertex_buffer.reserve(mesh->mNumVertices * 2 * 3);
-    ret->vertex_buffer.reserve(mesh->mNumVertices * 2);
+    ret->has_uvs = aimesh->HasTextureCoords(0);
 
-    for(int i = 0; i < mesh->mNumVertices; ++i)
+    ret->vertex_buffer.reserve(aimesh->mNumVertices * 2 * 3);
+    ret->vertex_buffer.reserve(aimesh->mNumVertices * 2);
+
+    for(int i = 0; i < aimesh->mNumVertices; ++i)
     {
-        aiVector3D aivertice = mesh->mVertices[i];
-        aiVector3D ainormals = mesh->mNormals[i];
+        aiVector3D aivertice = aimesh->mVertices[i];
+        aiVector3D ainormals = aimesh->mNormals[i];
 
         ret->vertex_buffer.push_back(aivertice.x);
         ret->vertex_buffer.push_back(aivertice.y);
@@ -143,7 +150,7 @@ SubMesh *MeshManager::ProcessMesh(const aiScene *scene, aiMesh *mesh)
 
         if(ret->has_uvs)
         {
-            aiVector3D aiuvs = mesh->mTextureCoords[0][i];
+            aiVector3D aiuvs = aimesh->mTextureCoords[0][i];
 
             ret->vertex_buffer.push_back(aiuvs.x);
             ret->vertex_buffer.push_back(aiuvs.y);
@@ -155,11 +162,11 @@ SubMesh *MeshManager::ProcessMesh(const aiScene *scene, aiMesh *mesh)
         }
     }
 
-    ret->index_buffer.reserve(mesh->mNumFaces * 3);
+    ret->index_buffer.reserve(aimesh->mNumFaces * 3);
 
-    for(int i = 0; i < mesh->mNumFaces; ++i)
+    for(int i = 0; i < aimesh->mNumFaces; ++i)
     {
-        aiFace aiface = mesh->mFaces[i];
+        aiFace aiface = aimesh->mFaces[i];
 
         if(aiface.mNumIndices <= 3)
         {
@@ -172,6 +179,56 @@ SubMesh *MeshManager::ProcessMesh(const aiScene *scene, aiMesh *mesh)
         }
     }
 
+    // Textures -----------
+
+    if(aimesh->mMaterialIndex > 0 && aimesh->mMaterialIndex < aiscene->mNumMaterials)
+    {
+        aiMaterial* aimaterial = aiscene->mMaterials[aimesh->mMaterialIndex];
+
+        int diffuse_count = aimaterial->GetTextureCount(aiTextureType_DIFFUSE);
+        int height_count = aimaterial->GetTextureCount(aiTextureType_HEIGHT);
+        int normals_count = aimaterial->GetTextureCount(aiTextureType_NORMALS);
+
+        if(diffuse_count > 0)
+        {
+            aiString texture_path;
+            bool success = aimaterial->GetTexture(aiTextureType_DIFFUSE, 0, &texture_path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS;
+
+            std::experimental::filesystem::path new_path = path.parent_path().string() + "/" + std::string(texture_path.C_Str());
+
+            if(success)
+                ret->textures_difuse_paths.push_back(new_path.string());
+
+            SPOOKYLOG("Mesh contains diffuse: " + new_path.string());
+        }
+
+        if(height_count > 0)
+        {
+            aiString texture_path;
+            bool success = aimaterial->GetTexture(aiTextureType_HEIGHT, 0, &texture_path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS;
+
+            std::experimental::filesystem::path new_path = path.parent_path().string() + "/" + std::string(texture_path.C_Str());
+
+            if(success)
+                ret->textures_height_paths.push_back(new_path.string());
+
+            SPOOKYLOG("Mesh contains height map: " + new_path.string());
+        }
+
+        if(normals_count > 0)
+        {
+            aiString texture_path;
+            bool success = aimaterial->GetTexture(aiTextureType_NORMALS, 0, &texture_path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS;
+
+            std::experimental::filesystem::path new_path = path.parent_path().string() + "/" + std::string(texture_path.C_Str());
+
+            if(success)
+                ret->textures_normals_paths.push_back(new_path.string());
+
+            SPOOKYLOG("Mesh contains normal map: " + new_path.string());
+        }
+    }
+
     return ret;
 }
 
@@ -181,60 +238,53 @@ void MeshManager::LoadToVRAM(Mesh *mesh)
     {
         RenderManager::Instance()->UseGL();
 
-        std::vector<SubMesh*> sub_meshes = mesh->GetSubMeshes();
-
-        SPOOKYLOG(std::to_string(sub_meshes.size()));
-
-        for(std::vector<SubMesh*>::iterator it = sub_meshes.begin(); it != sub_meshes.end(); ++it)
+        if(!mesh->loaded)
         {
-            SubMesh* curr_submesh = (*it);
+            mesh->loaded = true;
 
-            if(!curr_submesh->loaded)
-            {
-                curr_submesh->loaded = true;
+            SPOOKYLOG("Loading mesh to VRAM with vao: " + std::to_string((mesh->vao)));
 
-                // VAO
-                curr_submesh->vao = RenderManager::Instance()->GenVertexArrayBuffer();
-                RenderManager::Instance()->BindVertexArrayBuffer(curr_submesh->vao);
+            SPOOKYLOG("Loaded " + std::to_string(mesh->vertex_buffer.size()) + " vertices to VRAM");
+            SPOOKYLOG("Loaded " + std::to_string(mesh->index_buffer.size()) + " indices to VRAM");
 
-                // VBO
-                curr_submesh->vbo = RenderManager::Instance()->GenBuffer();
-                RenderManager::Instance()->BindArrayBuffer(curr_submesh->vbo);
+            // VAO
+            mesh->vao = RenderManager::Instance()->GenVertexArrayBuffer();
+            RenderManager::Instance()->BindVertexArrayBuffer(mesh->vao);
 
-                RenderManager::Instance()->LoadArrayToVRAM(curr_submesh->vertex_buffer.size() * sizeof(float),
-                                                           &curr_submesh->vertex_buffer[0], GL_STATIC_DRAW);
+            // VBO
+            mesh->vbo = RenderManager::Instance()->GenBuffer();
+            RenderManager::Instance()->BindArrayBuffer(mesh->vbo);
 
-                RenderManager::Instance()->EnableVertexAttributeArray(0);
-                RenderManager::Instance()->EnableVertexAttributeArray(1);
-                RenderManager::Instance()->EnableVertexAttributeArray(2);
+            RenderManager::Instance()->LoadArrayToVRAM(mesh->vertex_buffer.size() * sizeof(float),
+                                                       &mesh->vertex_buffer[0], GL_STATIC_DRAW);
 
-                // Set info
-                RenderManager::Instance()->SetVertexAttributePointer(0, 3, 8, 0);
-                RenderManager::Instance()->SetVertexAttributePointer(1, 3, 8, 3);
-                RenderManager::Instance()->SetVertexAttributePointer(2, 2, 8, 6);
+            RenderManager::Instance()->EnableVertexAttributeArray(0);
+            RenderManager::Instance()->EnableVertexAttributeArray(1);
+            RenderManager::Instance()->EnableVertexAttributeArray(2);
 
-                // VBIO
-                curr_submesh->vbio = RenderManager::Instance()->GenBuffer();
-                RenderManager::Instance()->BindElementArrayBuffer(curr_submesh->vbio);
+            // Set info
+            RenderManager::Instance()->SetVertexAttributePointer(0, 3, 8, 0);
+            RenderManager::Instance()->SetVertexAttributePointer(1, 3, 8, 3);
+            RenderManager::Instance()->SetVertexAttributePointer(2, 2, 8, 6);
 
-                RenderManager::Instance()->LoadElementArrayToVRAM(curr_submesh->index_buffer.size() * sizeof(uint),
-                                                                  &curr_submesh->index_buffer[0], GL_STATIC_DRAW);
+            // VBIO
+            mesh->vbio = RenderManager::Instance()->GenBuffer();
+            RenderManager::Instance()->BindElementArrayBuffer(mesh->vbio);
 
-                SPOOKYLOG("Loading mesh to VRAM with vao: " + std::to_string((curr_submesh->vao)));
+            RenderManager::Instance()->LoadElementArrayToVRAM(mesh->index_buffer.size() * sizeof(uint),
+                                                              &mesh->index_buffer[0], GL_STATIC_DRAW);
 
-                SPOOKYLOG("Loaded " + std::to_string(curr_submesh->vertex_buffer.size()) + " vertices to VRAM");
-                SPOOKYLOG("Loaded " + std::to_string(curr_submesh->index_buffer.size()) + " indices to VRAM");
 
-                // Clear
-                RenderManager::Instance()->UnbindVertexArrayBuffer();
+            // Clear
+            RenderManager::Instance()->UnbindVertexArrayBuffer();
 
-                RenderManager::Instance()->DisableVertexAttributeArray(0);
-                RenderManager::Instance()->DisableVertexAttributeArray(1);
-                RenderManager::Instance()->DisableVertexAttributeArray(2);
+            RenderManager::Instance()->DisableVertexAttributeArray(0);
+            RenderManager::Instance()->DisableVertexAttributeArray(1);
+            RenderManager::Instance()->DisableVertexAttributeArray(2);
 
-                EventManager::Instance()->SendEvent(new Event(EventType::EVENT_MESH_LOADED));
-            }
+            EventManager::Instance()->SendEvent(new Event(EventType::EVENT_MESH_LOADED));
         }
+
     }
 }
 
@@ -242,35 +292,46 @@ void MeshManager::UnloadFromVRAM(Mesh *mesh)
 {
     if(mesh != nullptr)
     {
-        std::vector<SubMesh*> sub_meshes = mesh->GetSubMeshes();
+        RenderManager::Instance()->UseGL();
 
-        for(std::vector<SubMesh*>::iterator it = sub_meshes.begin(); it != sub_meshes.end(); ++it)
+        if(mesh->loaded)
         {
-            SubMesh* curr_submesh = (*it);
+            mesh->loaded = false;
 
-            if(curr_submesh->loaded)
-            {
-                curr_submesh->loaded = false;
+            RenderManager::Instance()->DeleteFrameBuffer(mesh->vao);
 
-                RenderManager::Instance()->DeleteFrameBuffer(curr_submesh->vao);
-
-                curr_submesh->vao = 0;
-            }
+            mesh->vao = 0;
         }
+
     }
 }
 
-Mesh* MeshManager::GetLoadedMeshFromFilepath(const std::string &filepath)
+Mesh *MeshManager::GetLoadedMeshFromFilepathPlusName(const std::string &filepath_plus_name)
 {
     Mesh* ret = nullptr;
 
     for(std::vector<Mesh*>::iterator it = meshes.begin(); it != meshes.end(); ++it)
     {
-        if((*it)->file_path.compare(filepath) == 0)
+        if((*it)->GetFilePathPlusName().compare(filepath_plus_name) == 0)
         {
             ret = (*it);
 
             break;
+        }
+    }
+
+    return ret;
+}
+
+std::vector<Mesh*> MeshManager::GetLoadedMeshesFromFilepath(const std::string &filepath)
+{
+    std::vector<Mesh*> ret;
+
+    for(std::vector<Mesh*>::iterator it = meshes.begin(); it != meshes.end(); ++it)
+    {
+        if((*it)->GetFilePath().compare(filepath) == 0)
+        {
+            ret.push_back((*it));
         }
     }
 

@@ -9,6 +9,8 @@
 #include "globals.h"
 #include "hierarchyentity.h"
 #include "QFileDialog"
+#include "Renderers/texture.h"
+#include "Managers/texturemanager.h"
 
 #include "Managers/entitymanager.h"
 #include "Managers/meshmanager.h"
@@ -104,13 +106,16 @@ void Hierarchy::LoadModel()
 
     SPOOKYLOG("Loading: " + fileName.toStdString());
 
-    Entity* new_entity = EntityManager::Instance()->LoadModel(fileName.toStdString());
+    std::vector<Entity*> new_entity = EntityManager::Instance()->LoadModel(fileName.toStdString());
 
-    HierarchyEntity* new_entity_in_hierarchy = new HierarchyEntity(new_entity, this);
+    for(std::vector<Entity*>::iterator it = new_entity.begin(); it != new_entity.end(); ++it)
+    {
+        HierarchyEntity* new_entity_in_hierarchy = new HierarchyEntity((*it), this);
 
-    ui->scrollLayout->addWidget(new_entity_in_hierarchy);
+        ui->scrollLayout->addWidget(new_entity_in_hierarchy);
 
-    h_entities.push_back(new_entity_in_hierarchy);
+        h_entities.push_back(new_entity_in_hierarchy);
+    }
 
     UpdateEntitiesUI();
     UpdateUI();
@@ -118,19 +123,26 @@ void Hierarchy::LoadModel()
 
 void Hierarchy::LoadMesh()
 {
-    QString fileName = QFileDialog::getOpenFileName(this, ("Load Scene"), "scene_name", (""));
+    QString fileName = QFileDialog::getOpenFileName(this, ("Load Mesh"), "mesh", (""));
 
-    Mesh* loaded_mesh = MeshManager::Instance()->LoadMesh(fileName.toStdString());
+    std::vector<Mesh*> loaded_meshes = MeshManager::Instance()->LoadMesh(fileName.toStdString());
 
-    if(loaded_mesh != nullptr)
+    for(std::vector<Mesh*>::iterator it = loaded_meshes.begin(); it != loaded_meshes.end(); ++it)
     {
-        MeshManager::Instance()->LoadToVRAM(loaded_mesh);
+        MeshManager::Instance()->LoadToVRAM((*it));
     }
 }
 
 void Hierarchy::LoadTexture()
 {
+    QString fileName = QFileDialog::getOpenFileName(this, ("Load Texture"), "texture", (""));
 
+    Texture* loaded_texture = TextureManager::Instance()->LoadTexture(fileName.toStdString());
+
+    if(loaded_texture != nullptr)
+    {
+        TextureManager::Instance()->LoadToVRAM(loaded_texture);
+    }
 }
 
 void Hierarchy::on_buttonAddEntity_clicked()

@@ -111,6 +111,7 @@ void EntityManager::Start()
 {
     AddComponentType(ComponentType::COMPONENT_TRANSFORM, "Transform");
     AddComponentType(ComponentType::COMPONENT_MESH_RENDERER, "Mesh Renderer");
+    AddComponentType(ComponentType::COMPONENT_MATERIAL_RENDERER, "Material Renderer");
 }
 
 void EntityManager::CleanUp()
@@ -155,22 +156,27 @@ std::vector<Entity *> EntityManager::DuplicateEntity(std::vector<Entity *> entit
     return ret;
 }
 
-Entity* EntityManager::LoadModel(const std::string &filepath)
+std::vector<Entity*> EntityManager::LoadModel(const std::string &filepath)
 {
-    Entity* ret = nullptr;
+    std::vector<Entity*> ret;
 
-    Mesh* loaded_mesh = MeshManager::Instance()->LoadMesh(filepath);
+    std::vector<Mesh*> loaded_meshes = MeshManager::Instance()->LoadMesh(filepath);
 
-    if(loaded_mesh != nullptr)
+    if(loaded_meshes.size() > 0)
     {
-        MeshManager::Instance()->LoadToVRAM(loaded_mesh);
+        for(std::vector<Mesh*>::iterator it = loaded_meshes.begin(); it != loaded_meshes.end(); ++it)
+        {
+            MeshManager::Instance()->LoadToVRAM((*it));
 
-        Entity* new_entity = CreateEntity();
-        new_entity->SetName("Model");
+            Entity* new_entity = CreateEntity();
+            new_entity->SetName((*it)->GetFilePlusName());
 
-        C_MeshRenderer* c_mesh = (C_MeshRenderer*)new_entity->AddComponent(ComponentType::COMPONENT_MESH_RENDERER);
+            C_MeshRenderer* c_mesh = (C_MeshRenderer*)new_entity->AddComponent(ComponentType::COMPONENT_MESH_RENDERER);
 
-        c_mesh->SetMesh(loaded_mesh);
+            c_mesh->SetMesh((*it));
+
+            ret.push_back(new_entity);
+        }
     }
 
     return ret;

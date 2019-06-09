@@ -84,13 +84,17 @@ void C_MeshRenderer::UpdateMeshComboBox()
 {
     std::vector<Mesh*> meshes = MeshManager::Instance()->GetAllMeshes();
 
+    QString selected = form->MeshComboBoxSelector->itemText(form->MeshComboBoxSelector->currentIndex());
+
     form->MeshComboBoxSelector->clear();
 
     for(std::vector<Mesh*>::iterator it = meshes.begin(); it != meshes.end(); ++it)
     {
-        QString text = QString::fromStdString((*it)->GetFilePath());
+        QString text = QString::fromStdString((*it)->GetFilePathPlusName());
         form->MeshComboBoxSelector->addItem(text, text);
     }
+
+    form->MeshComboBoxSelector->setCurrentText(selected);
 }
 
 void C_MeshRenderer::OnSelectedMeshChanges(const QString& new_shape)
@@ -101,7 +105,7 @@ void C_MeshRenderer::OnSelectedMeshChanges(const QString& new_shape)
     {
         QString curr_val = form->MeshComboBoxSelector->itemText(form->MeshComboBoxSelector->currentIndex());
 
-        mesh = MeshManager::Instance()->GetLoadedMeshFromFilepath(curr_val.toStdString());
+        mesh = MeshManager::Instance()->GetLoadedMeshFromFilepathPlusName(curr_val.toStdString());
 
     }
 

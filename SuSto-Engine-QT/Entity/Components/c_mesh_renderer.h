@@ -13,8 +13,6 @@ class MeshRenderer;
 class C_MeshRenderer : public Component
 {
 public:
-    C_MeshRenderer();
-
     Q_OBJECT
 
 public:

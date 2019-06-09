@@ -363,7 +363,10 @@ SOURCES += \
     Managers/meshmanager.cpp \
     Entity/Components/c_mesh_renderer.cpp \
     Renderers/rendertarget.cpp \
-    Renderers/rendertargetrenderer.cpp
+    Renderers/rendertargetrenderer.cpp \
+    Managers/texturemanager.cpp \
+    Renderers/texture.cpp \
+    Entity/Components/c_material_renderer.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -870,7 +873,11 @@ HEADERS += \
     3rdParty/Assimp/include/assimp/version.h \
     Entity/Components/c_mesh_renderer.h \
     Renderers/rendertarget.h \
-    Renderers/rendertargetrenderer.h
+    Renderers/rendertargetrenderer.h \
+    Managers/texturemanager.h \
+    Renderers/texture.h \
+    3rdParty/StbImage/stb_image.h \
+    Entity/Components/c_material_renderer.h
 
 FORMS += \
         mainwindow.ui \
@@ -882,7 +889,8 @@ FORMS += \
     drawingwidget.ui \
     shape.ui \
     floatingcontext.ui \
-    meshrenderer.ui
+    meshrenderer.ui \
+    materialrenderer.ui
 
 QT += opengl \
 
@@ -932,3 +940,4 @@ else:unix: LIBS += -L$$PWD/3rdParty/Assimp/lib/ -lassimp
 
 INCLUDEPATH += $$PWD/3rdParty/Assimp/include
 DEPENDPATH += $$PWD/3rdParty/Assimp/include
+

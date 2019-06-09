@@ -20,51 +20,49 @@ void RenderTargetRenderer::Start()
     SPOOKYLOG("DEFAULT PLANE ----------");
 
     plane_mesh = new Mesh("plane_default");
-    SubMesh* submesh = new SubMesh();
-    plane_mesh->sub_meshes.push_back(submesh);
 
-    submesh->vertex_buffer.push_back(-1);
-    submesh->vertex_buffer.push_back(-1);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(-1);
+    plane_mesh->vertex_buffer.push_back(-1);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
 
-    submesh->vertex_buffer.push_back(1);
-    submesh->vertex_buffer.push_back(-1);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(1);
-    submesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(1);
+    plane_mesh->vertex_buffer.push_back(-1);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(1);
+    plane_mesh->vertex_buffer.push_back(0);
 
-    submesh->vertex_buffer.push_back(1);
-    submesh->vertex_buffer.push_back(1);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(1);
-    submesh->vertex_buffer.push_back(1);
+    plane_mesh->vertex_buffer.push_back(1);
+    plane_mesh->vertex_buffer.push_back(1);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(1);
+    plane_mesh->vertex_buffer.push_back(1);
 
-    submesh->vertex_buffer.push_back(-1);
-    submesh->vertex_buffer.push_back(1);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(0);
-    submesh->vertex_buffer.push_back(1);
+    plane_mesh->vertex_buffer.push_back(-1);
+    plane_mesh->vertex_buffer.push_back(1);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(1);
 
-    submesh->index_buffer.push_back(0);
-    submesh->index_buffer.push_back(1);
-    submesh->index_buffer.push_back(3);
-    submesh->index_buffer.push_back(1);
-    submesh->index_buffer.push_back(2);
-    submesh->index_buffer.push_back(3);
+    plane_mesh->index_buffer.push_back(0);
+    plane_mesh->index_buffer.push_back(1);
+    plane_mesh->index_buffer.push_back(3);
+    plane_mesh->index_buffer.push_back(1);
+    plane_mesh->index_buffer.push_back(2);
+    plane_mesh->index_buffer.push_back(3);
 
     MeshManager::Instance()->LoadToVRAM(plane_mesh);
 
@@ -124,7 +122,7 @@ void RenderTargetRenderer::Render(const float4x4 &view, const float4x4 &projecti
 
     if(render_target != nullptr)
     {
-        RenderManager::Instance()->BindVertexArrayBuffer(plane_mesh->sub_meshes[0]->GetVao());
+        RenderManager::Instance()->BindVertexArrayBuffer(plane_mesh->GetVao());
 
         RenderManager::Instance()->SetUniformMatrix(program->GetID(), "View", view.ptr());
         RenderManager::Instance()->SetUniformMatrix(program->GetID(), "Projection", projection.ptr());
@@ -136,7 +134,7 @@ void RenderTargetRenderer::Render(const float4x4 &view, const float4x4 &projecti
         RenderManager::Instance()->SetActiveTexture(GL_TEXTURE0);
         RenderManager::Instance()->BindTexture(render_target->GetColorTextureId());
 
-        RenderManager::Instance()->DrawElements(GL_TRIANGLES, plane_mesh->sub_meshes[0]->GetElementsCount());
+        RenderManager::Instance()->DrawElements(GL_TRIANGLES, plane_mesh->GetElementsCount());
 
         RenderManager::Instance()->UnbindVertexArrayBuffer();
     }

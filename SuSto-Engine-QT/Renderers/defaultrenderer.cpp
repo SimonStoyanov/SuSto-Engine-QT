@@ -104,33 +104,29 @@ void DefaultRenderer::Render(const float4x4 &view, const float4x4 &projection)
 
             if(curr_mesh != nullptr)
             {
-                std::vector<SubMesh*> submeshes = curr_mesh->GetSubMeshes();
-
-                for(std::vector<SubMesh*>::iterator it = submeshes.begin(); it != submeshes.end(); ++it)
+                if(curr_mesh->GetLoaded())
                 {
-                    if((*it)->GetLoaded())
-                    {
-                        RenderManager::Instance()->BindVertexArrayBuffer((*it)->GetVao());
+                    RenderManager::Instance()->BindVertexArrayBuffer(curr_mesh->GetVao());
 
-                        RenderManager::Instance()->SetUniformMatrix(program->GetID(), "View", view.ptr());
-                        RenderManager::Instance()->SetUniformMatrix(program->GetID(), "Projection", projection.ptr());
+                    RenderManager::Instance()->SetUniformMatrix(program->GetID(), "View", view.ptr());
+                    RenderManager::Instance()->SetUniformMatrix(program->GetID(), "Projection", projection.ptr());
 
-                        float4 colour = float4(1, 1, 1, 1);
+                    float4 colour = float4(1, 1, 1, 1);
 
-                        float4x4 world_transform = transform_mat;
+                    float4x4 world_transform = transform_mat;
 
-                        RenderManager::Instance()->SetUniformFloat(program->GetID(), "z_pos", 1);
+                    RenderManager::Instance()->SetUniformFloat(program->GetID(), "z_pos", 1);
 
-                        RenderManager::Instance()->SetUniformVec4(program->GetID(), "col", colour);
-                        RenderManager::Instance()->SetUniformInt(program->GetID(), "hasTexture", false);
+                    RenderManager::Instance()->SetUniformVec4(program->GetID(), "col", colour);
+                    RenderManager::Instance()->SetUniformInt(program->GetID(), "hasTexture", false);
 
-                        RenderManager::Instance()->SetUniformMatrix(program->GetID(), "Model", world_transform.Transposed().ptr());
+                    RenderManager::Instance()->SetUniformMatrix(program->GetID(), "Model", world_transform.Transposed().ptr());
 
-                        RenderManager::Instance()->DrawElements(GL_TRIANGLES, (*it)->GetElementsCount());
+                    RenderManager::Instance()->DrawElements(GL_TRIANGLES, curr_mesh->GetElementsCount());
 
-                        RenderManager::Instance()->UnbindVertexArrayBuffer();
-                    }
+                    RenderManager::Instance()->UnbindVertexArrayBuffer();
                 }
+
             }
         }
     }

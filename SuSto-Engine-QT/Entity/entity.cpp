@@ -4,6 +4,7 @@
 #include "Components/c_transform.h"
 #include "Components/c_shape_renderer.h"
 #include "Components/c_mesh_renderer.h"
+#include "Components/c_material_renderer.h"
 
 #include "globals.h"
 
@@ -66,6 +67,12 @@ Component *Entity::AddComponent(ComponentType type)
         case ComponentType::COMPONENT_MESH_RENDERER:
         {
             ret = new C_MeshRenderer(this);
+            SPOOKYLOG("Component -Mesh Renderer- created");
+        }
+        break;
+        case ComponentType::COMPONENT_MATERIAL_RENDERER:
+        {
+            ret = new C_MaterialRenderer(this);
             SPOOKYLOG("Component -Mesh Renderer- created");
         }
         break;
