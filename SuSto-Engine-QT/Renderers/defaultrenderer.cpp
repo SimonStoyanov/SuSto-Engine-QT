@@ -53,6 +53,7 @@ void DefaultRenderer::Render(const float4x4 &view, const float4x4 &projection)
         bool has_diffuse = false;
         bool has_normal = false;
         bool has_height = false;
+        bool has_specular = false;
 
         if(material_renderer != nullptr)
         {
@@ -64,6 +65,9 @@ void DefaultRenderer::Render(const float4x4 &view, const float4x4 &projection)
 
             if(material_renderer->GetHeightTexture() != nullptr)
                 has_height = true;
+
+            if(material_renderer->GetSpecularTexture() != nullptr)
+                has_specular = true;
         }
 
         Quat rotation = Quat::FromEulerXYZ(DEGTORAD(transform->GetRotationDegrees().x), DEGTORAD(transform->GetRotationDegrees().y),
@@ -91,10 +95,9 @@ void DefaultRenderer::Render(const float4x4 &view, const float4x4 &projection)
                     RenderManager::Instance()->SetUniformVec4(program->GetID(), "col", colour);
                     RenderManager::Instance()->SetUniformInt(program->GetID(), "hasDiffuse", has_diffuse);
                     RenderManager::Instance()->SetUniformInt(program->GetID(), "hasNormalMap", has_normal);
+                    RenderManager::Instance()->SetUniformInt(program->GetID(), "hasAlbedo", has_specular);
 
                     RenderManager::Instance()->SetUniformMatrix(program->GetID(), "Model", world_transform.Transposed().ptr());
-
-                    RenderManager::Instance()->SetUniformFloat(program->GetID(), "ambientTerm", 0.35f);
 
                     if(has_diffuse)
                     {
@@ -106,6 +109,12 @@ void DefaultRenderer::Render(const float4x4 &view, const float4x4 &projection)
                     {
                          RenderManager::Instance()->SetActiveTexture(GL_TEXTURE1);
                          RenderManager::Instance()->BindTexture(material_renderer->GetNormalTexture()->GetTextureId());
+                    }
+
+                    if(has_specular)
+                    {
+                         RenderManager::Instance()->SetActiveTexture(GL_TEXTURE2);
+                         RenderManager::Instance()->BindTexture(material_renderer->GetSpecularTexture()->GetTextureId());
                     }
 
                     RenderManager::Instance()->DrawElements(GL_TRIANGLES, curr_mesh->GetElementsCount());

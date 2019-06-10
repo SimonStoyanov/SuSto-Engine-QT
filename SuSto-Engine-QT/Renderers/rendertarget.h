@@ -18,6 +18,9 @@ public:
     void UnBind();
 
     int GetPositionColorTextureId() const;
+    int GetNormalColorTextureId() const;
+    int GetColorPlusSpecularColorTextureId() const;
+    int GetDepthTextureId() const;
 
 private:
     void CheckStatus();

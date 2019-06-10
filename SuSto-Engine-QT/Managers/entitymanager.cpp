@@ -174,6 +174,7 @@ std::vector<Entity*> EntityManager::LoadModel(const std::string &filepath)
             std::vector<std::string> diffuse_textures = (*it)->GetTexturesDifusePaths();
             std::vector<std::string> normal_textures = (*it)->GetTexturesNormalPaths();
             std::vector<std::string> height_textures = (*it)->GetTexturesHeightPaths();
+            std::vector<std::string> specular_textures = (*it)->GetTexturesSpecularPaths();
 
             Entity* new_entity = CreateEntity();
             new_entity->SetName((*it)->GetFilePlusName());
@@ -234,6 +235,24 @@ std::vector<Entity*> EntityManager::LoadModel(const std::string &filepath)
                 if(loaded_texture != nullptr)
                 {
                     c_material->SetHeightTexture(loaded_texture);
+                }
+            }
+
+            if(specular_textures.size() > 0)
+            {
+                Texture* loaded_texture = TextureManager::Instance()->GetLoadedTextureFromFilepath(specular_textures[0]);
+
+                if(loaded_texture == nullptr)
+                {
+                    loaded_texture = TextureManager::Instance()->LoadTexture(specular_textures[0]);
+
+                    if(loaded_texture != nullptr)
+                        TextureManager::Instance()->LoadToVRAM(loaded_texture);
+                }
+
+                if(loaded_texture != nullptr)
+                {
+                    c_material->SetSpecularTexture(loaded_texture);
                 }
             }
 

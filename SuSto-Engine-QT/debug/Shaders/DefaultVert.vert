@@ -9,36 +9,45 @@
     uniform mat4 View; 
     uniform mat4 Projection; 
     
-    uniform float ambientTerm; 
-    
     uniform vec4 col; 
     uniform int hasDiffuse; 
     uniform int hasNormalMap; 
+	uniform int hasAlbedo; 
     
     out Data 
     { 
-     mat4 worldViewMatrix; 
-     vec3 tangentLocalspace; 
-     vec3 bitangentLocalspace; 
-     vec3 normalLocalspace; 
+	 vec3 tangents; 
+     vec3 bitangents; 
+     vec3 normals; 
      vec2 uvs; 
      vec4 colour; 
+	
+	 vec3 fragPosWorldSpace;
+	 vec3 normalWorldSpace;
+	 vec2 uvsWorldSpace;
+	 
      flat int hasDiffuse; 
      flat int hasNormalMap; 
-     float ambientTerm; 
+	 flat int hasAlbedo;
     } VSOut; 
     
     void main()
     {
-        VSOut.worldViewMatrix = View * Model; 
-        VSOut.tangentLocalspace = tangents; 
-        VSOut.bitangentLocalspace = bitangents; 
-        VSOut.normalLocalspace = normals; 
+		vec4 transformedPosition = Projection * View * Model * vec4(position, 1.0f);
+	
+		VSOut.fragPosWorldSpace = vec3(Model * vec4(position, 1.0));
+		VSOut.normalWorldSpace = mat3(transpose(inverse(Model))) * normals;
+		VSOut.uvsWorldSpace = uvs;
+	
+        VSOut.tangents = tangents; 
+        VSOut.bitangents = bitangents; 
+        VSOut.normals = normals; 
         VSOut.uvs = uvs; 
         VSOut.colour = col; 
         VSOut.hasDiffuse = hasDiffuse; 
         VSOut.hasNormalMap = hasNormalMap; 
-        VSOut.ambientTerm = ambientTerm; 
+		VSOut.hasNormalMap = hasNormalMap; 
+		VSOut.hasAlbedo = hasAlbedo; 
         
-        gl_Position = Projection * View * Model * vec4(vec3(position.x, position.y, position.z), 1);
+        gl_Position = transformedPosition;
     }

@@ -47,6 +47,11 @@ std::vector<std::string> Mesh::GetTexturesNormalPaths() const
     return textures_normals_paths;
 }
 
+std::vector<std::string> Mesh::GetTexturesSpecularPaths() const
+{
+    return textures_specular_paths;
+}
+
 std::string Mesh::GetFilePath() const
 {
     return file_path;

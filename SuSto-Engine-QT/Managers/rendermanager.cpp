@@ -46,7 +46,7 @@ void RenderManager::Start()
     format.setRedBufferSize(8);
     format.setGreenBufferSize(8);
     format.setBlueBufferSize(8);
-    format.setAlphaBufferSize(8);
+    format.setAlphaBufferSize(0);
     format.setSwapBehavior(QSurfaceFormat::SwapBehavior::DoubleBuffer);
     QSurfaceFormat::setDefaultFormat(format);
 }
@@ -503,6 +503,17 @@ void RenderManager::DeleteFrameBuffer(uint id)
 void RenderManager::DrawBuffer(uint mode)
 {
     gl->glDrawBuffer(mode);
+
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR)
+    {
+        SPOOKYLOG("Error drawing buffer: " + GetErrorString(error));
+    }
+}
+
+void RenderManager::DrawBuffers(uint ammount, uint* modes)
+{
+    gl->glDrawBuffers(ammount, modes);
 
     GLenum error = glGetError();
     if (error != GL_NO_ERROR)

@@ -9,6 +9,15 @@ class Camera3D;
 class RenderTargetRenderer;
 class RenderTarget;
 
+enum RenderingBuffer
+{
+    BUFFER_ALL,
+    BUFFER_POSITION,
+    BUFFER_NORMALS,
+    BUFFER_ALBEDO,
+    BUFFER_DEPTH,
+};
+
 class SceneRendererManager
 {
     friend class AppManager;
@@ -59,6 +68,9 @@ public:
 
     void RenderRenderTarget();
 
+    void SetRenderingBuffer(RenderingBuffer buffer);
+    RenderingBuffer GetRenderingBuffer();
+
 private:
     Renderer *AddRenderer(Renderer* render);
 
@@ -72,6 +84,8 @@ private:
 
     int last_w = 0;
     int last_h = 0;
+
+    RenderingBuffer rendering_buffer = RenderingBuffer::BUFFER_ALL;
 };
 
 #endif // SCENERENDERERMANAGER_H

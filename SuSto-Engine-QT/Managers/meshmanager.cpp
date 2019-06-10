@@ -213,6 +213,7 @@ Mesh *MeshManager::ProcessMesh(const aiScene *aiscene, aiMesh * aimesh, std::exp
         int diffuse_count = aimaterial->GetTextureCount(aiTextureType_DIFFUSE);
         int height_count = aimaterial->GetTextureCount(aiTextureType_HEIGHT);
         int normals_count = aimaterial->GetTextureCount(aiTextureType_NORMALS);
+        int specular_count = aimaterial->GetTextureCount(aiTextureType_SPECULAR);
 
         if(diffuse_count > 0)
         {
@@ -251,6 +252,19 @@ Mesh *MeshManager::ProcessMesh(const aiScene *aiscene, aiMesh * aimesh, std::exp
                 ret->textures_normals_paths.push_back(new_path.string());
 
             SPOOKYLOG("Mesh contains normal map: " + new_path.string());
+        }
+
+        if(specular_count > 0)
+        {
+            aiString texture_path;
+            bool success = aimaterial->GetTexture(aiTextureType_SPECULAR, 0, &texture_path, NULL, NULL, NULL, NULL, NULL) == AI_SUCCESS;
+
+            std::experimental::filesystem::path new_path = path.parent_path().string() + "/" + std::string(texture_path.C_Str());
+
+            if(success)
+                ret->textures_specular_paths.push_back(new_path.string());
+
+            SPOOKYLOG("Mesh contains specular map: " + new_path.string());
         }
     }
 

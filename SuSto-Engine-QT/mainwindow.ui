@@ -71,6 +71,7 @@
     </property>
     <addaction name="actionWindowsInspector"/>
     <addaction name="actionWindowsHierarchy"/>
+    <addaction name="actionRenderer"/>
     <addaction name="actionWindowsRenderer"/>
    </widget>
    <addaction name="menuFile"/>
@@ -147,7 +148,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Renderer</string>
+    <string>Scene</string>
    </property>
   </action>
   <action name="actionDuplicate">
@@ -176,6 +177,17 @@
   <action name="actionLoad_Mesh">
    <property name="text">
     <string>Load Mesh</string>
+   </property>
+  </action>
+  <action name="actionRenderer">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Renderer</string>
    </property>
   </action>
  </widget>

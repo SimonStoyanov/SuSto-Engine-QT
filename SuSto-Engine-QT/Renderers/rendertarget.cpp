@@ -47,7 +47,8 @@ void RenderTarget::Resize(const float2 &new_size)
         RenderManager::Instance()->SetFrameBufferTexture2D(GL_TEXTURE_2D, GL_COLOR_ATTACHMENT2, color_plus_specular_color_texture);
         RenderManager::Instance()->SetFrameBufferTexture2D(GL_TEXTURE_2D, GL_DEPTH_ATTACHMENT, depth_texture);
 
-        RenderManager::Instance()->DrawBuffer(GL_COLOR_ATTACHMENT0);
+        unsigned int attachments[3] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
+        RenderManager::Instance()->DrawBuffers(3, attachments);
 
         CheckStatus();
     }
@@ -66,6 +67,21 @@ void RenderTarget::UnBind()
 int RenderTarget::GetPositionColorTextureId() const
 {
     return position_color_texture;
+}
+
+int RenderTarget::GetNormalColorTextureId() const
+{
+    return normal_color_texture;
+}
+
+int RenderTarget::GetColorPlusSpecularColorTextureId() const
+{
+    return color_plus_specular_color_texture;
+}
+
+int RenderTarget::GetDepthTextureId() const
+{
+    return depth_texture;
 }
 
 void RenderTarget::CheckStatus()

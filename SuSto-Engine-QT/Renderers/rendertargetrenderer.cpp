@@ -8,6 +8,7 @@
 #include "Entity/Components/c_mesh_renderer.h"
 #include "Entity/Components/c_transform.h"
 #include "Renderers/rendertarget.h"
+#include "Managers/scenerenderermanager.h"
 
 RenderTargetRenderer::RenderTargetRenderer()
 {
@@ -111,11 +112,12 @@ void RenderTargetRenderer::Start()
 
 void RenderTargetRenderer::Render(const float4x4 &view, const float4x4 &projection)
 {
-    glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glDepthFunc(GL_LESS);
 
     program->UseProgram();
+
+    RenderingBuffer curr_buffer = SceneRendererManager::Instance()->GetRenderingBuffer();
 
     if(render_target != nullptr)
     {
@@ -128,8 +130,33 @@ void RenderTargetRenderer::Render(const float4x4 &view, const float4x4 &projecti
 
         RenderManager::Instance()->SetUniformMatrix(program->GetID(), "Model", model.Transposed().ptr());
 
-        RenderManager::Instance()->SetActiveTexture(GL_TEXTURE0);
-        RenderManager::Instance()->BindTexture(render_target->GetPositionColorTextureId());
+        switch (curr_buffer)
+        {
+            case RenderingBuffer::BUFFER_POSITION:
+            {
+                RenderManager::Instance()->SetActiveTexture(GL_TEXTURE0);
+                RenderManager::Instance()->BindTexture(render_target->GetPositionColorTextureId());
+                break;
+            }
+            case RenderingBuffer::BUFFER_NORMALS:
+            {
+                RenderManager::Instance()->SetActiveTexture(GL_TEXTURE0);
+                RenderManager::Instance()->BindTexture(render_target->GetNormalColorTextureId());
+                break;
+            }
+            case RenderingBuffer::BUFFER_ALBEDO:
+            {
+                RenderManager::Instance()->SetActiveTexture(GL_TEXTURE0);
+                RenderManager::Instance()->BindTexture(render_target->GetColorPlusSpecularColorTextureId());
+                break;
+            }
+            case RenderingBuffer::BUFFER_DEPTH:
+            {
+                RenderManager::Instance()->SetActiveTexture(GL_TEXTURE0);
+                RenderManager::Instance()->BindTexture(render_target->GetDepthTextureId());
+                break;
+            }
+        }
 
         RenderManager::Instance()->DrawElements(GL_TRIANGLES, plane_mesh->GetElementsCount());
 

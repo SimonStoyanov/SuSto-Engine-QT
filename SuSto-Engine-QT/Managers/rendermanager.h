@@ -105,6 +105,7 @@ public:
     uint CheckFrameBufferStatus();
     void DeleteFrameBuffer(uint id);
     void DrawBuffer(uint mode);
+    void DrawBuffers(uint ammount, uint* modes);
 
     uint CreateVertexShader(const char* source, std::string& compilation_error_msg);
     uint CreateFragmentShader(const char* source, std::string& compilation_error_msg);

@@ -49,6 +49,10 @@ void C_MaterialRenderer::CreateUI()
     connect(form->HeightCombo, SIGNAL(currentIndexChanged(const QString&)),
             this, SLOT(OnSelectedHeightChange(const QString&)));
 
+    connect(form->SpecularCombo, SIGNAL(currentIndexChanged(const QString&)),
+            this, SLOT(OnSelectedSpecularChange(const QString&)));
+
+
     UpdateTexturesComboBoxes();
 }
 
@@ -112,6 +116,21 @@ void C_MaterialRenderer::SetHeightTexture(Texture *tex)
     }
 }
 
+void C_MaterialRenderer::SetSpecularTexture(Texture *tex)
+{
+    specular_texture = tex;
+
+    if(specular_texture != nullptr)
+    {
+        QString text = QString::fromStdString(specular_texture->GetFilePath());
+        form->SpecularCombo->setCurrentText(text);
+    }
+    else
+    {
+        form->SpecularCombo->setCurrentText("");
+    }
+}
+
 Texture *C_MaterialRenderer::GetDiffuseTexture() const
 {
     return diffuse_texture;
@@ -125,6 +144,11 @@ Texture *C_MaterialRenderer::GetNormalTexture() const
 Texture *C_MaterialRenderer::GetHeightTexture() const
 {
     return height_texture;
+}
+
+Texture *C_MaterialRenderer::GetSpecularTexture() const
+{
+    return specular_texture;
 }
 
 void C_MaterialRenderer::OnEvent(Event *ev)
@@ -142,10 +166,17 @@ void C_MaterialRenderer::UpdateTexturesComboBoxes()
     QString selected_diffuse = form->DiffuseCombo->itemText(form->DiffuseCombo->currentIndex());
     QString selected_normal = form->NormalCombo->itemText(form->NormalCombo->currentIndex());
     QString selected_height = form->HeightCombo->itemText(form->HeightCombo->currentIndex());
+    QString selected_specular = form->SpecularCombo->itemText(form->SpecularCombo->currentIndex());
 
     form->DiffuseCombo->clear();
     form->NormalCombo->clear();
     form->HeightCombo->clear();
+    form->SpecularCombo->clear();
+
+    form->DiffuseCombo->addItem("none", "none");
+    form->NormalCombo->addItem("none", "none");
+    form->HeightCombo->addItem("none", "none");
+    form->SpecularCombo->addItem("none", "none");
 
     for(std::vector<Texture*>::iterator it = textures.begin(); it != textures.end(); ++it)
     {
@@ -154,11 +185,13 @@ void C_MaterialRenderer::UpdateTexturesComboBoxes()
         form->DiffuseCombo->addItem(text, text);
         form->NormalCombo->addItem(text, text);
         form->HeightCombo->addItem(text, text);
+        form->SpecularCombo->addItem(text, text);
     }
 
     form->DiffuseCombo->setCurrentText(selected_diffuse);
     form->NormalCombo->setCurrentText(selected_normal);
     form->HeightCombo->setCurrentText(selected_height);
+    form->SpecularCombo->setCurrentText(selected_height);
 }
 
 void C_MaterialRenderer::OnSelectedDiffuseChange(const QString &new_shape)
@@ -196,5 +229,17 @@ void C_MaterialRenderer::OnSelectedHeightChange(const QString &new_shape)
         QString curr_val = form->HeightCombo->itemText(form->HeightCombo->currentIndex());
 
         height_texture = TextureManager::Instance()->GetLoadedTextureFromFilepath(curr_val.toStdString());
+    }
+}
+
+void C_MaterialRenderer::OnSelectedSpecularChange(const QString &new_shape)
+{
+    specular_texture = nullptr;
+
+    if(form->SpecularCombo->count() > 0)
+    {
+        QString curr_val = form->SpecularCombo->itemText(form->SpecularCombo->currentIndex());
+
+        specular_texture = TextureManager::Instance()->GetLoadedTextureFromFilepath(curr_val.toStdString());
     }
 }

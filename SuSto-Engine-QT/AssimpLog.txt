@@ -1,0 +1,12 @@
+Info,  T31908: Load C:/Users/Guillem/Desktop/Models/PalmTree/PalmTree.obj
+Info,  T31908: Found a matching importer for this file format: Wavefront Object Importer.
+Info,  T31908: Import root directory is 'C:/Users/Guillem/Desktop/Models/PalmTree\'
+Info,  T31908: Entering post processing pipeline
+Info,  T31908: Removed 2 nodes and 0 animation channels (3 output nodes)
+Info,  T31908: Kept 0 lights and 0 cameras
+Info,  T31908: Moved 2 meshes to WCS (number of output meshes: 2)
+Info,  T31908: CalcTangentsProcess finished. Tangents have been calculated
+Warn,  T31908: Mesh 0: Not suitable for vcache optimization
+Warn,  T31908: Mesh 1: Not suitable for vcache optimization
+Info,  T31908: Cache relevant are 0 meshes (0 faces). Average output ACMR is -nan(ind)
+Info,  T31908: Leaving post processing pipeline

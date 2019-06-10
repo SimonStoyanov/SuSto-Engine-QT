@@ -1,35 +1,43 @@
 	#version 330 core    
     uniform sampler2D diffuse; 
     uniform sampler2D normalMap; 
-    uniform sampler2D specularMap; 
+    uniform sampler2D albedo; 
     
-    in vec3 FragPos;
-    
-    out vec4 finalColor; 
-    
+	layout (location = 0) out vec3 gPosition;
+	layout (location = 1) out vec3 gNormal;
+	layout (location = 2) out vec4 gAlbedoSpec;
+	        
     in Data 
     {
-     mat4 worldViewMatrix; 
-     vec3 tangentLocalspace; 
-     vec3 bitangentLocalspace; 
-     vec3 normalLocalspace; 
+	 vec3 tangents; 
+     vec3 bitangents; 
+     vec3 normals; 
      vec2 uvs; 
      vec4 colour; 
+	
+	 vec3 fragPosWorldSpace;
+	 vec3 normalWorldSpace;
+	 vec2 uvsWorldSpace;
+	 
      flat int hasDiffuse; 
      flat int hasNormalMap; 
-     float ambientTerm; 
+	 flat int hasAlbedo;
     } FSIn; 
     
     void main()
     {
-        //finalPos = FragPos; 
+        gPosition = FSIn.fragPosWorldSpace; 
         
-        //if(FSIn.hasNormalMap == 1) 
-        //{ 
-            //finalNormal = normalize(FSIn.normalLocalspace); 
-        //} 
-        //finalAlbedo.rgb = texture(diffuse, FSIn.uvs).rgb; 
-        //finalAlbedo.a = texture(specularMap, TexCoords).r; 
+        if(FSIn.hasNormalMap == 1) 
+        { 
+            gNormal = normalize(FSIn.normals); 
+        } 
+		
+		if(FSIn.hasAlbedo == 1) 
+        { 
+            gAlbedoSpec.rgb = texture(diffuse, FSIn.uvs).rgb; 
+			gAlbedoSpec.a = texture(albedo, FSIn.uvs).r; 
+        } 
         
         if(FSIn.hasNormalMap == 1) 
         {
@@ -47,7 +55,6 @@
             diffuse_col = FSIn.colour;
         }
         
-        finalColor.a = diffuse_col.a; 
-        finalColor.rgb = diffuse_col.rgb * FSIn.ambientTerm;
+        //finalColor = diffuse_col;
         
     }

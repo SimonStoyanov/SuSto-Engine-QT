@@ -83,6 +83,16 @@ void SceneRendererManager::RenderRenderTarget()
     render_target_renderer->Render(view_mat, proj_mat);
 }
 
+void SceneRendererManager::SetRenderingBuffer(RenderingBuffer buffer)
+{
+    rendering_buffer = buffer;
+}
+
+RenderingBuffer SceneRendererManager::GetRenderingBuffer()
+{
+    return rendering_buffer;
+}
+
 Renderer *SceneRendererManager::AddRenderer(Renderer *renderer)
 {
     Renderer* ret = nullptr;

@@ -33,10 +33,12 @@ public:
      void SetDiffuseTexture(Texture* tex);
      void SetNormalTexture(Texture* tex);
      void SetHeightTexture(Texture* tex);
+     void SetSpecularTexture(Texture* tex);
 
      Texture* GetDiffuseTexture() const;
      Texture* GetNormalTexture() const;
      Texture* GetHeightTexture() const;
+     Texture* GetSpecularTexture() const;
 
 private:
      void OnEvent(Event* ev);
@@ -47,6 +49,7 @@ private slots:
    void OnSelectedDiffuseChange(const QString& new_shape);
    void OnSelectedNormalChange(const QString& new_shape);
    void OnSelectedHeightChange(const QString& new_shape);
+   void OnSelectedSpecularChange(const QString& new_shape);
 
 private:
      QWidget* ui = nullptr;
@@ -55,6 +58,9 @@ private:
      Texture* diffuse_texture = nullptr;
      Texture* normal_texture = nullptr;
      Texture* height_texture = nullptr;
+     Texture* specular_texture = nullptr;
 };
+
+
 
 #endif // C_MATERIAL_RENDERER_H

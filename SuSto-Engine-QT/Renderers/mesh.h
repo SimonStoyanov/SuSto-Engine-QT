@@ -30,6 +30,7 @@ public:
     std::vector<std::string> GetTexturesDifusePaths() const;
     std::vector<std::string> GetTexturesHeightPaths() const;
     std::vector<std::string> GetTexturesNormalPaths() const;
+    std::vector<std::string> GetTexturesSpecularPaths() const;
 
     std::string GetFilePath() const;
     std::string GetFilePathPlusName();
@@ -47,6 +48,7 @@ private:
     std::vector<std::string> textures_difuse_paths;
     std::vector<std::string> textures_height_paths;
     std::vector<std::string> textures_normals_paths;
+    std::vector<std::string> textures_specular_paths;
 
     bool loaded = false;
 
