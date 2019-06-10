@@ -130,10 +130,11 @@ Mesh *MeshManager::ProcessMesh(const aiScene *aiscene, aiMesh * aimesh, std::exp
 
     ret->name = aimesh->mName.C_Str();
 
-    ret->has_uvs = aimesh->HasTextureCoords(0);
+    bool has_uvs = aimesh->HasTextureCoords(0);
 
-    ret->vertex_buffer.reserve(aimesh->mNumVertices * 2 * 3);
-    ret->vertex_buffer.reserve(aimesh->mNumVertices * 2);
+    int to_reserve = (aimesh->mNumVertices * 4 * 3) + (aimesh->mNumVertices * 2);
+
+    ret->vertex_buffer.reserve(to_reserve);
 
     for(int i = 0; i < aimesh->mNumVertices; ++i)
     {
@@ -148,7 +149,7 @@ Mesh *MeshManager::ProcessMesh(const aiScene *aiscene, aiMesh * aimesh, std::exp
         ret->vertex_buffer.push_back(ainormals.y);
         ret->vertex_buffer.push_back(ainormals.z);
 
-        if(ret->has_uvs)
+        if(has_uvs)
         {
             aiVector3D aiuvs = aimesh->mTextureCoords[0][i];
 
@@ -157,6 +158,30 @@ Mesh *MeshManager::ProcessMesh(const aiScene *aiscene, aiMesh * aimesh, std::exp
         }
         else
         {
+            ret->vertex_buffer.push_back(0);
+            ret->vertex_buffer.push_back(0);
+        }
+
+        if(aimesh->mTangents != nullptr && aimesh->mBitangents != nullptr)
+        {
+            aiVector3D aitangents = aimesh->mTangents[i];
+            aiVector3D aibitangents = aimesh->mBitangents[i];
+
+            ret->vertex_buffer.push_back(aitangents.x);
+            ret->vertex_buffer.push_back(aitangents.y);
+            ret->vertex_buffer.push_back(aitangents.z);
+
+            ret->vertex_buffer.push_back(aibitangents.x);
+            ret->vertex_buffer.push_back(aibitangents.y);
+            ret->vertex_buffer.push_back(aibitangents.z);
+        }
+        else
+        {
+            ret->vertex_buffer.push_back(0);
+            ret->vertex_buffer.push_back(0);
+            ret->vertex_buffer.push_back(0);
+
+            ret->vertex_buffer.push_back(0);
             ret->vertex_buffer.push_back(0);
             ret->vertex_buffer.push_back(0);
         }
@@ -258,14 +283,18 @@ void MeshManager::LoadToVRAM(Mesh *mesh)
             RenderManager::Instance()->LoadArrayToVRAM(mesh->vertex_buffer.size() * sizeof(float),
                                                        &mesh->vertex_buffer[0], GL_STATIC_DRAW);
 
-            RenderManager::Instance()->EnableVertexAttributeArray(0);
-            RenderManager::Instance()->EnableVertexAttributeArray(1);
-            RenderManager::Instance()->EnableVertexAttributeArray(2);
+            RenderManager::Instance()->EnableVertexAttributeArray(0); // Position
+            RenderManager::Instance()->EnableVertexAttributeArray(1); // Normals
+            RenderManager::Instance()->EnableVertexAttributeArray(2); // Uvs
+            RenderManager::Instance()->EnableVertexAttributeArray(3); // Tangents
+            RenderManager::Instance()->EnableVertexAttributeArray(4); // Bitangents
 
             // Set info
-            RenderManager::Instance()->SetVertexAttributePointer(0, 3, 8, 0);
-            RenderManager::Instance()->SetVertexAttributePointer(1, 3, 8, 3);
-            RenderManager::Instance()->SetVertexAttributePointer(2, 2, 8, 6);
+            RenderManager::Instance()->SetVertexAttributePointer(0, 3, 14, 0);
+            RenderManager::Instance()->SetVertexAttributePointer(1, 3, 14, 3);
+            RenderManager::Instance()->SetVertexAttributePointer(2, 2, 14, 6);
+            RenderManager::Instance()->SetVertexAttributePointer(3, 3, 14, 8);
+            RenderManager::Instance()->SetVertexAttributePointer(4, 3, 14, 11);
 
             // VBIO
             mesh->vbio = RenderManager::Instance()->GenBuffer();

@@ -29,6 +29,12 @@ void RenderTargetRenderer::Start()
     plane_mesh->vertex_buffer.push_back(0);
     plane_mesh->vertex_buffer.push_back(0);
     plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
 
     plane_mesh->vertex_buffer.push_back(1);
     plane_mesh->vertex_buffer.push_back(-1);
@@ -38,6 +44,12 @@ void RenderTargetRenderer::Start()
     plane_mesh->vertex_buffer.push_back(0);
     plane_mesh->vertex_buffer.push_back(1);
     plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
 
     plane_mesh->vertex_buffer.push_back(1);
     plane_mesh->vertex_buffer.push_back(1);
@@ -47,6 +59,12 @@ void RenderTargetRenderer::Start()
     plane_mesh->vertex_buffer.push_back(0);
     plane_mesh->vertex_buffer.push_back(1);
     plane_mesh->vertex_buffer.push_back(1);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
 
     plane_mesh->vertex_buffer.push_back(-1);
     plane_mesh->vertex_buffer.push_back(1);
@@ -56,6 +74,12 @@ void RenderTargetRenderer::Start()
     plane_mesh->vertex_buffer.push_back(0);
     plane_mesh->vertex_buffer.push_back(0);
     plane_mesh->vertex_buffer.push_back(1);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
+    plane_mesh->vertex_buffer.push_back(0);
 
     plane_mesh->index_buffer.push_back(0);
     plane_mesh->index_buffer.push_back(1);
@@ -63,6 +87,7 @@ void RenderTargetRenderer::Start()
     plane_mesh->index_buffer.push_back(1);
     plane_mesh->index_buffer.push_back(2);
     plane_mesh->index_buffer.push_back(3);
+
 
     MeshManager::Instance()->LoadToVRAM(plane_mesh);
 

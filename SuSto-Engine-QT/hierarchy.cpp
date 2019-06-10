@@ -108,15 +108,6 @@ void Hierarchy::LoadModel()
 
     std::vector<Entity*> new_entity = EntityManager::Instance()->LoadModel(fileName.toStdString());
 
-    for(std::vector<Entity*>::iterator it = new_entity.begin(); it != new_entity.end(); ++it)
-    {
-        HierarchyEntity* new_entity_in_hierarchy = new HierarchyEntity((*it), this);
-
-        ui->scrollLayout->addWidget(new_entity_in_hierarchy);
-
-        h_entities.push_back(new_entity_in_hierarchy);
-    }
-
     UpdateEntitiesUI();
     UpdateUI();
 }

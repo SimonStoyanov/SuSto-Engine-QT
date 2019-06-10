@@ -10,6 +10,8 @@
 #include "Entity/entityabstraction.h"
 #include "Entity/Components/c_mesh_renderer.h"
 #include "Managers/meshmanager.h"
+#include "Managers/texturemanager.h"
+#include "Entity/Components/c_material_renderer.h"
 
 EntityManager* EntityManager::instance = nullptr;
 
@@ -168,12 +170,71 @@ std::vector<Entity*> EntityManager::LoadModel(const std::string &filepath)
         {
             MeshManager::Instance()->LoadToVRAM((*it));
 
+            std::vector<std::string> diffuse_textures = (*it)->GetTexturesDifusePaths();
+            std::vector<std::string> normal_textures = (*it)->GetTexturesNormalPaths();
+            std::vector<std::string> height_textures = (*it)->GetTexturesHeightPaths();
+
             Entity* new_entity = CreateEntity();
             new_entity->SetName((*it)->GetFilePlusName());
 
             C_MeshRenderer* c_mesh = (C_MeshRenderer*)new_entity->AddComponent(ComponentType::COMPONENT_MESH_RENDERER);
+            C_MaterialRenderer* c_material = (C_MaterialRenderer*)new_entity->AddComponent(ComponentType::COMPONENT_MATERIAL_RENDERER);
 
             c_mesh->SetMesh((*it));
+
+            if(diffuse_textures.size() > 0)
+            {
+                Texture* loaded_texture = TextureManager::Instance()->GetLoadedTextureFromFilepath(diffuse_textures[0]);
+
+                if(loaded_texture == nullptr)
+                {
+                    loaded_texture = TextureManager::Instance()->LoadTexture(diffuse_textures[0]);
+
+                    if(loaded_texture != nullptr)
+                        TextureManager::Instance()->LoadToVRAM(loaded_texture);
+                }
+
+                if(loaded_texture != nullptr)
+                {
+                    c_material->SetDiffuseTexture(loaded_texture);
+                }
+            }
+
+            if(normal_textures.size() > 0)
+            {
+                Texture* loaded_texture = TextureManager::Instance()->GetLoadedTextureFromFilepath(normal_textures[0]);
+
+                if(loaded_texture == nullptr)
+                {
+                    loaded_texture = TextureManager::Instance()->LoadTexture(normal_textures[0]);
+
+                    if(loaded_texture != nullptr)
+                        TextureManager::Instance()->LoadToVRAM(loaded_texture);
+                }
+
+                if(loaded_texture != nullptr)
+                {
+                    c_material->SetNormalTexture(loaded_texture);
+                }
+            }
+
+            if(height_textures.size() > 0)
+            {
+                Texture* loaded_texture = TextureManager::Instance()->GetLoadedTextureFromFilepath(height_textures[0]);
+
+                if(loaded_texture == nullptr)
+                {
+                    loaded_texture = TextureManager::Instance()->LoadTexture(height_textures[0]);
+
+                    if(loaded_texture != nullptr)
+                        TextureManager::Instance()->LoadToVRAM(loaded_texture);
+                }
+
+                if(loaded_texture != nullptr)
+                {
+                    c_material->SetHeightTexture(loaded_texture);
+                }
+            }
 
             ret.push_back(new_entity);
         }

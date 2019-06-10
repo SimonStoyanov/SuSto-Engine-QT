@@ -48,8 +48,6 @@ private:
     std::vector<std::string> textures_height_paths;
     std::vector<std::string> textures_normals_paths;
 
-    bool has_uvs = false;
-
     bool loaded = false;
 
     int vao = 0;

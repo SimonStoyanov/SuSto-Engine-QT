@@ -30,6 +30,14 @@ public:
      void UpdateUI();
      QWidget *GetUI() const;
 
+     void SetDiffuseTexture(Texture* tex);
+     void SetNormalTexture(Texture* tex);
+     void SetHeightTexture(Texture* tex);
+
+     Texture* GetDiffuseTexture() const;
+     Texture* GetNormalTexture() const;
+     Texture* GetHeightTexture() const;
+
 private:
      void OnEvent(Event* ev);
 

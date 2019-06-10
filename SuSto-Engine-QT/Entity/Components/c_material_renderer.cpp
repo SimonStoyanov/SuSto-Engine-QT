@@ -48,6 +48,8 @@ void C_MaterialRenderer::CreateUI()
 
     connect(form->HeightCombo, SIGNAL(currentIndexChanged(const QString&)),
             this, SLOT(OnSelectedHeightChange(const QString&)));
+
+    UpdateTexturesComboBoxes();
 }
 
 void C_MaterialRenderer::DestroyUI()
@@ -63,6 +65,66 @@ void C_MaterialRenderer::UpdateUI()
 QWidget *C_MaterialRenderer::GetUI() const
 {
     return ui;
+}
+
+void C_MaterialRenderer::SetDiffuseTexture(Texture *tex)
+{
+    diffuse_texture = tex;
+
+    if(diffuse_texture != nullptr)
+    {
+        QString text = QString::fromStdString(diffuse_texture->GetFilePath());
+        form->DiffuseCombo->setCurrentText(text);
+    }
+    else
+    {
+        form->DiffuseCombo->setCurrentText("");
+    }
+}
+
+void C_MaterialRenderer::SetNormalTexture(Texture *tex)
+{
+    normal_texture = tex;
+
+    if(normal_texture != nullptr)
+    {
+        QString text = QString::fromStdString(normal_texture->GetFilePath());
+        form->NormalCombo->setCurrentText(text);
+    }
+    else
+    {
+        form->NormalCombo->setCurrentText("");
+    }
+}
+
+void C_MaterialRenderer::SetHeightTexture(Texture *tex)
+{
+    height_texture = tex;
+
+    if(height_texture != nullptr)
+    {
+        QString text = QString::fromStdString(height_texture->GetFilePath());
+        form->HeightCombo->setCurrentText(text);
+    }
+    else
+    {
+        form->HeightCombo->setCurrentText("");
+    }
+}
+
+Texture *C_MaterialRenderer::GetDiffuseTexture() const
+{
+    return diffuse_texture;
+}
+
+Texture *C_MaterialRenderer::GetNormalTexture() const
+{
+    return normal_texture;
+}
+
+Texture *C_MaterialRenderer::GetHeightTexture() const
+{
+    return height_texture;
 }
 
 void C_MaterialRenderer::OnEvent(Event *ev)

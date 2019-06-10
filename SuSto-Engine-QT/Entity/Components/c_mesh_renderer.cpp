@@ -65,6 +65,16 @@ QWidget *C_MeshRenderer::GetUI() const
 void C_MeshRenderer::SetMesh(Mesh *m)
 {
     mesh = m;
+
+    if(mesh != nullptr)
+    {
+        QString text = QString::fromStdString(mesh->GetFilePathPlusName());
+        form->MeshComboBoxSelector->setCurrentText(text);
+    }
+    else
+    {
+        form->MeshComboBoxSelector->setCurrentText("");
+    }
 }
 
 Mesh *C_MeshRenderer::GetMesh() const
