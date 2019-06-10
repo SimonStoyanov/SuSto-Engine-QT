@@ -9,6 +9,7 @@
 #include "Entity/Components/c_transform.h"
 #include "Renderers/rendertarget.h"
 #include "Managers/scenerenderermanager.h"
+#include "Managers/cameramanager.h"
 
 RenderTargetRenderer::RenderTargetRenderer()
 {
@@ -97,10 +98,10 @@ void RenderTargetRenderer::Start()
 
     std::string base_path = ShaderManager::Instance()->GetShadersBaseFolder();
 
-    std::string vert_path = base_path + "RenderTargetVert.vert";
+    std::string vert_path = base_path + "LightVert.vert";
     Shader* ver_sha = ShaderManager::Instance()->LoadShaderFromFile(vert_path, ShaderType::VERTEX);
 
-    std::string frag_path = base_path + "RenderTargetFrag.frag";
+    std::string frag_path = base_path + "LightFrag.frag";
     Shader* frag_sha = ShaderManager::Instance()->LoadShaderFromFile(frag_path, ShaderType::FRAGMENT);
 
     program = ShaderManager::Instance()->CreateShaderProgram();
@@ -112,51 +113,45 @@ void RenderTargetRenderer::Start()
 
 void RenderTargetRenderer::Render(const float4x4 &view, const float4x4 &projection)
 {
-    glEnable(GL_BLEND);
+    glDisable(GL_BLEND);
     glDepthFunc(GL_LESS);
 
     program->UseProgram();
+
+    Camera3D* cam = CameraManager::Instance()->GetEditorCamera();
+
+    float3 view_pos = cam->GetPosition();
 
     RenderingBuffer curr_buffer = SceneRendererManager::Instance()->GetRenderingBuffer();
 
     if(render_target != nullptr)
     {
+        int mode = curr_buffer;
+
         RenderManager::Instance()->BindVertexArrayBuffer(plane_mesh->GetVao());
 
         RenderManager::Instance()->SetUniformMatrix(program->GetID(), "View", view.ptr());
         RenderManager::Instance()->SetUniformMatrix(program->GetID(), "Projection", projection.ptr());
 
+        RenderManager::Instance()->SetUniformVec3(program->GetID(), "view_pos", view_pos);
+
         float4x4 model = float4x4::FromTRS(float3::zero, Quat::identity, float3(10, 10, 1));
 
         RenderManager::Instance()->SetUniformMatrix(program->GetID(), "Model", model.Transposed().ptr());
 
-        switch (curr_buffer)
-        {
-            case RenderingBuffer::BUFFER_POSITION:
-            {
-                RenderManager::Instance()->SetActiveTexture(GL_TEXTURE0);
-                RenderManager::Instance()->BindTexture(render_target->GetPositionColorTextureId());
-                break;
-            }
-            case RenderingBuffer::BUFFER_NORMALS:
-            {
-                RenderManager::Instance()->SetActiveTexture(GL_TEXTURE0);
-                RenderManager::Instance()->BindTexture(render_target->GetNormalColorTextureId());
-                break;
-            }
-            case RenderingBuffer::BUFFER_ALBEDO:
-            {
-                RenderManager::Instance()->SetActiveTexture(GL_TEXTURE0);
-                RenderManager::Instance()->BindTexture(render_target->GetColorPlusSpecularColorTextureId());
-                break;
-            }
-            case RenderingBuffer::BUFFER_DEPTH:
-            {
-                RenderManager::Instance()->SetActiveTexture(GL_TEXTURE0);
-                RenderManager::Instance()->BindTexture(render_target->GetDepthTextureId());
-                break;
-            }
-        }
+        RenderManager::Instance()->SetUniformInt(program->GetID(), "mode", mode);
+
+        RenderManager::Instance()->SetUniformInt(program->GetID(), "gPosition", 0);
+        RenderManager::Instance()->SetActiveTexture(GL_TEXTURE0);
+        RenderManager::Instance()->BindTexture(render_target->GetPositionColorTextureId());
+
+        RenderManager::Instance()->SetUniformInt(program->GetID(), "gNormal", 1);
+        RenderManager::Instance()->SetActiveTexture(GL_TEXTURE1);
+        RenderManager::Instance()->BindTexture(render_target->GetNormalColorTextureId());
+
+        RenderManager::Instance()->SetUniformInt(program->GetID(), "gAlbedoSpec", 2);
+        RenderManager::Instance()->SetActiveTexture(GL_TEXTURE2);
+        RenderManager::Instance()->BindTexture(render_target->GetColorPlusSpecularColorTextureId());
 
         RenderManager::Instance()->DrawElements(GL_TRIANGLES, plane_mesh->GetElementsCount());
 

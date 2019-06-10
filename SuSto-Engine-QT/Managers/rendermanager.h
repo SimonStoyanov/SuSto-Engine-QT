@@ -129,6 +129,13 @@ public:
     void SetUniformVec3(uint program, const char* name, const float3& data);
     void SetUniformVec4(uint program, const char* name, const float4& data);
 
+    void SetArrayUniformMatrix(uint program, const char* array_name, const char* name,int index, const float* data);
+    void SetArrayUniformFloat(uint program, const char* array_name, const char* name,int index, float data);
+    void SetArrayUniformInt(uint program, const char* array_name, const char* name, int index, int data);
+    void SetArrayUniformBool(uint program, const char* array_name, const char* name, int index, bool data);
+    void SetArrayUniformVec3(uint program, const char* array_name, const char* name, int index, const float3& data);
+    void SetArrayUniformVec4(uint program, const char* array_name, const char* name, int index, const float4& data);
+
     uint GetUniformsCount(uint program);
     void GetUniformInfo(uint program, uint index, std::string& name, GLenum& type);
 

@@ -21,10 +21,10 @@ void DefaultRenderer::Start()
 {
     std::string base_path = ShaderManager::Instance()->GetShadersBaseFolder();
 
-    std::string vert_path = base_path + "DefaultVert.vert";
+    std::string vert_path = base_path + "GeometryVert.vert";
     Shader* ver_sha = ShaderManager::Instance()->LoadShaderFromFile(vert_path, ShaderType::VERTEX);
 
-    std::string frag_path = base_path + "DefaultFrag.frag";
+    std::string frag_path = base_path + "GeometryFrag.frag";
     Shader* frag_sha = ShaderManager::Instance()->LoadShaderFromFile(frag_path, ShaderType::FRAGMENT);
 
     program = ShaderManager::Instance()->CreateShaderProgram();

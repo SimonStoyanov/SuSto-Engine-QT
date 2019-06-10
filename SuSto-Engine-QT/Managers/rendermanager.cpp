@@ -797,6 +797,11 @@ void RenderManager::SetUniformVec4(uint program, const char *name, const float4 
     }
 }
 
+void RenderManager::SetArrayUniformMatrix(uint program, const char *array_name, const char *name, int index, const float *data)
+{
+
+}
+
 uint RenderManager::GetUniformsCount(uint program)
 {
     uint ret = 0;
