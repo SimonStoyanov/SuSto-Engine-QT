@@ -1,6 +1,8 @@
 #include "shadermanager.h"
 #include "Managers/rendermanager.h"
 #include "globals.h"
+#include <qfile.h>
+#include "qcoreapplication.h"
 
 ShaderManager* ShaderManager::instance = nullptr;
 
@@ -78,6 +80,58 @@ void ShaderManager::DestroyShaderProgram(ShaderProgram *sp)
             }
         }
     }
+}
+
+Shader* ShaderManager::LoadShaderFromFile(const std::string &filepath, ShaderType type)
+{
+    Shader* ret = nullptr;
+
+    QFile file(filepath.c_str());
+
+    if(!file.open(QIODevice::ReadOnly))
+    {
+        SPOOKYLOG("Error loading shader from: " + filepath);
+    }
+    else
+    {
+        QTextStream in(&file);
+        std::string shader_code = in.readAll().toStdString();
+
+        switch (type)
+        {
+        case ShaderType::VERTEX:
+        {
+            ret = ShaderManager::Instance()->CreateShader(ShaderType::VERTEX);
+            ret->SetShaderCode(shader_code.c_str());
+
+            break;
+        }
+        case ShaderType::FRAGMENT:
+        {
+            ret = ShaderManager::Instance()->CreateShader(ShaderType::FRAGMENT);
+            ret->SetShaderCode(shader_code.c_str());
+
+            break;
+        }
+        case ShaderType::GEOMETRY:
+        {
+            ret = ShaderManager::Instance()->CreateShader(ShaderType::GEOMETRY);
+            ret->SetShaderCode(shader_code.c_str());
+
+            break;
+        }
+        }
+    }
+
+    return ret;
+}
+
+std::string ShaderManager::GetShadersBaseFolder() const
+{
+    std::string path = QCoreApplication::applicationDirPath().toStdString();
+    path += "/Shaders/";
+
+    return path;
 }
 
 void ShaderManager::DestroyAllShaders()

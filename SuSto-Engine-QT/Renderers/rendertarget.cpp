@@ -24,9 +24,17 @@ void RenderTarget::Resize(const float2 &new_size)
     {
         size = new_size;
 
-        color_texture = RenderManager::Instance()->GenTexture();
-        RenderManager::Instance()->BindTexture(color_texture);
-        RenderManager::Instance()->LoadTextureToVRAM(color_texture, size.x, size.y, nullptr, GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE);
+        position_color_texture = RenderManager::Instance()->GenTexture();
+        RenderManager::Instance()->BindTexture(position_color_texture);
+        RenderManager::Instance()->LoadTextureToVRAM(position_color_texture, size.x, size.y, nullptr, GL_RGB8, GL_RGB, GL_FLOAT);
+
+        normal_color_texture = RenderManager::Instance()->GenTexture();
+        RenderManager::Instance()->BindTexture(normal_color_texture);
+        RenderManager::Instance()->LoadTextureToVRAM(normal_color_texture, size.x, size.y, nullptr, GL_RGB8, GL_RGBA, GL_FLOAT);
+
+        color_plus_specular_color_texture = RenderManager::Instance()->GenTexture();
+        RenderManager::Instance()->BindTexture(normal_color_texture);
+        RenderManager::Instance()->LoadTextureToVRAM(color_plus_specular_color_texture, size.x, size.y, nullptr, GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE);
 
         depth_texture = RenderManager::Instance()->GenTexture();
         RenderManager::Instance()->BindTexture(depth_texture);
@@ -34,7 +42,9 @@ void RenderTarget::Resize(const float2 &new_size)
 
         fbo_texture = RenderManager::Instance()->GenFrameBuffer();
         RenderManager::Instance()->BindFrameBuffer(fbo_texture);
-        RenderManager::Instance()->SetFrameBufferTexture2D(GL_TEXTURE_2D, GL_COLOR_ATTACHMENT0, color_texture);
+        RenderManager::Instance()->SetFrameBufferTexture2D(GL_TEXTURE_2D, GL_COLOR_ATTACHMENT0, position_color_texture);
+        RenderManager::Instance()->SetFrameBufferTexture2D(GL_TEXTURE_2D, GL_COLOR_ATTACHMENT1, normal_color_texture);
+        RenderManager::Instance()->SetFrameBufferTexture2D(GL_TEXTURE_2D, GL_COLOR_ATTACHMENT2, color_plus_specular_color_texture);
         RenderManager::Instance()->SetFrameBufferTexture2D(GL_TEXTURE_2D, GL_DEPTH_ATTACHMENT, depth_texture);
 
         RenderManager::Instance()->DrawBuffer(GL_COLOR_ATTACHMENT0);
@@ -53,9 +63,9 @@ void RenderTarget::UnBind()
     RenderManager::Instance()->BindFrameBuffer(0);
 }
 
-int RenderTarget::GetColorTextureId() const
+int RenderTarget::GetPositionColorTextureId() const
 {
-    return color_texture;
+    return position_color_texture;
 }
 
 void RenderTarget::CheckStatus()

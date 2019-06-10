@@ -5,6 +5,7 @@
 #include "Components/c_shape_renderer.h"
 #include "Components/c_mesh_renderer.h"
 #include "Components/c_material_renderer.h"
+#include "Components/c_light.h"
 
 #include "globals.h"
 
@@ -73,9 +74,15 @@ Component *Entity::AddComponent(ComponentType type)
         case ComponentType::COMPONENT_MATERIAL_RENDERER:
         {
             ret = new C_MaterialRenderer(this);
-            SPOOKYLOG("Component -Mesh Renderer- created");
+            SPOOKYLOG("Component -Material Renderer- created");
         }
         break;
+        case ComponentType::COMPONENT_LIGHT:
+        {
+            ret = new C_Light(this);
+            SPOOKYLOG("Component -Light- created");
+        }
+    break;
         case ComponentType::COMPONENT_NULL:
         {
             SPOOKYLOG("Component of type null created");

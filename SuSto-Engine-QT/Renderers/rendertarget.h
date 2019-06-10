@@ -17,7 +17,7 @@ public:
     void Bind();
     void UnBind();
 
-    int GetColorTextureId() const;
+    int GetPositionColorTextureId() const;
 
 private:
     void CheckStatus();
@@ -25,7 +25,9 @@ private:
 private:
     float2 size = float2::zero;
 
-    uint color_texture = 0;
+    uint position_color_texture = 0;
+    uint normal_color_texture = 0;
+    uint color_plus_specular_color_texture = 0;
     uint depth_texture = 0;
 
     uint fbo_texture = 0;

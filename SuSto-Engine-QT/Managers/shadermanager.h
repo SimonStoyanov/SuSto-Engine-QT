@@ -50,6 +50,9 @@ public:
     ShaderProgram* CreateShaderProgram();
     void DestroyShaderProgram(ShaderProgram* sp);
 
+    Shader* LoadShaderFromFile(const std::string& filepath, ShaderType type);
+    std::string GetShadersBaseFolder() const;
+
 private:
     void DestroyAllShaders();
     void DestroyAllShaderPrograms();

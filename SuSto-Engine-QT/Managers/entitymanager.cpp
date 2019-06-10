@@ -114,6 +114,7 @@ void EntityManager::Start()
     AddComponentType(ComponentType::COMPONENT_TRANSFORM, "Transform");
     AddComponentType(ComponentType::COMPONENT_MESH_RENDERER, "Mesh Renderer");
     AddComponentType(ComponentType::COMPONENT_MATERIAL_RENDERER, "Material Renderer");
+    AddComponentType(ComponentType::COMPONENT_LIGHT, "Light");
 }
 
 void EntityManager::CleanUp()

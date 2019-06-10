@@ -366,7 +366,8 @@ SOURCES += \
     Renderers/rendertargetrenderer.cpp \
     Managers/texturemanager.cpp \
     Renderers/texture.cpp \
-    Entity/Components/c_material_renderer.cpp
+    Entity/Components/c_material_renderer.cpp \
+    Entity/Components/c_light.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -877,7 +878,8 @@ HEADERS += \
     Managers/texturemanager.h \
     Renderers/texture.h \
     3rdParty/StbImage/stb_image.h \
-    Entity/Components/c_material_renderer.h
+    Entity/Components/c_material_renderer.h \
+    Entity/Components/c_light.h
 
 FORMS += \
         mainwindow.ui \
@@ -890,7 +892,8 @@ FORMS += \
     shape.ui \
     floatingcontext.ui \
     meshrenderer.ui \
-    materialrenderer.ui
+    materialrenderer.ui \
+    light.ui
 
 QT += opengl \
 

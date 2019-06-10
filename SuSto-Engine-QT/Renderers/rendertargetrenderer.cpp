@@ -94,45 +94,17 @@ void RenderTargetRenderer::Start()
     SPOOKYLOG("DEFAULT PLANE  ----------");
     SPOOKYLOG("");
 
-    const char* vertex_code =
-    "#version 330 core\n \
-    layout(location = 0) in vec3 position; \n \
-    layout(location = 1) in vec3 normals; \n \
-    layout(location = 2) in vec2 uvs; \n \
-    \
-    uniform mat4 Model; \
-    uniform mat4 View; \
-    uniform mat4 Projection; \
-            \
-    out vec2 oUvs; \
-    \
-    void main()\
-    {\
-        oUvs = uvs; \
-        gl_Position = vec4(vec3(position.x, position.y, position.z), 1);\
-    }";
+    std::string base_path = ShaderManager::Instance()->GetShadersBaseFolder();
 
-    const char* fragment_code =
-    "#version 330 core\n \
-    uniform sampler2D tex; \
-    in vec2 oUvs; \
-    out vec4 finalColor; \
-    void main() \
-    {\
-        finalColor = texture(tex, oUvs);\
-    }";
+    std::string vert_path = base_path + "RenderTargetVert.vert";
+    Shader* ver_sha = ShaderManager::Instance()->LoadShaderFromFile(vert_path, ShaderType::VERTEX);
 
-    // finalCOlor = vec4(1, 1, 1, 1);
-
-    Shader* vsh = ShaderManager::Instance()->CreateShader(ShaderType::VERTEX);
-    vsh->SetShaderCode(vertex_code);
-
-    Shader* fsh = ShaderManager::Instance()->CreateShader(ShaderType::FRAGMENT);
-    fsh->SetShaderCode(fragment_code);
+    std::string frag_path = base_path + "RenderTargetFrag.frag";
+    Shader* frag_sha = ShaderManager::Instance()->LoadShaderFromFile(frag_path, ShaderType::FRAGMENT);
 
     program = ShaderManager::Instance()->CreateShaderProgram();
-    program->AddShader(vsh);
-    program->AddShader(fsh);
+    program->AddShader(ver_sha);
+    program->AddShader(frag_sha);
 
     program->LinkProgram();
 }
@@ -157,7 +129,7 @@ void RenderTargetRenderer::Render(const float4x4 &view, const float4x4 &projecti
         RenderManager::Instance()->SetUniformMatrix(program->GetID(), "Model", model.Transposed().ptr());
 
         RenderManager::Instance()->SetActiveTexture(GL_TEXTURE0);
-        RenderManager::Instance()->BindTexture(render_target->GetColorTextureId());
+        RenderManager::Instance()->BindTexture(render_target->GetPositionColorTextureId());
 
         RenderManager::Instance()->DrawElements(GL_TRIANGLES, plane_mesh->GetElementsCount());
 
