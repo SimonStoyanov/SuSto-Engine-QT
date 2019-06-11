@@ -44,6 +44,8 @@ public:
 
     void UseGL();
 
+    void Clear();
+
     std::string GetErrorString(GLenum name) const;
 
     // OpenGl control -----------------------------------------

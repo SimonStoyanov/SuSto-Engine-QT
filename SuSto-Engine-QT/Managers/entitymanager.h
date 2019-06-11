@@ -7,6 +7,8 @@
 #include "Entity/entity.h"
 #include "Entity/Components/component.h"
 
+class C_Light;
+
 class EntityManager
 {
     friend class AppManager;

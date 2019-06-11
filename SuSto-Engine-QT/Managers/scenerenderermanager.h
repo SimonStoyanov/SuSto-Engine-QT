@@ -7,6 +7,9 @@
 
 class Camera3D;
 class RenderTargetRenderer;
+class GeometryRenderer;
+class AmbientLightRenderer;
+class LightRenderer;
 class RenderTarget;
 
 enum RenderingBuffer
@@ -59,9 +62,7 @@ private:
 public:
     void StartRenderers();
 
-    void BindRenderTarget(int w, int h);
-    void BindRenderTarget();
-    void UnbindRenderTarget();
+    void ResizeRenderTarget(int w, int h);
 
     void RenderOnCamera();
     void RenderOnCamera(int w, int h);
@@ -70,6 +71,8 @@ public:
 
     void SetRenderingBuffer(RenderingBuffer buffer);
     RenderingBuffer GetRenderingBuffer();
+    void SetAmbientLight(float set);
+    float GetAmbientLight() const;
 
 private:
     Renderer *AddRenderer(Renderer* render);
@@ -79,6 +82,9 @@ private:
 private:
     std::vector<Renderer*> renderers;
 
+    GeometryRenderer* geometry_renderer = nullptr;
+    AmbientLightRenderer* ambient_light_renderer = nullptr;
+    LightRenderer* light_renderer = nullptr;
     RenderTargetRenderer* render_target_renderer = nullptr;
     RenderTarget* render_target = nullptr;
 
@@ -86,6 +92,7 @@ private:
     int last_h = 0;
 
     RenderingBuffer rendering_buffer = RenderingBuffer::BUFFER_ALL;
+    float ambient_light = 0.2f;
 };
 
 #endif // SCENERENDERERMANAGER_H

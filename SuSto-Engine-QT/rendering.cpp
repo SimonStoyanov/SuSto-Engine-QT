@@ -3,6 +3,7 @@
 #include "mainwindow.h"
 #include "Managers/scenerenderermanager.h"
 #include <qwidget.h>
+#include "globals.h"
 
 Rendering::Rendering(MainWindow* mainwindow_, QWidget *parent) :
     QWidget(parent),
@@ -21,6 +22,9 @@ Rendering::Rendering(MainWindow* mainwindow_, QWidget *parent) :
 
     connect(ui->ComboRenderingBuffer, SIGNAL(currentIndexChanged(const QString&)),
             this, SLOT(OnComboRenderingBufferChange(const QString&)));
+
+    ui->AmbientLight->setValue(0.4f);
+    connect(ui->AmbientLight, SIGNAL(valueChanged(double)), this, SLOT(OnAmbientLightChanges(double)));
 }
 
 Rendering::~Rendering()
@@ -35,4 +39,9 @@ void Rendering::OnComboRenderingBufferChange(const QString &new_shape)
     RenderingBuffer type = (RenderingBuffer)data;
 
     SceneRendererManager::Instance()->SetRenderingBuffer(type);
+}
+
+void Rendering::OnAmbientLightChanges(double val)
+{
+    SceneRendererManager::Instance()->SetAmbientLight(val);
 }

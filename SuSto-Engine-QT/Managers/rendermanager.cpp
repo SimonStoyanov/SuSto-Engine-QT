@@ -36,6 +36,12 @@ void RenderManager::UseGL()
     }
 }
 
+void RenderManager::Clear()
+{
+    gl->glClearColor(0, 0, 0, 1.0f);
+    gl->glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
 void RenderManager::Start()
 {
     QSurfaceFormat format = QSurfaceFormat::defaultFormat();

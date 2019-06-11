@@ -36,6 +36,14 @@ void RenderTarget::Resize(const float2 &new_size)
         RenderManager::Instance()->BindTexture(normal_color_texture);
         RenderManager::Instance()->LoadTextureToVRAM(color_plus_specular_color_texture, size.x, size.y, nullptr, GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE);
 
+        ambient_light_texture = RenderManager::Instance()->GenTexture();
+        RenderManager::Instance()->BindTexture(ambient_light_texture);
+        RenderManager::Instance()->LoadTextureToVRAM(ambient_light_texture, size.x, size.y, nullptr, GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE);
+
+        light_texture = RenderManager::Instance()->GenTexture();
+        RenderManager::Instance()->BindTexture(light_texture);
+        RenderManager::Instance()->LoadTextureToVRAM(light_texture, size.x, size.y, nullptr, GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE);
+
         depth_texture = RenderManager::Instance()->GenTexture();
         RenderManager::Instance()->BindTexture(depth_texture);
         RenderManager::Instance()->LoadTextureToVRAM(depth_texture, size.x, size.y, nullptr, GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT, GL_FLOAT);
@@ -45,10 +53,12 @@ void RenderTarget::Resize(const float2 &new_size)
         RenderManager::Instance()->SetFrameBufferTexture2D(GL_TEXTURE_2D, GL_COLOR_ATTACHMENT0, position_color_texture);
         RenderManager::Instance()->SetFrameBufferTexture2D(GL_TEXTURE_2D, GL_COLOR_ATTACHMENT1, normal_color_texture);
         RenderManager::Instance()->SetFrameBufferTexture2D(GL_TEXTURE_2D, GL_COLOR_ATTACHMENT2, color_plus_specular_color_texture);
+        RenderManager::Instance()->SetFrameBufferTexture2D(GL_TEXTURE_2D, GL_COLOR_ATTACHMENT3, ambient_light_texture);
+        RenderManager::Instance()->SetFrameBufferTexture2D(GL_TEXTURE_2D, GL_COLOR_ATTACHMENT4, light_texture);
         RenderManager::Instance()->SetFrameBufferTexture2D(GL_TEXTURE_2D, GL_DEPTH_ATTACHMENT, depth_texture);
 
-        unsigned int attachments[3] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
-        RenderManager::Instance()->DrawBuffers(3, attachments);
+        unsigned int attachments[5] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3, GL_COLOR_ATTACHMENT4 };
+        RenderManager::Instance()->DrawBuffers(5, attachments);
 
         CheckStatus();
     }
@@ -77,6 +87,16 @@ int RenderTarget::GetNormalColorTextureId() const
 int RenderTarget::GetColorPlusSpecularColorTextureId() const
 {
     return color_plus_specular_color_texture;
+}
+
+int RenderTarget::GetAmbientLightTextureId() const
+{
+    return ambient_light_texture;
+}
+
+int RenderTarget::GetLightTextureId() const
+{
+    return light_texture;
 }
 
 int RenderTarget::GetDepthTextureId() const

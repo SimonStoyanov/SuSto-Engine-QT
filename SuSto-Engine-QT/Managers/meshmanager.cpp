@@ -3,6 +3,7 @@
 #include "Managers/rendermanager.h"
 #include "Renderers/mesh.h"
 #include "Managers/eventmanager.h"
+#include <math.h>
 
 #include <assimp/cimport.h>
 #include <assimp/postprocess.h>
@@ -40,7 +41,7 @@ std::vector<Mesh*> MeshManager::LoadMesh(const std::string &filepath)
 
         if(all_correct)
         {
-            const aiScene* scene = aiImportFile(filepath.c_str(), aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenSmoothNormals | aiProcess_OptimizeMeshes |
+            const aiScene* scene = aiImportFile(filepath.c_str(), aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_OptimizeMeshes |
                                                 aiProcess_PreTransformVertices | aiProcess_ImproveCacheLocality | aiProcess_CalcTangentSpace);
 
             all_correct = (scene != nullptr) && (scene->mRootNode != nullptr) && ((scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE) == false);
@@ -271,6 +272,134 @@ Mesh *MeshManager::ProcessMesh(const aiScene *aiscene, aiMesh * aimesh, std::exp
     return ret;
 }
 
+void MeshManager::LoadDefaultMeshes()
+{
+    vertical_plane_mesh = new Mesh("vertical_plane");
+
+    vertical_plane_mesh->vertex_buffer.push_back(-1);
+    vertical_plane_mesh->vertex_buffer.push_back(-1);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+
+    vertical_plane_mesh->vertex_buffer.push_back(1);
+    vertical_plane_mesh->vertex_buffer.push_back(-1);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(1);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+
+    vertical_plane_mesh->vertex_buffer.push_back(1);
+    vertical_plane_mesh->vertex_buffer.push_back(1);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(1);
+    vertical_plane_mesh->vertex_buffer.push_back(1);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+
+    vertical_plane_mesh->vertex_buffer.push_back(-1);
+    vertical_plane_mesh->vertex_buffer.push_back(1);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(1);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+    vertical_plane_mesh->vertex_buffer.push_back(0);
+
+    vertical_plane_mesh->index_buffer.push_back(0);
+    vertical_plane_mesh->index_buffer.push_back(1);
+    vertical_plane_mesh->index_buffer.push_back(3);
+    vertical_plane_mesh->index_buffer.push_back(1);
+    vertical_plane_mesh->index_buffer.push_back(2);
+    vertical_plane_mesh->index_buffer.push_back(3);
+
+    MeshManager::Instance()->LoadToVRAM(vertical_plane_mesh);
+
+    // ------------------------------------------------------------
+
+    float pi = 3.14159f;
+    int H = 32;
+    int V = 16;
+
+    sphere_mesh = new Mesh("sphere_default");
+
+    for(int h = 0; h < H; ++h)
+    {
+        for(int v = 0; v < V + 1; ++v)
+        {
+            float nh = float(h) / H;
+            float nv = float(v) / V - 0.5f;
+            float angleh = 2 * pi * nh;
+            float anglev = -pi * nv;
+
+            sphere_mesh->vertex_buffer.push_back(sinf(angleh) * cosf(anglev));
+            sphere_mesh->vertex_buffer.push_back(-sinf(anglev));
+            sphere_mesh->vertex_buffer.push_back(cosf(angleh) * cosf(anglev));
+
+            sphere_mesh->vertex_buffer.push_back(sinf(angleh) * cosf(anglev));
+            sphere_mesh->vertex_buffer.push_back(-sinf(anglev));
+            sphere_mesh->vertex_buffer.push_back(cosf(angleh) * cosf(anglev));
+
+            sphere_mesh->vertex_buffer.push_back(0);
+            sphere_mesh->vertex_buffer.push_back(0);
+
+            sphere_mesh->vertex_buffer.push_back(0);
+            sphere_mesh->vertex_buffer.push_back(0);
+            sphere_mesh->vertex_buffer.push_back(0);
+
+            sphere_mesh->vertex_buffer.push_back(0);
+            sphere_mesh->vertex_buffer.push_back(0);
+            sphere_mesh->vertex_buffer.push_back(0);
+        }
+    }
+
+    for(int h = 0; h < H; ++h)
+    {
+        for(int v = 0; v < V; ++v)
+        {
+            sphere_mesh->index_buffer.push_back((h + 0) * (V + 1) + v);
+            sphere_mesh->index_buffer.push_back(((h + 1) % (int)H) * (V + 1) + v);
+            sphere_mesh->index_buffer.push_back(((h + 1) % (int)H) * (V + 1) + v + 1);
+
+            sphere_mesh->index_buffer.push_back((h + 0) * (V + 1) + v);
+            sphere_mesh->index_buffer.push_back(((h + 1) % (int)H) * (V + 1) + v + 1);
+            sphere_mesh->index_buffer.push_back((h + 0) * (V + 1) + v + 1);
+        }
+    }
+
+    MeshManager::Instance()->LoadToVRAM(sphere_mesh);
+}
+
 void MeshManager::LoadToVRAM(Mesh *mesh)
 {
     if(mesh != nullptr)
@@ -280,8 +409,6 @@ void MeshManager::LoadToVRAM(Mesh *mesh)
         if(!mesh->loaded)
         {
             mesh->loaded = true;
-
-            SPOOKYLOG("Loading mesh to VRAM with vao: " + std::to_string((mesh->vao)));
 
             SPOOKYLOG("Loaded " + std::to_string(mesh->vertex_buffer.size()) + " vertices to VRAM");
             SPOOKYLOG("Loaded " + std::to_string(mesh->index_buffer.size()) + " indices to VRAM");
@@ -317,6 +444,8 @@ void MeshManager::LoadToVRAM(Mesh *mesh)
             RenderManager::Instance()->LoadElementArrayToVRAM(mesh->index_buffer.size() * sizeof(uint),
                                                               &mesh->index_buffer[0], GL_STATIC_DRAW);
 
+
+            SPOOKYLOG("Loading mesh to VRAM with vao: " + std::to_string((mesh->vao)));
 
             // Clear
             RenderManager::Instance()->UnbindVertexArrayBuffer();

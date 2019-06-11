@@ -12,7 +12,7 @@
     uniform vec4 col; 
     uniform int hasDiffuse; 
     uniform int hasNormalMap; 
-	uniform int hasAlbedo; 
+	uniform int hasSpecular; 
     
     out Data 
     { 
@@ -28,7 +28,7 @@
 		
 		flat int hasDiffuse; 
 		flat int hasNormalMap; 
-		flat int hasAlbedo;
+		flat int hasSpecular;
     } VSOut; 
     
     void main()
@@ -46,8 +46,7 @@
         VSOut.colour = col; 
         VSOut.hasDiffuse = hasDiffuse; 
         VSOut.hasNormalMap = hasNormalMap; 
-		VSOut.hasNormalMap = hasNormalMap; 
-		VSOut.hasAlbedo = hasAlbedo; 
+		VSOut.hasSpecular = hasSpecular; 
         
         gl_Position = transformedPosition;
     }

@@ -355,7 +355,6 @@ SOURCES += \
     Managers/shadermanager.cpp \
     Managers/scenerenderermanager.cpp \
     Renderers/renderer.cpp \
-    Renderers/defaultrenderer.cpp \
     Renderers/vertexbuffer.cpp \
     Managers/cameramanager.cpp \
     Managers/inputmanager.cpp \
@@ -368,7 +367,10 @@ SOURCES += \
     Renderers/texture.cpp \
     Entity/Components/c_material_renderer.cpp \
     Entity/Components/c_light.cpp \
-    rendering.cpp
+    rendering.cpp \
+    Renderers/geometryrenderer.cpp \
+    Renderers/ambientlightrenderer.cpp \
+    Renderers/lightrenderer.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -820,7 +822,6 @@ HEADERS += \
     Managers/scenerenderermanager.h \
     renderer.h \
     Renderers/renderer.h \
-    Renderers/defaultrenderer.h \
     Renderers/vertexbuffer.h \
     Managers/cameramanager.h \
     Managers/inputmanager.h \
@@ -882,7 +883,10 @@ HEADERS += \
     Entity/Components/c_material_renderer.h \
     Entity/Components/c_light.h \
     rendering.h \
-    rendering.h
+    rendering.h \
+    Renderers/geometryrenderer.h \
+    Renderers/ambientlightrenderer.h \
+    Renderers/lightrenderer.h
 
 FORMS += \
         mainwindow.ui \

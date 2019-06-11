@@ -5,6 +5,7 @@
 
 class Mesh;
 class RenderTarget;
+class Camera3D;
 
 class Renderer
 {
@@ -12,7 +13,7 @@ public:
     Renderer() {};
 
     virtual void Start() {}
-    virtual void Render(const float4x4& view, const float4x4& projection) {}
+    virtual void Render(Camera3D* camera, const float4x4& view, const float4x4& projection, RenderTarget* target) {}
     virtual void CleanUp() {}
 };
 

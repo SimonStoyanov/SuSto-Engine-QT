@@ -13,14 +13,11 @@ public:
     RenderTargetRenderer();
 
     void Start();
-    void Render(const float4x4& view, const float4x4& projection);
+    void Render(Camera3D* camera, const float4x4& view, const float4x4& projection, RenderTarget* target);
     void CleanUp();
-
-    void SetTarget(RenderTarget* target);
 
 private:
     ShaderProgram* program = nullptr;
-    RenderTarget* render_target = nullptr;
 
     Mesh* plane_mesh = nullptr;
 };

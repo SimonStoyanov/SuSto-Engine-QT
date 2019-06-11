@@ -27,10 +27,7 @@ void RendererWidget::resizeGL(int w, int h)
     glClearColor(0, 0, 0, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    SceneRendererManager::Instance()->BindRenderTarget(w, h);
-
-    glClearColor(1.5f, 0.7f, 0.9f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    SceneRendererManager::Instance()->ResizeRenderTarget(w, h);
 
     SceneRendererManager::Instance()->RenderOnCamera(w, h);
 
@@ -42,11 +39,6 @@ void RendererWidget::resizeGL(int w, int h)
 void RendererWidget::paintGL()
 {
     glClearColor(0, 0, 0, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    SceneRendererManager::Instance()->BindRenderTarget();
-
-    glClearColor(1.5f, 0.7f, 0.9f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     SceneRendererManager::Instance()->RenderOnCamera();

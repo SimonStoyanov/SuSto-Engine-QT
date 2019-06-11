@@ -37,9 +37,9 @@ void C_Light::CreateUI()
     ui = new QWidget();
     form->setupUi(ui);
 
-    form->ComboLightType->addItem("Ambient", LightType::AMBIENT);
-    form->ComboLightType->addItem("Point", LightType::POINT);
-    form->ComboLightType->addItem("Directional", LightType::DIRECTIONAL);
+    form->ComboLightType->addItem("Ambient", LightType::AMBIENT_LIGHT);
+    form->ComboLightType->addItem("Point", LightType::POINT_LIGHT);
+    form->ComboLightType->addItem("Directional", LightType::DIRECTIONAL_LIGHT);
 
     connect(form->ComboLightType, SIGNAL(currentIndexChanged(const QString&)),
             this, SLOT(OnComboLightTypeChanges(const QString&)));

@@ -19,6 +19,7 @@ public:
 
 private slots:
     void OnComboRenderingBufferChange(const QString& new_shape);
+    void OnAmbientLightChanges(double val);
 
 private:
     MainWindow* mainwindow = nullptr;

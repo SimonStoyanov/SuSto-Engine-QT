@@ -20,6 +20,8 @@ public:
     int GetPositionColorTextureId() const;
     int GetNormalColorTextureId() const;
     int GetColorPlusSpecularColorTextureId() const;
+    int GetAmbientLightTextureId() const;
+    int GetLightTextureId() const;
     int GetDepthTextureId() const;
 
 private:
@@ -31,6 +33,8 @@ private:
     uint position_color_texture = 0;
     uint normal_color_texture = 0;
     uint color_plus_specular_color_texture = 0;
+    uint ambient_light_texture = 0;
+    uint light_texture = 0;
     uint depth_texture = 0;
 
     uint fbo_texture = 0;

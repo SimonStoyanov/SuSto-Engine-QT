@@ -1,7 +1,7 @@
 	#version 330 core    
     uniform sampler2D diffuse; 
     uniform sampler2D normalMap; 
-    uniform sampler2D albedo; 
+    uniform sampler2D specular; 
     
 	layout (location = 0) out vec3 gPosition;
 	layout (location = 1) out vec3 gNormal;
@@ -21,7 +21,7 @@
 		
 		flat int hasDiffuse; 
 		flat int hasNormalMap; 
-		flat int hasAlbedo;
+		flat int hasSpecular;
     } FSIn; 
     
     void main()
@@ -29,36 +29,34 @@
         gPosition = FSIn.fragPosWorldSpace; 
         
         if(FSIn.hasNormalMap == 1) 
-        { 
-            gNormal = normalize(FSIn.normals); 
+        { 		
+			vec3 texNormal = texture(normalMap, FSIn.uvs).rgb;
+			texNormal = normalize(texNormal * 2.0 - 1.0);
+			
+			vec3 T = normalize(FSIn.tangents);
+			vec3 B = normalize(FSIn.bitangents);
+			vec3 N = normalize(FSIn.normals);
+			mat3 TBN = mat3(T, B, N);
+			
+            gNormal = TBN * texNormal;
         } 
 		
-		if(FSIn.hasAlbedo == 1) 
-        { 
-            gAlbedoSpec.rgb = texture(diffuse, FSIn.uvs).rgb; 
-			gAlbedoSpec.a = texture(albedo, FSIn.uvs).r; 
-        }
+		if(FSIn.hasDiffuse == 1)
+        {
+			gAlbedoSpec.rgb = texture(diffuse, FSIn.uvs).rgb; 
+		}
 		else
 		{
-			gAlbedoSpec = texture(diffuse, FSIn.uvs);
+			gAlbedoSpec.rgb = vec3(1, 1, 1);
 		}
+		
+		if(FSIn.hasSpecular == 1) 
+        { 
+			gAlbedoSpec.a = texture(specular, FSIn.uvs).r; 
+        }
         
         if(FSIn.hasNormalMap == 1) 
         {
-        
+			gAlbedoSpec.a = 1;
         }
-        
-        vec4 diffuse_col; 
-        
-        if(FSIn.hasDiffuse == 1)
-        {
-            diffuse_col = texture(diffuse, FSIn.uvs);
-        }
-        else
-        {
-            diffuse_col = FSIn.colour;
-        }
-        
-        //finalColor = diffuse_col;
-        
     }

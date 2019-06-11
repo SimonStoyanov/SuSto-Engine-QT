@@ -9,9 +9,9 @@ class Light;
 
 enum LightType
 {
-    AMBIENT,
-    DIRECTIONAL,
-    POINT,
+    AMBIENT_LIGHT,
+    DIRECTIONAL_LIGHT,
+    POINT_LIGHT,
 };
 
 class C_Light : public Component
@@ -45,7 +45,7 @@ private:
      QWidget* ui = nullptr;
      Ui::Light* form = nullptr;
 
-     LightType type = LightType::POINT;
+     LightType type = LightType::POINT_LIGHT;
      float intensity = 0.3f;
 };
 

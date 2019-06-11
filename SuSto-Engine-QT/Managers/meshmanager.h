@@ -66,6 +66,8 @@ public:
     Mesh* GetLoadedMeshFromFilepathPlusName(const std::string& filepath_plus_name);
     std::vector<Mesh*> GetAllMeshes() const;
 
+    void LoadDefaultMeshes();
+
 private:
     void Start();
     void CleanUp();
@@ -75,6 +77,10 @@ private:
 
 private:
     static MeshManager* instance;
+
+public:
+    Mesh* vertical_plane_mesh = nullptr;
+    Mesh* sphere_mesh = nullptr;
 
 private:
     std::vector<Mesh*> meshes;

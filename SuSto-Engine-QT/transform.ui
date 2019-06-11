@@ -35,6 +35,18 @@
      </item>
      <item>
       <widget class="QDoubleSpinBox" name="posx">
+       <property name="mouseTracking">
+        <bool>true</bool>
+       </property>
+       <property name="acceptDrops">
+        <bool>true</bool>
+       </property>
+       <property name="wrapping">
+        <bool>true</bool>
+       </property>
+       <property name="accelerated">
+        <bool>true</bool>
+       </property>
        <property name="minimum">
         <double>-99999999.000000000000000</double>
        </property>
