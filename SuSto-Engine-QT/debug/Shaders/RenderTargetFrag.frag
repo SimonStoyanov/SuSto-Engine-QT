@@ -37,7 +37,7 @@
 		}
 		if(FSIn.mode == 0)
 		{
-			finalColor = texture(gLight, FSIn.uvs) + texture(gAmbient, FSIn.uvs);
+			finalColor = vec4(texture(gLight, FSIn.uvs).rgb, 1);
 		}
 	
     }

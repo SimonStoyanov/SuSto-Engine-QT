@@ -24,10 +24,10 @@ void LightRenderer::Start()
 
     std::string base_path = ShaderManager::Instance()->GetShadersBaseFolder();
 
-    std::string vert_path = base_path + "LightVert.vert";
+    std::string vert_path = base_path + "DirectionalLightVert.vert";
     Shader* ver_sha = ShaderManager::Instance()->LoadShaderFromFile(vert_path, ShaderType::VERTEX);
 
-    std::string frag_path = base_path + "LightFrag.frag";
+    std::string frag_path = base_path + "DirectionalLightFrag.frag";
     Shader* frag_sha = ShaderManager::Instance()->LoadShaderFromFile(frag_path, ShaderType::FRAGMENT);
 
     program = ShaderManager::Instance()->CreateShaderProgram();
@@ -59,21 +59,38 @@ void LightRenderer::Render(Camera3D *camera, const float4x4 &view, const float4x
 
             float4x4 transform_mat = float4x4::FromTRS(transform->GetPos(), rotation, transform->GetScale());
 
-            RenderManager::Instance()->BindVertexArrayBuffer(sphere_mesh->GetVao());
+            float4x4 world_transform = transform_mat;
+
+            RenderManager::Instance()->BindVertexArrayBuffer(plane_mesh->GetVao());
 
             RenderManager::Instance()->SetUniformMatrix(program->GetID(), "View", view.ptr());
             RenderManager::Instance()->SetUniformMatrix(program->GetID(), "Projection", projection.ptr());
 
-            float4 colour = float4(1, 1, 1, 1);
-
-            float4x4 world_transform = transform_mat;
-
             RenderManager::Instance()->SetUniformMatrix(program->GetID(), "Model", world_transform.Transposed().ptr());
+
+            float4 colour = float4(1, 1, 1, 1);
 
             RenderManager::Instance()->SetUniformVec3(program->GetID(), "LightPos", transform->GetPos());
             RenderManager::Instance()->SetUniformVec3(program->GetID(), "CameraPos", camera->GetPosition());
+            RenderManager::Instance()->SetUniformVec3(program->GetID(), "LightDir", float3(1, 0, 0));
 
-            RenderManager::Instance()->DrawElements(GL_TRIANGLES, sphere_mesh->GetElementsCount());
+            RenderManager::Instance()->SetUniformInt(program->GetID(), "gPosition", 0);
+            RenderManager::Instance()->SetActiveTexture(GL_TEXTURE0);
+            RenderManager::Instance()->BindTexture(target->GetPositionColorTextureId());
+
+            RenderManager::Instance()->SetUniformInt(program->GetID(), "gNormal", 1);
+            RenderManager::Instance()->SetActiveTexture(GL_TEXTURE1);
+            RenderManager::Instance()->BindTexture(target->GetNormalColorTextureId());
+
+            RenderManager::Instance()->SetUniformInt(program->GetID(), "gAlbedoSpec", 2);
+            RenderManager::Instance()->SetActiveTexture(GL_TEXTURE2);
+            RenderManager::Instance()->BindTexture(target->GetColorPlusSpecularColorTextureId());
+
+            RenderManager::Instance()->SetUniformInt(program->GetID(), "gAmbient", 3);
+            RenderManager::Instance()->SetActiveTexture(GL_TEXTURE3);
+            RenderManager::Instance()->BindTexture(target->GetAmbientLightTextureId());
+
+            RenderManager::Instance()->DrawElements(GL_TRIANGLES, plane_mesh->GetElementsCount());
 
             RenderManager::Instance()->UnbindVertexArrayBuffer();
         }

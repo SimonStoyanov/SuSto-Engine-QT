@@ -1,12 +1,12 @@
-Info,  T25352: Load C:/Users/Guillem/Desktop/Models/PalmTree/PalmTree.obj
-Info,  T25352: Found a matching importer for this file format: Wavefront Object Importer.
-Info,  T25352: Import root directory is 'C:/Users/Guillem/Desktop/Models/PalmTree\'
-Info,  T25352: Entering post processing pipeline
-Info,  T25352: Removed 2 nodes and 0 animation channels (3 output nodes)
-Info,  T25352: Kept 0 lights and 0 cameras
-Info,  T25352: Moved 2 meshes to WCS (number of output meshes: 2)
-Info,  T25352: CalcTangentsProcess finished. Tangents have been calculated
-Warn,  T25352: Mesh 0: Not suitable for vcache optimization
-Warn,  T25352: Mesh 1: Not suitable for vcache optimization
-Info,  T25352: Cache relevant are 0 meshes (0 faces). Average output ACMR is -nan(ind)
-Info,  T25352: Leaving post processing pipeline
+Info,  T13988: Load C:/Users/Guillem/Desktop/Models/PalmTree/PalmTree.obj
+Info,  T13988: Found a matching importer for this file format: Wavefront Object Importer.
+Info,  T13988: Import root directory is 'C:/Users/Guillem/Desktop/Models/PalmTree\'
+Info,  T13988: Entering post processing pipeline
+Info,  T13988: Removed 2 nodes and 0 animation channels (3 output nodes)
+Info,  T13988: Kept 0 lights and 0 cameras
+Info,  T13988: Moved 2 meshes to WCS (number of output meshes: 2)
+Info,  T13988: CalcTangentsProcess finished. Tangents have been calculated
+Warn,  T13988: Mesh 0: Not suitable for vcache optimization
+Warn,  T13988: Mesh 1: Not suitable for vcache optimization
+Info,  T13988: Cache relevant are 0 meshes (0 faces). Average output ACMR is -nan(ind)
+Info,  T13988: Leaving post processing pipeline
