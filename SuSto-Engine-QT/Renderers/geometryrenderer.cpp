@@ -38,7 +38,6 @@ void GeometryRenderer::Render(Camera3D* camera, const float4x4 &view, const floa
 {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
-    glBlendFunc(GL_ONE, GL_ONE);
     glDepthFunc(GL_LESS);
 
     program->UseProgram();

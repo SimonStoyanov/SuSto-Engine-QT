@@ -39,6 +39,16 @@ void LightRenderer::Start()
 
 void LightRenderer::Render(Camera3D *camera, const float4x4 &view, const float4x4 &projection, RenderTarget *target)
 {
+    RenderDirectionals(camera, view, projection, target);
+}
+
+void LightRenderer::CleanUp()
+{
+
+}
+
+void LightRenderer::RenderDirectionals(Camera3D *camera, const float4x4 &view, const float4x4 &projection, RenderTarget *target)
+{
     glDisable(GL_DEPTH_TEST);
     glEnable(GL_BLEND);
     glDepthFunc(GL_LESS);
@@ -54,45 +64,58 @@ void LightRenderer::Render(Camera3D *camera, const float4x4 &view, const float4x
 
         if(light != nullptr)
         {
-            Quat rotation = Quat::FromEulerXYZ(DEGTORAD(transform->GetRotationDegrees().x), DEGTORAD(transform->GetRotationDegrees().y),
-                                               DEGTORAD(transform->GetRotationDegrees().z));
+            if(1)
+            {
+                float3 light_colour = light->GetLightColour();
+                float light_intensity = light->GetLightIntensity();
 
-            float4x4 transform_mat = float4x4::FromTRS(transform->GetPos(), rotation, transform->GetScale());
+                Quat rotation = Quat::FromEulerXYZ(DEGTORAD(transform->GetRotationDegrees().x), DEGTORAD(transform->GetRotationDegrees().y),
+                                                   DEGTORAD(transform->GetRotationDegrees().z));
 
-            float4x4 world_transform = transform_mat;
+                float3 rotation_degrees = transform->GetRotationDegrees();
+                float3 rotation_rads = float3(DEGTORAD(rotation_degrees.x), DEGTORAD(rotation_degrees.y), DEGTORAD(rotation_degrees.z));
 
-            RenderManager::Instance()->BindVertexArrayBuffer(plane_mesh->GetVao());
+                float3 direction = float3::zero;
+                direction.x = -cos(rotation_rads.z) * sin(rotation_rads.y) * sin(rotation_rads.x) * -sin(rotation_rads.z) * cos(rotation_rads.x);
+                direction.y = -sin(rotation_rads.z) * sin(rotation_rads.y) * sin(rotation_rads.x)+cos(rotation_rads.z) * cos(rotation_rads.x);
+                direction.z =  cos(rotation_rads.y) * sin(rotation_rads.x);
 
-            RenderManager::Instance()->SetUniformMatrix(program->GetID(), "View", view.ptr());
-            RenderManager::Instance()->SetUniformMatrix(program->GetID(), "Projection", projection.ptr());
+                float4x4 transform_mat = float4x4::FromTRS(transform->GetPos(), rotation, transform->GetScale());
 
-            RenderManager::Instance()->SetUniformMatrix(program->GetID(), "Model", world_transform.Transposed().ptr());
+                float4x4 world_transform = transform_mat;
 
-            float4 colour = float4(1, 1, 1, 1);
+                RenderManager::Instance()->BindVertexArrayBuffer(plane_mesh->GetVao());
 
-            RenderManager::Instance()->SetUniformVec3(program->GetID(), "LightPos", transform->GetPos());
-            RenderManager::Instance()->SetUniformVec3(program->GetID(), "CameraPos", camera->GetPosition());
-            RenderManager::Instance()->SetUniformVec3(program->GetID(), "LightDir", float3(1, 0, 0));
+                RenderManager::Instance()->SetUniformMatrix(program->GetID(), "View", view.ptr());
+                RenderManager::Instance()->SetUniformMatrix(program->GetID(), "Projection", projection.ptr());
 
-            RenderManager::Instance()->SetUniformInt(program->GetID(), "gPosition", 0);
-            RenderManager::Instance()->SetActiveTexture(GL_TEXTURE0);
-            RenderManager::Instance()->BindTexture(target->GetPositionColorTextureId());
+                RenderManager::Instance()->SetUniformMatrix(program->GetID(), "Model", world_transform.Transposed().ptr());
 
-            RenderManager::Instance()->SetUniformInt(program->GetID(), "gNormal", 1);
-            RenderManager::Instance()->SetActiveTexture(GL_TEXTURE1);
-            RenderManager::Instance()->BindTexture(target->GetNormalColorTextureId());
+                RenderManager::Instance()->SetUniformVec3(program->GetID(), "CameraPos", camera->GetPosition());
+                RenderManager::Instance()->SetUniformVec3(program->GetID(), "LightDir", direction);
+                RenderManager::Instance()->SetUniformVec3(program->GetID(), "LightColour", light_colour);
+                RenderManager::Instance()->SetUniformFloat(program->GetID(), "LightIntensity", light_intensity);
 
-            RenderManager::Instance()->SetUniformInt(program->GetID(), "gAlbedoSpec", 2);
-            RenderManager::Instance()->SetActiveTexture(GL_TEXTURE2);
-            RenderManager::Instance()->BindTexture(target->GetColorPlusSpecularColorTextureId());
+                RenderManager::Instance()->SetUniformInt(program->GetID(), "gPosition", 0);
+                RenderManager::Instance()->SetActiveTexture(GL_TEXTURE0);
+                RenderManager::Instance()->BindTexture(target->GetPositionColorTextureId());
 
-            RenderManager::Instance()->SetUniformInt(program->GetID(), "gAmbient", 3);
-            RenderManager::Instance()->SetActiveTexture(GL_TEXTURE3);
-            RenderManager::Instance()->BindTexture(target->GetAmbientLightTextureId());
+                RenderManager::Instance()->SetUniformInt(program->GetID(), "gNormal", 1);
+                RenderManager::Instance()->SetActiveTexture(GL_TEXTURE1);
+                RenderManager::Instance()->BindTexture(target->GetNormalColorTextureId());
 
-            RenderManager::Instance()->DrawElements(GL_TRIANGLES, plane_mesh->GetElementsCount());
+                RenderManager::Instance()->SetUniformInt(program->GetID(), "gAlbedoSpec", 2);
+                RenderManager::Instance()->SetActiveTexture(GL_TEXTURE2);
+                RenderManager::Instance()->BindTexture(target->GetColorPlusSpecularColorTextureId());
 
-            RenderManager::Instance()->UnbindVertexArrayBuffer();
+                RenderManager::Instance()->SetUniformInt(program->GetID(), "gAmbient", 3);
+                RenderManager::Instance()->SetActiveTexture(GL_TEXTURE3);
+                RenderManager::Instance()->BindTexture(target->GetAmbientLightTextureId());
+
+                RenderManager::Instance()->DrawElements(GL_TRIANGLES, plane_mesh->GetElementsCount());
+
+                RenderManager::Instance()->UnbindVertexArrayBuffer();
+            }
         }
     }
 
@@ -100,9 +123,4 @@ void LightRenderer::Render(Camera3D *camera, const float4x4 &view, const float4x
 
     glDisable(GL_BLEND);
     glDisable(GL_DEPTH_TEST);
-}
-
-void LightRenderer::CleanUp()
-{
-
 }

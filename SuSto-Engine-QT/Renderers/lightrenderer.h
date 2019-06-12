@@ -15,6 +15,9 @@ public:
     void CleanUp();
 
 private:
+    void RenderDirectionals(Camera3D* camera, const float4x4& view, const float4x4& projection, RenderTarget* target);
+
+private:
     ShaderProgram* program = nullptr;
 
     Mesh* plane_mesh = nullptr;

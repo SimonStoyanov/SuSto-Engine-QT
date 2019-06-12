@@ -34,11 +34,16 @@ public:
      void UpdateUI();
      QWidget *GetUI() const;
 
+     LightType GetLightType() const;
+     float GetLightIntensity() const;
+     float3 GetLightColour() const;
+
 private:
 
 private slots:
      void OnComboLightTypeChanges(const QString& new_shape);
      void OnIntensityChanges(double val);
+     void OnColorChanges(int val);
 
 
 private:
@@ -47,6 +52,7 @@ private:
 
      LightType type = LightType::POINT_LIGHT;
      float intensity = 0.3f;
+     float3 colour = float3::zero;
 };
 
 #endif // C_LIGHT_H
