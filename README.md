@@ -1,12 +1,9 @@
 # SuSto Engine QT
 
-In this release, the user can do the next things with entities:
-* Create
-* Delete
-* Rename
-* Add Component 
-* Duplicate
-	
+Creators: Simon Stoyanov and Guillem Sunyer.
+
+This is a small 3D engine made using QT for the Advanced graphics programming subject.
+
 Use workflow: Load model using the File/LoadModel button located on the top menu of the application. To 
 see the model on the scene, a light is needed. To do this, create a new entity, and add a light component. Now the model is
 shown. Use WASD to move the camera thorugh the scene.
